@@ -144,18 +144,69 @@ body::before {
             box-shadow: 0 4px 10px rgba(255, 69, 0, 0.6);
         }
     </style>
+    <script>
+        let bannerIndex = 0;
+        const banners = [
+            {src: "https://token4fun.github.io/babysherk/banner.gif", link: "https://sherk.io/"},
+            {src: "https://token4fun.github.io/babysherk/banner1.gif", link: "https://sherkfun.io/"},
+            {src: "https://token4fun.github.io/babysherk/banner3.gif", link: "https://t.me/SherkGameBot"},
+            {src: "https://token4fun.github.io/babysherk/banner4.gif", link: "https://x.com/SherkFunToken"},
+        ];
+
+        function rotateBanner() {
+            const bannerElement = document.getElementById('banner');
+            const bannerLink = document.getElementById('banner-link');
+            bannerElement.style.opacity = '0';  // Torna o banner invisível temporariamente
+
+            setTimeout(() => {
+                bannerIndex = (bannerIndex + 1) % banners.length;
+                bannerElement.src = banners[bannerIndex].src;
+                bannerLink.href = banners[bannerIndex].link;
+                bannerElement.style.opacity = '1';  // Torna o banner visível novamente
+            }, 500);  // Atraso de 0,5s para combinar com a transição
+        }
+
+        function nextBanner() {
+            bannerIndex = (bannerIndex + 1) % banners.length;
+            const bannerElement = document.getElementById('banner');
+            const bannerLink = document.getElementById('banner-link');
+            bannerElement.style.opacity = '0';
+
+            setTimeout(() => {
+                bannerElement.src = banners[bannerIndex].src;
+                bannerLink.href = banners[bannerIndex].link;
+                bannerElement.style.opacity = '1';
+            }, 500);
+        }
+
+        function prevBanner() {
+            bannerIndex = (bannerIndex - 1 + banners.length) % banners.length;
+            const bannerElement = document.getElementById('banner');
+            const bannerLink = document.getElementById('banner-link');
+            bannerElement.style.opacity = '0';
+
+            setTimeout(() => {
+                bannerElement.src = banners[bannerIndex].src;
+                bannerLink.href = banners[bannerIndex].link;
+                bannerElement.style.opacity = '1';
+            }, 500);
+        }
+
+        window.onload = function() {
+            setInterval(rotateBanner, 6000); // Troca a cada 6 segundos
+        };
+    </script>
 </head>
 <body>
     <header>
         <h1>Welcome to Sherk Fun Token ($SFT)!</h1>
-        <p>Powered by <a href="https://sherkfun.io" style="color: white; text-decoration: underline;">Sherk.fun</a></p>
-    </header>
+            </header>
 <div class="content">
        <!-- <img src="welcome.gif" alt="Baby Sherk Token"> -->
      <h1>Welcome to Sherk Fun Token ($SFT)!</h1> <p>Powered by <a href="https://sherkfun.io" style="color: blue; text-decoration: underline;">Sherkfun</a></p>
     <div class="banner-container">
-        <a id="banner-link" href="https://sherkfun.io/token/7LrFusFsbzpC6yus7qGCBbDdZaJBQWMJqiEM16VSGfun">
-            <img id="banner" src="https://token4fun.github.io/babysherk/banner2.gif" alt="Banner Rotativo">
+        <a id="banner-link" href="https://sherkfun.io/token/6wY93bkRSk5KagCGTHrjLPCpbMWEPQGU9wrpsZ8tyftL">
+            <img id="banner" src="https://token4fun.github.io/babysherk/banner1.gif" alt="Banner Rotativo">
         </a>
         <!-- Setas de navegação abaixo do banner -->
         <div class="banner-nav">
