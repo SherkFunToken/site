@@ -3,57 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="$SFT, powered by Sherk.fun, is a revolutionary community-driven token on the Solana blockchain. Join now and experience the future of crypto!"></meta>
+    <meta name="description" content="$SFT, powered by Sherk.fun, is a revolutionary community-driven token on the Solana blockchain. Join now and experience the future of crypto!">
     <meta name="keywords" content="cryptocurrency, Sherk Fun Token, SFT, Sherk.fun, Solana, blockchain, crypto">
     <meta name="author" content="Sherkfun">
     <meta name="robots" content="index, follow">
     <title>Sherk Fun Token ($SFT) - Powered by Sherkfun.io</title>
     <link rel="icon" type="image/png" href="sherkhead.png">
     <style>
-body {
-    position: relative;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-image: url('bgsft.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: top left;
-    color: #333;
-}
-
-body::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.1); /* Ajusta a opacidade */
-    z-index: -1; /* Mantém a sobreposição atrás do conteúdo */
-}
-                .banner-container {
+        body {
             position: relative;
-            max-width: 100%;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('bgsft.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: top left;
+            color: #333;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            z-index: -1;
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.5);
+            max-width: 800px;
             margin: 20px auto;
             text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
         }
-        .banner-container a img {
+
+        .content img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .banner-container {
+            position: relative;
+            margin: 20px auto;
+            text-align: center;
+            max-width: 100%;
+        }
+
+        .banner-container img {
             width: 100%;
             max-width: 1024px;
             height: auto;
-            aspect-ratio: 1024 / 270;
             object-fit: cover;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             transition: opacity 0.9s ease;
         }
-        /* Navegação de Banner */
+
         .banner-nav {
             display: flex;
             justify-content: center;
-            margin-top: 10px; /* Espaço entre o banner e as setas */
+            margin-top: 10px;
         }
 
         .banner-nav button {
@@ -72,35 +88,20 @@ body::before {
             background-color: rgba(0, 0, 0, 0.8);
         }
 
-        .banner-nav button:focus {
-            outline: none;
-        }
-
-
-        header {
-            background-color: #4CAF50;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-        header h1 {
-            margin: 0;
-        }
-        .content {
-            background: rgba(255, 255, 255, 0.5);
-            max-width: 800px;
-            margin: 20px auto;
-            text-align: center;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-        }
-        .content img {
-            max-width: 150px;
-        }
-        .content h2 {
+        .highlight-title {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #add8e6, #87cefa);
             color: black;
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 10px auto;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(135, 206, 250, 0.3);
         }
+
+        .button-highlight,
         .button {
             display: inline-block;
             padding: 10px 20px;
@@ -110,101 +111,101 @@ body::before {
             text-decoration: none;
             border-radius: 5px;
             font-size: 16px;
+            transition: transform 0.2s, background-color 0.3s;
         }
+
+        .button-highlight:hover,
         .button:hover {
+            transform: scale(1.1);
             background-color: #0056b3;
         }
-        .button-highlight {
-            display: inline-block;
-            padding: 15px 30px;
-            margin: 10px;
+
+        ul {
+            text-align: left;
+            margin: 0 auto;
+            max-width: 600px;
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #4CAF50;
             color: white;
-            background: linear-gradient(45deg, #ff7f50, #ff4500);
-            text-decoration: none;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(255, 69, 0, 0.6);
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
-        .button-highlight:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 15px rgba(255, 69, 0, 0.8);
+
+        footer a {
+            color: blue;
+            text-decoration: underline;
         }
-.highlight-title {
-    font-size: 24px;
-    font-weight: bold;
-    background: linear-gradient(45deg, #add8e6, #87cefa); /* Azul clarinho e azul pastel */
-    color: black; /* o texto preto */
-    padding: 10px 20px;
-    border-radius: 10px;
-    display: inline-block;
-    margin: 10px auto;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(135, 206, 250, 0.3); /* Sombra azul clarinho */
-}
 
-.highlight-banner {
-    font-size: 14px;
-    background: linear-gradient(45deg, #add8e6, #87cefa); /* Azul clarinho e azul pastel */
-    color: black; /* o texto preto */
-    padding: 10px 20px;
-    border-radius: 10px;
-    display: inline-block;
-    margin: 10px auto;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(135, 206, 250, 0.9); /* Sombra azul clarinho */
-}
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .highlight-title {
+                font-size: 18px;
+                padding: 10px;
+            }
 
+            .content {
+                padding: 10px;
+            }
+
+            .button-highlight,
+            .button {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+
+            ul {
+                max-width: 100%;
+            }
+
+            ul li {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .highlight-title {
+                font-size: 16px;
+                padding: 5px;
+            }
+
+            .button-highlight,
+            .button {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+        }
     </style>
     <script>
+        // Banner rotation script
         let bannerIndex = 0;
         const banners = [
-            {src: "https://token4fun.github.io/babysherk/banner1.gif", link: "https://sherkfun.io/"},
-            {src: "https://token4fun.github.io/babysherk/banner3.gif", link: "https://t.me/SherkGameBot"},
+            { src: "https://token4fun.github.io/babysherk/banner1.gif", link: "https://sherkfun.io/" },
+            { src: "https://token4fun.github.io/babysherk/banner3.gif", link: "https://t.me/SherkGameBot" },
         ];
 
         function rotateBanner() {
             const bannerElement = document.getElementById('banner');
             const bannerLink = document.getElementById('banner-link');
-            bannerElement.style.opacity = '0';  // Torna o banner invisível temporariamente
+            bannerElement.style.opacity = '0';
 
             setTimeout(() => {
                 bannerIndex = (bannerIndex + 1) % banners.length;
                 bannerElement.src = banners[bannerIndex].src;
                 bannerLink.href = banners[bannerIndex].link;
-                bannerElement.style.opacity = '1';  // Torna o banner visível novamente
-            }, 500);  // Atraso de 0,5s para combinar com a transição
-        }
-
-        function nextBanner() {
-            bannerIndex = (bannerIndex + 1) % banners.length;
-            const bannerElement = document.getElementById('banner');
-            const bannerLink = document.getElementById('banner-link');
-            bannerElement.style.opacity = '0';
-
-            setTimeout(() => {
-                bannerElement.src = banners[bannerIndex].src;
-                bannerLink.href = banners[bannerIndex].link;
                 bannerElement.style.opacity = '1';
             }, 500);
         }
 
-        function prevBanner() {
-            bannerIndex = (bannerIndex - 1 + banners.length) % banners.length;
-            const bannerElement = document.getElementById('banner');
-            const bannerLink = document.getElementById('banner-link');
-            bannerElement.style.opacity = '0';
-
-            setTimeout(() => {
-                bannerElement.src = banners[bannerIndex].src;
-                bannerLink.href = banners[bannerIndex].link;
-                bannerElement.style.opacity = '1';
-            }, 500);
-        }
-
-        window.onload = function() {
-            setInterval(rotateBanner, 6000); // Troca a cada 6 segundos
+        window.onload = function () {
+            setInterval(rotateBanner, 6000);
         };
     </script>
 </head>
