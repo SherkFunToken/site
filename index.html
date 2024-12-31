@@ -33,6 +33,49 @@ body::before {
     background-color: rgba(255, 255, 255, 0.6); /* Ajusta a opacidade */
     z-index: -1; /* Mantém a sobreposição atrás do conteúdo */
 }
+                .banner-container {
+            position: relative;
+            max-width: 100%;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .banner-container a img {
+            width: 100%;
+            max-width: 1024px;
+            height: auto;
+            aspect-ratio: 1024 / 270;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+            transition: opacity 0.9s ease;
+        }
+        /* Navegação de Banner */
+        .banner-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px; /* Espaço entre o banner e as setas */
+        }
+
+        .banner-nav button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+            margin: 0 10px;
+        }
+
+        .banner-nav button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .banner-nav button:focus {
+            outline: none;
+        }
+
 
         header {
             background-color: #4CAF50;
@@ -107,7 +150,19 @@ body::before {
         <h1>Welcome to Sherk Fun Token ($SFT)!</h1>
         <p>Powered by <a href="https://sherkfun.io" style="color: white; text-decoration: underline;">Sherk.fun</a></p>
     </header>
-
+<div class="content">
+       <!-- <img src="welcome.gif" alt="Baby Sherk Token"> -->
+     <h1>Welcome to Sherk Fun Token ($SFT)!</h1> <p>Powered by <a href="https://sherkfun.io" style="color: blue; text-decoration: underline;">Sherkfun</a></p>
+    <div class="banner-container">
+        <a id="banner-link" href="https://sherkfun.io/token/7LrFusFsbzpC6yus7qGCBbDdZaJBQWMJqiEM16VSGfun">
+            <img id="banner" src="https://token4fun.github.io/babysherk/banner2.gif" alt="Banner Rotativo">
+        </a>
+        <!-- Setas de navegação abaixo do banner -->
+        <div class="banner-nav">
+            <button class="prev" onclick="prevBanner()">&#10094;</button>
+            <button class="next" onclick="nextBanner()">&#10095;</button>
+        </div>
+    </div>
     <div class="content">
         <div class="highlight-title">Introducing Sherk Fun Token ($SFT)</div>
         <p>The #SherkfunToken was initially created by the developer of SherkFun.io as a test token on the Solana network. However, the community quickly embraced it, transforming it into the flagship token of the platform. Powered by innovative features not found on competitors like PumpFun, $SFT is leading the way with real-time tools such as the SherkFunBuyBot, already functioning seamlessly.</p>
