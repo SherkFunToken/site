@@ -49,6 +49,28 @@
             height: auto;
         }
 
+        .contentmar {
+    position: relative;
+    background: url('mar1.gif') no-repeat center center;
+    background-size: cover; /* Ajusta a imagem para cobrir todo o fundo */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.contentmar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.4); /* Transparência para o fundo */
+    z-index: -1; /* Garante que o fundo fique atrás do conteúdo */
+}
+
+
         .banner-container {
             position: relative;
             margin: 20px auto;
@@ -271,13 +293,10 @@
         <img src="giveaway.jpg" alt="Giveaway" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);">
         </a>
     </div>
-</div>
-
+</div> 
     
-
-    
-<div class="content">
-     <div class="highlight-title">Why Choose $SFT? 🚀</div>
+<div class="contentmar">
+    <div class="highlight-title">Why Choose $SFT? 🚀</div>
     <p>Here’s why $SFT is more than just a token—it’s a game-changer:</p>
     <ul style="text-align: left; margin-left: auto; margin-right: auto; display: inline-block;">
         <li><strong>Speed and Savings:</strong> Built on the Solana blockchain for lightning-fast transactions and ultra-low fees.</li>
@@ -288,6 +307,7 @@
     </ul>
     <p>With $SFT, you’re not just joining a token; you’re stepping into a community-driven revolution. Let’s make history together!</p>
 </div>
+
     
 <div class="content">
      <div class="highlight-title">Tokenomics: The Heart of $SFT</div>
