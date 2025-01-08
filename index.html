@@ -245,7 +245,7 @@
             }
         }
     </style>
-    <script>
+   <script>
         // Banner rotation script
         let bannerIndex = 0;
         const banners = [
@@ -272,8 +272,8 @@
             setInterval(rotateBanner, 7000);
         };
 
-        // First content section randomizer (for first three sections)
-        function getRandomFirstSections() {
+        // First content section randomizer (for "Introducing $SFT")
+        function getRandomFirstSection() {
             const versions = [
                 {
                     title: 'Introducing the Community Favorite: Sherk Fun Token ($SFT)',
@@ -346,9 +346,48 @@
             document.getElementById('dynamic-content-second').innerHTML = randomVersion.content;
         }
 
+        // Third content section randomizer (for "Giveaway Announcement")
+        function getRandomGiveaway() {
+            const versions = [
+                {
+                    title: 'Giveaway Announcement - 1',
+                    content: `
+                        <p>After we bond, I will sponsor a Giveaway!<br>
+                        0.5% (5M) supply is going to find a new holder!<br>
+                        Every buy over 50$ (after bonding to Radium will count)<br>
+                        24 hours time to qualify.<br>
+                        Winner must hold at least 48 hours.</p>
+                    `
+                },
+                {
+                    title: 'Giveaway Announcement - 2',
+                    content: `
+                        <p>Exciting Giveaway Ahead!<br>
+                        0.5% (5M) of the supply is up for grabs!<br>
+                        All purchases over $50 qualify for this giveaway.<br>
+                        Make sure to hold your tokens for 48 hours after the giveaway.</p>
+                    `
+                },
+                {
+                    title: 'Giveaway Announcement - 3',
+                    content: `
+                        <p>Get ready for an exclusive Giveaway!<br>
+                        0.5% (5M) supply will be given to a new holder.<br>
+                        Every purchase over 50$ will count towards the giveaway.<br>
+                        Be sure to hold your tokens for 48 hours to qualify.</p>
+                    `
+                }
+            ];
+
+            const randomVersion = versions[Math.floor(Math.random() * versions.length)];
+            document.getElementById('giveaway-title').innerHTML = randomVersion.title;
+            document.getElementById('giveaway-content').innerHTML = randomVersion.content;
+        }
+
         window.onload = function() {
-            getRandomFirstSections();
+            getRandomFirstSection();
             getRandomSecondSection();
+            getRandomGiveaway();
         };
     </script>
 </head>
@@ -382,22 +421,16 @@
     </div>
 
 
-<div class="content">
-    <div class="highlight-title">Giveaway Announcement</div>
-    <div style="text-align: center;">
-        <p> After we bond, I will sponsor a Giveaway!
-
-0.5% (5M) supply is going to find a new holder!
-
-Every buy over 50$ (after bonding to Radium will count)
-24 hours time to qualify.
-Winner must hold at least 48 hours.</p>
-
-        <a href="https://t.me/SherkFunCommunity/1712" target="_blank">
-        <img src="giveaway.gif" alt="Giveaway" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);">
-        </a>
+    <!-- Giveaway Section -->
+    <div class="content">
+        <div class="highlight-title" id="giveaway-title"></div>
+        <div id="giveaway-content"></div>
+        <div style="text-align: center;">
+            <a href="https://t.me/SherkFunCommunity/1712" target="_blank">
+                <img src="giveaway.gif" alt="Giveaway" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);">
+            </a>
+        </div>
     </div>
-</div> 
     
 <div class="contentmar">
     <div class="highlight-title">Why Choose $SFT? 🚀</div>
