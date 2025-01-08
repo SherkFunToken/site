@@ -271,3 +271,10 @@
     color: #333;
     margin-top: 10px;
 }
+.meme-content img {
+    transition: transform 0.3s ease;
+}
+
+.meme-content img:hover {
+    transform: scale(1.1);
+}
