@@ -143,22 +143,26 @@ window.onload = function() {
 
 // Memes rotation
 const memeImages = [
-    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme1.jpg', // Exemplo de meme
-    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme2.jpg', // Exemplo de meme
+    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme1.jpg', 
+    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme2.jpg', 
+    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme3.jpg', 
+    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme4.jpg',
+    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme5.jpg',
     // Adicione mais memes aqui se necessário
 ];
 
 let memeIndex = 0;
 
 function rotateMemes() {
-    const memeImageElement = document.getElementById('meme-img');
-    memeImageElement.src = memeImages[memeIndex];
+    const memeCarousel = document.querySelector('.meme-carousel');
+    memeCarousel.style.transform = `translateX(-${(memeIndex * 100) / 3}%)`; // Move as imagens horizontalmente
 
-    memeIndex = (memeIndex + 1) % memeImages.length; // Alterna entre as imagens
+    memeIndex = (memeIndex + 1) % (memeImages.length - 2); // Alterna entre as imagens, mostrando sempre 3 de uma vez
 }
 
 // Inicializa a rotação de memes
-setInterval(rotateMemes, 5000); // 5000ms = 5 segundos
+setInterval(rotateMemes, 2000); // 2000ms = 2 segundos
 
-// Exibe o primeiro meme imediatamente
+// Exibe o primeiro conjunto de memes imediatamente
 rotateMemes();
+
