@@ -272,41 +272,41 @@
             setInterval(rotateBanner, 7000);
         };
 
-        // First content section randomizer (for "Introducing $SFT")
-        function getRandomFirstSection() {
-            const versions = [
-                {
-                    title: 'Introducing the Community Favorite: Sherk Fun Token ($SFT)',
-                    content: `
-                        <p>What started as a test token on the Solana network by the SherkFun.io team has blossomed into a highly cherished project, driven by the community. Today, $SFT stands as the flagship token of SherkFun.io, offering unique features that competitors, like PumpFun, can only hope to achieve!</p>
-                        <p>With cutting-edge tools like the SherkFunBuyBot already operating flawlessly, $SFT is set to transform our interaction with blockchain technology. But that’s not all—get ready for the upcoming SherkSnipe&Buy Bot, crafted to enhance token purchases with unmatched speed, intelligence, and efficiency.</p>
-                        <p>As the pioneering token on SherkFun.io, $SFT is charting a new course for future projects, redefining tokenomics, and revolutionizing token launches on the Solana network. Join us today and become part of this incredible movement!</p>
-                    `
-                },
-                {
-                    title: 'Discover the Sherk Fun Token ($SFT) Revolution',
-                    content: `
-                        <p>The journey of the SherkFun.io team began with a test token on the Solana network, which quickly turned into a community favorite. Today, $SFT proudly serves as the flagship token of SherkFun.io, offering innovative features that competitors like PumpFun can only dream of.</p>
-                        <p>With advanced tools such as the SherkFunBuyBot already up and running smoothly, $SFT is poised to reshape how we engage with blockchain technology. And the excitement doesn’t stop there—prepare for the launch of the SherkSnipe&Buy Bot, designed to streamline token purchases with greater speed and precision than ever before.</p>
-                        <p>As the trailblazing token on SherkFun.io, $SFT is leading the charge for future projects, reimagining tokenomics, and revolutionizing how token launches take place on Solana. Be a part of this movement and join the revolution today!</p>
-                    `
-                },
-                {
-                    title: 'Get to Know the Sherk Fun Token ($SFT)',
-                    content: `
-                        <p>$SFT started as a simple test token on the Solana network by the SherkFun.io team, and quickly evolved into a beloved project supported by the community. Now, $SFT proudly stands as the flagship token of SherkFun.io, offering features that outshine competitors like PumpFun!</p>
-                        <p>With advanced tools like the SherkFunBuyBot already running perfectly, $SFT is redefining the way we interact with blockchain technology. And the excitement continues with the launch of the SherkSnipe&Buy Bot, designed to make token purchases faster, smarter, and more efficient than ever before.</p>
-                        <p>As the first token on SherkFun.io, $SFT is setting the stage for future projects, transforming tokenomics, and revolutionizing the way token launches are conducted on Solana. Don’t miss out—join the revolution now and be part of this incredible journey!</p>
-                    `
-                }
-            ];
-
-            const randomVersion = versions[Math.floor(Math.random() * versions.length)];
-            document.getElementById('highlight-title-first').innerHTML = randomVersion.title;
-            document.getElementById('dynamic-content-first').innerHTML = randomVersion.content;
+// First content section randomizer (for "Introducing $SFT")
+function getRandomFirstSection() {
+    const versions = [
+        {
+            title: 'Introducing the Community Favorite: Sherk Fun Token ($SFT)',
+            content: `
+                <p>What started as a test token on the Solana network by the SherkFun.io team has blossomed into a highly cherished project, driven by the community. Today, $SFT stands as the flagship token of SherkFun.io, offering unique features that other tokens can only aspire to achieve!</p>
+                <p>With cutting-edge tools like the SherkFunBuyBot already operating flawlessly, $SFT is set to transform our interaction with blockchain technology. But that’s not all—get ready for the upcoming SherkSnipe&Buy Bot, crafted to enhance token purchases with unmatched speed, intelligence, and efficiency.</p>
+                <p>As the pioneering token on SherkFun.io, $SFT is charting a new course for future projects, redefining tokenomics, and revolutionizing token launches on the Solana network. Join us today and become part of this incredible movement!</p>
+            `
+        },
+        {
+            title: 'Discover the Sherk Fun Token ($SFT) Revolution',
+            content: `
+                <p>The journey of the SherkFun.io team began with a test token on the Solana network, which quickly turned into a community favorite. Today, $SFT proudly serves as the flagship token of SherkFun.io, offering innovative features that other tokens can only dream of.</p>
+                <p>With advanced tools such as the SherkFunBuyBot already up and running smoothly, $SFT is poised to reshape how we engage with blockchain technology. And the excitement doesn’t stop there—prepare for the launch of the SherkSnipe&Buy Bot, designed to streamline token purchases with greater speed and precision than ever before.</p>
+                <p>As the trailblazing token on SherkFun.io, $SFT is leading the charge for future projects, reimagining tokenomics, and revolutionizing how token launches take place on Solana. Be a part of this movement and join the revolution today!</p>
+            `
+        },
+        {
+            title: 'Get to Know the Sherk Fun Token ($SFT)',
+            content: `
+                <p>$SFT started as a simple test token on the Solana network by the SherkFun.io team, and quickly evolved into a beloved project supported by the community. Now, $SFT proudly stands as the flagship token of SherkFun.io, offering features that outshine other tokens!</p>
+                <p>With advanced tools like the SherkFunBuyBot already running perfectly, $SFT is redefining the way we interact with blockchain technology. And the excitement continues with the launch of the SherkSnipe&Buy Bot, designed to make token purchases faster, smarter, and more efficient than ever before.</p>
+                <p>As the first token on SherkFun.io, $SFT is setting the stage for future projects, transforming tokenomics, and revolutionizing the way token launches are conducted on Solana. Don’t miss out—join the revolution now and be part of this incredible journey!</p>
+            `
         }
+    ];
 
-        // Second content section randomizer (for "Ready to Join the $SFT Movement?")
+    const randomVersion = versions[Math.floor(Math.random() * versions.length)];
+    document.getElementById('highlight-title-first').innerHTML = randomVersion.title;
+    document.getElementById('dynamic-content-first').innerHTML = randomVersion.content;
+}
+
+// Second content section randomizer (for "Ready to Join the $SFT Movement?")
         function getRandomSecondSection() {
             const versions = [
                 {
