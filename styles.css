@@ -260,8 +260,14 @@
 }
 
 .meme-image {
-    max-height: 150px;
+    max-height: 300px;
     width: auto;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.meme_content p {
+    font-size: 16px;
+    color: #333;
+    margin-top: 10px;
 }
