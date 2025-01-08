@@ -140,3 +140,28 @@ window.onload = function() {
     getRandomSecondSection();
     getRandomGiveaway();
 };
+
+// Memes rotation
+const memeImages = [
+    '/site/memes/meme1.jpg', // Exemplo de meme
+    '/site/memes/meme2.jpg', // Exemplo de meme
+    '/site/memes/meme3.jpg', // Exemplo de meme
+    '/site/memes/meme4.jpg', // Exemplo de meme
+    '/site/memes/meme5.jpg', // Exemplo de meme
+    // Adicione mais memes aqui se necessário
+];
+
+let memeIndex = 0;
+
+function rotateMemes() {
+    const memeImageElement = document.getElementById('meme-img');
+    memeImageElement.src = memeImages[memeIndex];
+
+    memeIndex = (memeIndex + 1) % memeImages.length; // Alterna entre as imagens
+}
+
+// Inicializa a rotação de memes
+setInterval(rotateMemes, 5000); // 5000ms = 5 segundos
+
+// Exibe o primeiro meme imediatamente
+rotateMemes();
