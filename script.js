@@ -46,15 +46,21 @@ function nextBanner() {
 }
 
 window.onload = function () {
+    // Inicializando a rotação do banner a cada 7 segundos
     setInterval(rotateBanner, 7000); // Rotacionar o banner a cada 7 segundos
-    // Funções de navegação
+    // Adicionando as funções de navegação
     const prevButton = document.querySelector('.prev');
     const nextButton = document.querySelector('.next');
     if (prevButton) prevButton.addEventListener('click', prevBanner);
     if (nextButton) nextButton.addEventListener('click', nextBanner);
 
-// Rotação dos textos
-// First content section randomizer (for "Introducing $SFT")
+    // Funções para conteúdos randomizados
+    getRandomFirstSection();
+    getRandomSecondSection();
+    getRandomGiveaway();
+};
+
+// Função para a primeira seção de conteúdo (para "Introducing $SFT")
 function getRandomFirstSection() {
     const versions = [
         {
@@ -88,7 +94,7 @@ function getRandomFirstSection() {
     document.getElementById('dynamic-content-first').innerHTML = randomVersion.content;
 }
 
-// Second content section randomizer (for "Ready to Join the $SFT Movement?")
+// Função para a segunda seção de conteúdo (para "Ready to Join the $SFT Movement?")
 function getRandomSecondSection() {
     const versions = [
         {
@@ -128,7 +134,7 @@ function getRandomSecondSection() {
     document.getElementById('dynamic-content-second').innerHTML = randomVersion.content;
 }
 
-// Third content section randomizer (for "Giveaway Announcement")
+// Função para a terceira seção de conteúdo (para "Giveaway Announcement")
 function getRandomGiveaway() {
     const versions = [
         {
@@ -164,9 +170,3 @@ function getRandomGiveaway() {
     document.getElementById('giveaway-title').innerHTML = randomVersion.title;
     document.getElementById('giveaway-content').innerHTML = randomVersion.content;
 }
-
-window.onload = function() {
-    getRandomFirstSection();
-    getRandomSecondSection();
-    getRandomGiveaway();
-};
