@@ -269,3 +269,36 @@
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
+/* Estilos do carrossel de memes */
+.meme_content {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.meme-carousel {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    justify-content: center;
+}
+
+.meme-img {
+    max-height: 150px; /* Limite da altura das imagens */
+    object-fit: cover;
+    width: 33.33%; /* Faz com que 3 imagens caibam lado a lado */
+    transition: transform 1s ease; /* Transição suave ao mover as imagens */
+    border-radius: 10px;
+}
+
+.highlight-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    background: linear-gradient(45deg, #add8e6, #87cefa);
+    color: black;
+    padding: 10px 20px;
+    border-radius: 10px;
+    display: inline-block;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(135, 206, 250, 0.3);
+}
