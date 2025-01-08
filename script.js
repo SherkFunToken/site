@@ -10,6 +10,9 @@ const banners = [
 function rotateBanner() {
     const bannerElement = document.getElementById('banner');
     const bannerLink = document.getElementById('banner-link');
+    
+    if (!bannerElement || !bannerLink) return; // Verifica se os elementos existem
+    
     bannerElement.style.opacity = '0';
 
     setTimeout(() => {
@@ -17,12 +20,38 @@ function rotateBanner() {
         bannerElement.src = banners[bannerIndex].src;
         bannerLink.href = banners[bannerIndex].link;
         bannerElement.style.opacity = '1';
-    }, 500);
+    }, 500); // Tempo para transição de opacidade
+}
+
+function prevBanner() {
+    const bannerElement = document.getElementById('banner');
+    const bannerLink = document.getElementById('banner-link');
+    
+    if (!bannerElement || !bannerLink) return;
+
+    bannerIndex = (bannerIndex - 1 + banners.length) % banners.length; // Voltar ao índice anterior
+    bannerElement.src = banners[bannerIndex].src;
+    bannerLink.href = banners[bannerIndex].link;
+}
+
+function nextBanner() {
+    const bannerElement = document.getElementById('banner');
+    const bannerLink = document.getElementById('banner-link');
+    
+    if (!bannerElement || !bannerLink) return;
+
+    bannerIndex = (bannerIndex + 1) % banners.length; // Avançar ao próximo índice
+    bannerElement.src = banners[bannerIndex].src;
+    bannerLink.href = banners[bannerIndex].link;
 }
 
 window.onload = function () {
-    setInterval(rotateBanner, 7000);
-};
+    setInterval(rotateBanner, 7000); // Rotacionar o banner a cada 7 segundos
+    // Funções de navegação
+    const prevButton = document.querySelector('.prev');
+    const nextButton = document.querySelector('.next');
+    if (prevButton) prevButton.addEventListener('click', prevBanner);
+    if (nextButton) nextButton.addEventListener('click', nextBanner);
 
 // Rotação dos textos
 // First content section randomizer (for "Introducing $SFT")
