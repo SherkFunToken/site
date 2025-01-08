@@ -143,11 +143,8 @@ window.onload = function() {
 
 // Memes rotation
 const memeImages = [
-    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme1.jpg', // Exemplo de meme
-    '/site/memes/meme2.jpg', // Exemplo de meme
-    '/site/memes/meme3.jpg', // Exemplo de meme
-    '/site/memes/meme4.jpg', // Exemplo de meme
-    '/site/memes/meme5.jpg', // Exemplo de meme
+    'https://sherkfuntoken.github.io/site/memes/meme1.jpg', // Exemplo de meme
+    'https://sherkfuntoken.github.io/site/memes/meme2.jpg', // Exemplo de meme
     // Adicione mais memes aqui se necessário
 ];
 
