@@ -272,8 +272,8 @@
             setInterval(rotateBanner, 7000);
         };
 
-
-        function getRandomVersion() {
+        // First content section randomizer (for first three sections)
+        function getRandomFirstSections() {
             const versions = [
                 {
                     title: 'Introducing the Community Favorite: Sherk Fun Token ($SFT)',
@@ -301,17 +301,55 @@
                 }
             ];
 
-            // Randomly select a version
             const randomVersion = versions[Math.floor(Math.random() * versions.length)];
-
-            // Set the content dynamically on page load
-            document.getElementById('highlight-title').innerHTML = randomVersion.title;
-            document.getElementById('dynamic-content').innerHTML = randomVersion.content;
+            document.getElementById('highlight-title-first').innerHTML = randomVersion.title;
+            document.getElementById('dynamic-content-first').innerHTML = randomVersion.content;
         }
 
-        window.onload = getRandomVersion;
+        // Second content section randomizer (for "Ready to Join the $SFT Movement?")
+        function getRandomSecondSection() {
+            const versions = [
+                {
+                    title: 'Ready to Join the $SFT Revolution? 🚀',
+                    content: `
+                        <p>Step into the future with $SFT, the token that’s taking the Solana blockchain by storm! Powered by Sherk.fun, $SFT is not just another token—it's a game-changer for community-driven projects. With tools like the SherkFunBuyBot already active and the upcoming SherkSnipe&Buy Bot on the horizon, $SFT is redefining the way we interact with the crypto space.</p>
+                        <a href="https://sherkfun.io/token/6wY93bkRSk5KagCGTHrjLPCpbMWEPQGU9wrpsZ8tyftL" class="button-highlight">Buy $SFT Now</a>
+                        <a href="https://t.me/SherkFunCommunity" class="button">Hop Into Telegram</a>
+                        <a href="https://twitter.com/intent/tweet?text=Join+the+revolution+with+$SFT!%0AThe+ultimate+community-driven+token+on+%23Solana.%0APowered+by+Sherkfun.io!%0A%F0%9F%91%89+Telegram:+https://t.me/SherkFunCommunity%0A%23Crypto+%23Solana+%23Blockchain+%23DeFi+$SFT" class="button" target="_blank">Share the Hype on Twitter</a>
+                        <p>Get ahead of the game, unlock exclusive benefits, and become a key player in the $SFT movement. The time to shine is now—don't miss out!</p>
+                    `
+                },
+                {
+                    title: 'Join the $SFT Community Today! 🌐',
+                    content: `
+                        <p>The future of crypto is here, and it’s called $SFT. Powered by Sherk.fun, this community-driven token on the Solana blockchain is revolutionizing how we engage with blockchain technology. With features like the SherkFunBuyBot already in action and the highly anticipated SherkSnipe&Buy Bot just around the corner, $SFT is setting the standard for smarter, faster token buying.</p>
+                        <a href="https://sherkfun.io/token/6wY93bkRSk5KagCGTHrjLPCpbMWEPQGU9wrpsZ8tyftL" class="button-highlight">Buy $SFT Now</a>
+                        <a href="https://t.me/SherkFunCommunity" class="button">Hop Into Telegram</a>
+                        <a href="https://twitter.com/intent/tweet?text=Join+the+revolution+with+$SFT!%0AThe+ultimate+community-driven+token+on+%23Solana.%0APowered+by+Sherkfun.io!%0A%F0%9F%91%89+Telegram:+https://t.me/SherkFunCommunity%0A%23Crypto+%23Solana+%23Blockchain+%23DeFi+$SFT" class="button" target="_blank">Share the Hype on Twitter</a>
+                        <p>Be part of the most exciting crypto revolution and unlock incredible rewards. $SFT is here, and your journey starts now!</p>
+                    `
+                },
+                {
+                    title: 'Get Ready to Experience $SFT! 🌟',
+                    content: `
+                        <p>Don’t just sit back—be part of the $SFT movement! As the token that’s shaking up the Solana blockchain, $SFT is bringing a fresh perspective to community-driven projects. With tools like the SherkFunBuyBot already making waves and the upcoming SherkSnipe&Buy Bot promising to enhance your token purchases, $SFT is designed to offer a faster and smarter experience.</p>
+                        <a href="https://sherkfun.io/token/6wY93bkRSk5KagCGTHrjLPCpbMWEPQGU9wrpsZ8tyftL" class="button-highlight">Buy $SFT Now</a>
+                        <a href="https://t.me/SherkFunCommunity" class="button">Hop Into Telegram</a>
+                        <a href="https://twitter.com/intent/tweet?text=Join+the+revolution+with+$SFT!%0AThe+ultimate+community-driven+token+on+%23Solana.%0APowered+by+Sherkfun.io!%0A%F0%9F%91%89+Telegram:+https://t.me/SherkFunCommunity%0A%23Crypto+%23Solana+%23Blockchain+%23DeFi+$SFT" class="button" target="_blank">Share the Hype on Twitter</a>
+                        <p>Join the revolution early and take advantage of exclusive rewards. With $SFT, the future of crypto is now!</p>
+                    `
+                }
+            ];
 
-        
+            const randomVersion = versions[Math.floor(Math.random() * versions.length)];
+            document.getElementById('highlight-title-second').innerHTML = randomVersion.title;
+            document.getElementById('dynamic-content-second').innerHTML = randomVersion.content;
+        }
+
+        window.onload = function() {
+            getRandomFirstSections();
+            getRandomSecondSection();
+        };
     </script>
 </head>
 <body>
@@ -331,22 +369,17 @@
             <button class="next" onclick="nextBanner()">&#10095;</button>
         </div>
     </div>
-    <!-- Dynamically loaded content -->
+    <!-- Content section 1 -->
     <div class="content">
-        <div class="highlight-title" id="highlight-title"></div>
-        <div id="dynamic-content"></div>
+        <div class="highlight-title" id="highlight-title-first"></div>
+        <div id="dynamic-content-first"></div>
     </div>
 
-<div class="content">
-     <div class="highlight-title">Ready to Join the $SFT Movement? 🌟</div>
-    <p>Don’t just watch from the sidelines—jump into the crypto revolution with $SFT, the token that’s redefining community-driven projects on the Solana blockchain! Powered by Sherk.fun, $SFT is shaking things up with cutting-edge tools like the SherkFunBuyBot, already live, and the upcoming SherkSnipe&Buy Bot, promising faster and smarter token-buying experiences.</p>
-    <a href="https://sherkfun.io/token/6wY93bkRSk5KagCGTHrjLPCpbMWEPQGU9wrpsZ8tyftL" class="button-highlight">Buy $SFT Now</a>
-    <a href="https://t.me/SherkFunCommunity" class="button">Hop Into Telegram</a>
-    <a href="https://twitter.com/intent/tweet?text=Join+the+revolution+with+$SFT!%0AThe+ultimate+community-driven+token+on+%23Solana.%0APowered+by+Sherkfun.io!%0A%F0%9F%91%89+Telegram:+https://t.me/SherkFunCommunity%0A%23Crypto+%23Solana+%23Blockchain+%23DeFi+$SFT" class="button" target="_blank">Share the Hype on Twitter</a>
-    
-    
-<p> Get in early, unlock exclusive rewards, and be part of the movement that’s setting the standard for the future of crypto. Don’t miss out—$SFT is here, and it’s your time to shine!</p>
-</div>
+    <!-- Content section 2 -->
+    <div class="content">
+        <div class="highlight-title" id="highlight-title-second"></div>
+        <div id="dynamic-content-second"></div>
+    </div>
 
 
 <div class="content">
