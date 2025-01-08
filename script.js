@@ -140,36 +140,3 @@ window.onload = function() {
     getRandomSecondSection();
     getRandomGiveaway();
 };
-
-// Memes rotation
-const memeImages = [
-    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme1.jpg', 
-    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme2.jpg', 
-    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme3.jpg', 
-    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme4.jpg',
-    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme5.jpg',
-    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme6.jpg',
-    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme7.jpg',
-    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme8.jpg',
-    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme9.jpg',
-    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme10.jpg',
-    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme11.jpg',
-    
-    // Adicione mais memes aqui se necessário
-];
-
-let memeIndex = 0;
-
-function rotateMemes() {
-    const memeImageElement = document.getElementById('meme-img');
-    memeImageElement.src = memeImages[memeIndex];
-
-    memeIndex = (memeIndex + 1) % memeImages.length; // Alterna entre as imagens
-}
-
-// Inicializa a rotação de memes
-setInterval(rotateMemes, 2000); // 5000ms = 5 segundos
-
-// Exibe o primeiro meme imediatamente
-rotateMemes();
-
