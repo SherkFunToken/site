@@ -148,6 +148,13 @@ const memeImages = [
     'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme3.jpg', 
     'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme4.jpg',
     'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme5.jpg',
+    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme6.jpg',
+    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme7.jpg',
+    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme8.jpg',
+    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme9.jpg',
+    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme10.jpg',
+    'https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/site/memes/meme11.jpg',
+    
     // Adicione mais memes aqui se necessário
 ];
 
