@@ -161,15 +161,15 @@ const memeImages = [
 let memeIndex = 0;
 
 function rotateMemes() {
-    const memeCarousel = document.querySelector('.meme-carousel');
-    memeCarousel.style.transform = `translateX(-${(memeIndex * 100) / 3}%)`; // Move as imagens horizontalmente
+    const memeImageElement = document.getElementById('meme-img');
+    memeImageElement.src = memeImages[memeIndex];
 
-    memeIndex = (memeIndex + 1) % (memeImages.length - 2); // Alterna entre as imagens, mostrando sempre 3 de uma vez
+    memeIndex = (memeIndex + 1) % memeImages.length; // Alterna entre as imagens
 }
 
 // Inicializa a rotação de memes
-setInterval(rotateMemes, 2000); // 2000ms = 2 segundos
+setInterval(rotateMemes, 2000); // 5000ms = 5 segundos
 
-// Exibe o primeiro conjunto de memes imediatamente
+// Exibe o primeiro meme imediatamente
 rotateMemes();
 
