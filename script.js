@@ -5,7 +5,7 @@ const banners = [
     { src: "https://token4fun.github.io/babysherk/banner3.gif", link: "https://t.me/SherkGameBot" },
     { src: "https://token4fun.github.io/babysherk/banner5.gif", link: "https://t.me/SherkFunCommunity" },
     { src: "https://token4fun.github.io/babysherk/banner6.gif", link: "https://t.me/SherkFunCommunity/1529" },
-    { src: "https://sherkfuntoken.github.io/site/banner7.gif", link: "https://t.me/SherkFunCommunity/1529" },
+    { src: "https://sherkfuntoken.github.io/site/banner7.gif", link: "https://www.youtube.com/@SherkFunToken" },
 ];
 
 function rotateBanner() {
