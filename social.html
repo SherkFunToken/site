@@ -1,125 +1,108 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Geração de Link para Telegram (texto somente)</title>
+  <meta charset="UTF-8">
+  <title>Gerador de Link para Telegram</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
+      max-width: 600px;
+    }
+    h1 {
+      margin-bottom: 10px;
     }
     label {
-      font-weight: bold;
-      display: block;
-      margin-top: 20px;
-    }
-    select,
-    input[type="text"] {
-      width: 300px;
-      padding: 5px;
+      display: inline-block;
       margin: 5px 0;
+      font-weight: bold;
+    }
+    select, input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
     }
     button {
       padding: 10px 20px;
-      margin-top: 10px;
       cursor: pointer;
+      font-size: 16px;
     }
-    #preview,
-    #linkGerado {
-      margin-top: 10px;
+    #previewMensagem {
+      background-color: #f5f5f5;
       padding: 10px;
+      min-height: 40px;
       border: 1px solid #ccc;
-      width: 500px;
-      word-wrap: break-word;
+      margin-top: 5px;
+      white-space: pre-wrap; /* Mantém quebras de linha, se houver */
     }
-    #linkGerado a {
-      color: blue;
-      text-decoration: underline;
+    #linkGerado {
+      word-wrap: break-word; /* Para caso o link seja muito grande */
+      display: inline-block;
+      margin-top: 5px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Gerador de Texto para Telegram (sem link clicável)</h1>
+  <h1>Gerador de Link para Telegram</h1>
 
-  <!-- Mensagens pré-definidas -->
-  <label for="mensagemSelect">Escolha uma mensagem:</label>
-  <select id="mensagemSelect">
-    <option value="Olá, tudo bem? Dá uma olhada nesse link:">Olá, tudo bem? Dá uma olhada nesse link:</option>
-    <option value="E aí? Que tal conferir isso aqui:">E aí? Que tal conferir isso aqui:</option>
-    <option value="Veja este conteúdo incrível:">Veja este conteúdo incrível:</option>
-    <option value="Descobri algo interessante, olha só:">Descobri algo interessante, olha só:</option>
-  </select>
+  <!-- Formulário -->
+  <form>
+    <!-- Dropdown -->
+    <label for="mensagemDropdown">Escolha uma mensagem:</label>
+    <select id="mensagemDropdown">
+      <option value="Olá! Tudo bem?">Olá! Tudo bem?</option>
+      <option value="Segue o link que você pediu.">Segue o link que você pediu.</option>
+      <option value="Posso ajudar em algo?">Posso ajudar em algo?</option>
+    </select>
 
-  <!-- Campo para inserir o link -->
-  <label for="linkInput">Cole seu link (YouTube, Instagram, TikTok, etc.):</label>
-  <input type="text" id="linkInput" placeholder="https://www.youtube.com/..." />
+    <!-- Campo de texto -->
+    <label for="textoPersonalizado">Digite seu texto:</label>
+    <input 
+      type="text" 
+      id="textoPersonalizado" 
+      placeholder="Insira aqui um texto adicional"
+    >
 
-  <!-- Botão para gerar link -->
-  <button id="gerarLinkBtn">Gerar Link</button>
+    <!-- Botão para gerar o link -->
+    <button type="button" onclick="gerarLink()">Gerar Link</button>
+  </form>
 
-  <!-- Prévia da mensagem -->
-  <div id="preview"></div>
+  <!-- Preview da mensagem -->
+  <div>
+    <h3>Preview da mensagem formatada:</h3>
+    <p id="previewMensagem">Aqui aparecerá sua mensagem...</p>
+  </div>
 
-  <!-- Link Gerado -->
-  <div id="linkGerado"></div>
+  <!-- Link gerado -->
+  <div>
+    <h3>Link gerado:</h3>
+    <a id="linkGerado" href="#" target="_blank">Nenhum link gerado ainda</a>
+  </div>
 
   <script>
-    const mensagemSelect = document.getElementById('mensagemSelect');
-    const linkInput = document.getElementById('linkInput');
-    const gerarLinkBtn = document.getElementById('gerarLinkBtn');
-    const previewDiv = document.getElementById('preview');
-    const linkGeradoDiv = document.getElementById('linkGerado');
+    function gerarLink() {
+      // Obtém os valores selecionados/digitados
+      const mensagemSelecionada = document.getElementById('mensagemDropdown').value;
+      const textoPersonalizado = document.getElementById('textoPersonalizado').value;
 
-    // Função para inserir caractere invisível no link,
-    // impedindo o Telegram de reconhecê-lo como link
-    function obfuscarLink(url) {
-      // Zero width space
-      const zws = '\u200B';
+      // Cria a mensagem final unindo o dropdown com o texto personalizado
+      const mensagemFinal = mensagemSelecionada + (textoPersonalizado ? ' ' + textoPersonalizado : '');
 
-      let linkObfuscado = url;
+      // Monta a URL para abrir no Telegram
+      // https://t.me/share/url?url=<alguma_url>&text=<texto>
+      const telegramLink = `https://t.me/share/url?url=&text=${encodeURIComponent(mensagemFinal)}`;
 
-      // Se começar com https:// ...
-      if (linkObfuscado.startsWith('https://')) {
-        // "ht" + zero width space + "tps://"
-        linkObfuscado = 'ht' + zws + 'tps://' + linkObfuscado.slice(8);
-      } 
-      // Se começar com http:// ...
-      else if (linkObfuscado.startsWith('http://')) {
-        // "ht" + zero width space + "tp://"
-        linkObfuscado = 'ht' + zws + 'tp://' + linkObfuscado.slice(7);
-      }
+      // Exibe o preview da mensagem
+      document.getElementById('previewMensagem').innerText = mensagemFinal;
 
-      return linkObfuscado;
+      // Define o href do link gerado e exibe no texto do link
+      const linkGerado = document.getElementById('linkGerado');
+      linkGerado.href = telegramLink;
+      linkGerado.textContent = telegramLink;
     }
-
-    gerarLinkBtn.addEventListener('click', function() {
-      // Pega a mensagem selecionada e o link
-      const mensagem = mensagemSelect.value;
-      let link = linkInput.value.trim();
-
-      // "Quebra" o link para não ser reconhecido como URL no Telegram
-      const linkQuebrado = obfuscarLink(link);
-
-      // Monta a mensagem completa
-      const mensagemCompleta = mensagem + ' ' + linkQuebrado;
-
-      // Exibe a prévia da mensagem
-      previewDiv.textContent = 'Prévia: ' + mensagemCompleta;
-
-      // Monta o link para compartilhamento no Telegram,
-      // deixando 'url=' vazio. Assim, só o texto será enviado.
-      const telegramUrl = 'https://t.me/share/url?url=&text=' 
-        + encodeURIComponent(mensagemCompleta);
-
-      // Exibe o link gerado (esse link abre o Telegram com o texto pronto)
-      linkGeradoDiv.innerHTML = `
-        Link Gerado: 
-        <a href="${telegramUrl}" target="_blank">
-          Enviar pelo Telegram (texto somente)
-        </a>
-      `;
-    });
   </script>
+
 </body>
 </html>
