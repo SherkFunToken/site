@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Geração de Link para Telegram</title>
+  <title>Geração de Link para Telegram (texto somente)</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,7 +13,8 @@
       display: block;
       margin-top: 20px;
     }
-    select, input[type="text"] {
+    select,
+    input[type="text"] {
       width: 300px;
       padding: 5px;
       margin: 5px 0;
@@ -23,7 +24,8 @@
       margin-top: 10px;
       cursor: pointer;
     }
-    #preview, #linkGerado {
+    #preview,
+    #linkGerado {
       margin-top: 10px;
       padding: 10px;
       border: 1px solid #ccc;
@@ -38,8 +40,9 @@
 </head>
 <body>
 
-  <h1>Gerador de Link para Telegram</h1>
+  <h1>Gerador de Texto para Telegram (sem link clicável)</h1>
 
+  <!-- Mensagens pré-definidas -->
   <label for="mensagemSelect">Escolha uma mensagem:</label>
   <select id="mensagemSelect">
     <option value="Olá, tudo bem? Dá uma olhada nesse link:">Olá, tudo bem? Dá uma olhada nesse link:</option>
@@ -48,12 +51,17 @@
     <option value="Descobri algo interessante, olha só:">Descobri algo interessante, olha só:</option>
   </select>
 
+  <!-- Campo para inserir o link -->
   <label for="linkInput">Cole seu link (YouTube, Instagram, TikTok, etc.):</label>
   <input type="text" id="linkInput" placeholder="https://www.youtube.com/..." />
 
+  <!-- Botão para gerar link -->
   <button id="gerarLinkBtn">Gerar Link</button>
 
+  <!-- Prévia da mensagem -->
   <div id="preview"></div>
+
+  <!-- Link Gerado -->
   <div id="linkGerado"></div>
 
   <script>
@@ -63,21 +71,53 @@
     const previewDiv = document.getElementById('preview');
     const linkGeradoDiv = document.getElementById('linkGerado');
 
+    // Função para inserir caractere invisível no link,
+    // impedindo o Telegram de reconhecê-lo como link
+    function obfuscarLink(url) {
+      // Zero width space
+      const zws = '\u200B';
+
+      let linkObfuscado = url;
+
+      // Se começar com https:// ...
+      if (linkObfuscado.startsWith('https://')) {
+        // "ht" + zero width space + "tps://"
+        linkObfuscado = 'ht' + zws + 'tps://' + linkObfuscado.slice(8);
+      } 
+      // Se começar com http:// ...
+      else if (linkObfuscado.startsWith('http://')) {
+        // "ht" + zero width space + "tp://"
+        linkObfuscado = 'ht' + zws + 'tp://' + linkObfuscado.slice(7);
+      }
+
+      return linkObfuscado;
+    }
+
     gerarLinkBtn.addEventListener('click', function() {
+      // Pega a mensagem selecionada e o link
       const mensagem = mensagemSelect.value;
-      const link = linkInput.value.trim();
-      const mensagemCompleta = mensagem + ' ' + link;
+      let link = linkInput.value.trim();
+
+      // "Quebra" o link para não ser reconhecido como URL no Telegram
+      const linkQuebrado = obfuscarLink(link);
+
+      // Monta a mensagem completa
+      const mensagemCompleta = mensagem + ' ' + linkQuebrado;
 
       // Exibe a prévia da mensagem
       previewDiv.textContent = 'Prévia: ' + mensagemCompleta;
 
-      // Monta o link para compartilhamento no Telegram usando apenas o text=
-      const telegramUrl = 'https://t.me/share/url?text=' + encodeURIComponent(mensagemCompleta);
+      // Monta o link para compartilhamento no Telegram,
+      // deixando 'url=' vazio. Assim, só o texto será enviado.
+      const telegramUrl = 'https://t.me/share/url?url=&text=' 
+        + encodeURIComponent(mensagemCompleta);
 
-      // Exibe o link gerado
+      // Exibe o link gerado (esse link abre o Telegram com o texto pronto)
       linkGeradoDiv.innerHTML = `
-        Link Gerado:
-        <a href="${telegramUrl}" target="_blank">Enviar pelo Telegram</a>
+        Link Gerado: 
+        <a href="${telegramUrl}" target="_blank">
+          Enviar pelo Telegram (texto somente)
+        </a>
       `;
     });
   </script>
