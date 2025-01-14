@@ -18,7 +18,6 @@
       margin-top: 8px;
       resize: none;
     }
-    /* Área onde o link final será exibido */
     #textoLinkGerado {
       margin-top: 8px;
       padding: 6px;
@@ -28,7 +27,6 @@
       font-family: inherit;
       resize: none;
     }
-    /* Botão/link clicável para abrir diretamente o Telegram */
     #linkGerado {
       display: inline-block;
       margin-top: 8px;
@@ -47,18 +45,17 @@
 
 <body>
   <h1>Gerar Link de Mensagem para o Telegram</h1>
-  
-  <!-- Dropdown para escolher mensagem pré-definida -->
-<label for="mensagemDropdown">Escolha uma mensagem pré-definida:</label><br>
-<select id="mensagemDropdown" style="width: 100%;">
-  <option value="" disabled selected hidden>Selecione abaixo</option>
-  <option value="Agora é a sua vez, comunidade!">Agora é a sua vez, comunidade!</option>
-  <option value="O vídeo foi postado, precisamos engajar!">O vídeo foi postado, precisamos engajar!</option>
-  <option value="Compartilhem para espalhar a palavra pelo mundo!">Compartilhem para espalhar a palavra pelo mundo!</option>
-  <option value="Vamos juntos promover esse conteúdo!">Vamos juntos promover esse conteúdo!</option>
-  <option value="Não percam tempo, vamos divulgar agora!">Não percam tempo, vamos divulgar agora!</option>
-</select>
 
+  <!-- Dropdown com placeholder -->
+  <label for="mensagemDropdown">Escolha uma mensagem pré-definida:</label><br>
+  <select id="mensagemDropdown" style="width: 100%;">
+    <option value="" disabled selected hidden>Selecione abaixo</option>
+    <option value="Agora é a sua vez, comunidade!">Agora é a sua vez, comunidade!</option>
+    <option value="O vídeo foi postado, precisamos engajar!">O vídeo foi postado, precisamos engajar!</option>
+    <option value="Compartilhem para espalhar a palavra pelo mundo!">Compartilhem para espalhar a palavra pelo mundo!</option>
+    <option value="Vamos juntos promover esse conteúdo!">Vamos juntos promover esse conteúdo!</option>
+    <option value="Não percam tempo, vamos divulgar agora!">Não percam tempo, vamos divulgar agora!</option>
+  </select>
 
   <br><br>
 
@@ -102,8 +99,11 @@
       // 2. Obtém o texto adicional digitado
       const textoAdicional = document.getElementById("textoAdicional").value;
 
-      // 3. Monta a mensagem completa (concatenando mensagem + texto adicional, se houver)
-      const mensagemCompleta = mensagemSelecionada + (textoAdicional ? " " + textoAdicional : "");
+      // 3. Monta a mensagem completa, incluindo quebra de linha:
+      //    Ex: <mensagem pré-definida>
+      //        <texto adicional>
+      //    Se quiser 2 quebras, use "\n\n"
+      const mensagemCompleta = mensagemSelecionada + "\n" + textoAdicional;
 
       // 4. Atualiza o preview da mensagem
       document.getElementById("previewMensagem").value = mensagemCompleta;
@@ -111,11 +111,10 @@
       // 5. Codifica a mensagem para ser usada na URL
       const mensagemURL = encodeURIComponent(mensagemCompleta);
 
-      // 6. Defina aqui uma URL que você queira compartilhar (se não precisar de URL, pode usar algo fictício ou vazio)
-      //    Vamos supor que você queira compartilhar o link do seu site ou algo semelhante:
-      const urlParaCompartilhar = encodeURIComponent("Novo Posto nas redes Sociais");
+      // 6. Sua URL para compartilhar (caso queira)
+      const urlParaCompartilhar = encodeURIComponent("Novo Post publicado nas redes Sociais");
 
-      // 7. Monta o link para compartilhar no Telegram (usando t.me/share?url=<url>&text=<text>)
+      // 7. Monta o link para compartilhar no Telegram
       const linkTelegram = `https://t.me/share?url=${urlParaCompartilhar}&text=${mensagemURL}`;
 
       // 8. Exibe o link gerado na página (como texto)
