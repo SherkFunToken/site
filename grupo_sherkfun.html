@@ -66,15 +66,12 @@
                 return;
             }
 
-            // Define o link do grupo
-            const groupLink = "https://t.me/Sherkfun";
-
             // Codifica a mensagem personalizada e o link do vídeo
-            const encodedVideoLink = encodeURIComponent(videoLink);
-            const encodedMessage = encodeURIComponent(`${customMessage}\n\n🔗 Confira o vídeo aqui:`);
+            const formattedMessage = `🦈${customMessage}\n\n🔗 Confira o vídeo aqui:\n\n${videoLink}`;
+            const encodedMessage = encodeURIComponent(formattedMessage);
 
-            // Monta o link final
-            const finalLink = `https://t.me/share/url?url=${encodedVideoLink}&text=${encodedMessage}`;
+            // Monta o link final para compartilhamento
+            const finalLink = `https://t.me/share/url?url=${encodeURIComponent(videoLink)}&text=${encodedMessage}`;
 
             // Exibe o link gerado
             document.getElementById('result').innerHTML = `
