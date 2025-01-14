@@ -28,7 +28,7 @@
       font-family: inherit;
       resize: none;
     }
-    /* Botão ou link para abrir diretamente no Telegram */
+    /* Botão/link clicável para abrir diretamente o Telegram */
     #linkGerado {
       display: inline-block;
       margin-top: 8px;
@@ -49,14 +49,16 @@
   <h1>Gerar Link de Mensagem para o Telegram</h1>
   
   <!-- Dropdown para escolher mensagem pré-definida -->
-  <label for="mensagemDropdown">Escolha uma mensagem pré-definida:</label><br>
-  <select id="mensagemDropdown" style="width: 100%;">
-    <option value="Agora é a sua vez, comunidade!">Agora é a sua vez, comunidade!</option>
-    <option value="O vídeo foi postado, precisamos engajar!">O vídeo foi postado, precisamos engajar!</option>
-    <option value="Compartilhem para espalhar a palavra pelo mundo!">Compartilhem para espalhar a palavra pelo mundo!</option>
-    <option value="Vamos juntos promover esse conteúdo!">Vamos juntos promover esse conteúdo!</option>
-    <option value="Não percam tempo, vamos divulgar agora!">Não percam tempo, vamos divulgar agora!</option>
-  </select>
+<label for="mensagemDropdown">Escolha uma mensagem pré-definida:</label><br>
+<select id="mensagemDropdown" style="width: 100%;">
+  <option value="" disabled selected hidden>Selecione abaixo</option>
+  <option value="Agora é a sua vez, comunidade!">Agora é a sua vez, comunidade!</option>
+  <option value="O vídeo foi postado, precisamos engajar!">O vídeo foi postado, precisamos engajar!</option>
+  <option value="Compartilhem para espalhar a palavra pelo mundo!">Compartilhem para espalhar a palavra pelo mundo!</option>
+  <option value="Vamos juntos promover esse conteúdo!">Vamos juntos promover esse conteúdo!</option>
+  <option value="Não percam tempo, vamos divulgar agora!">Não percam tempo, vamos divulgar agora!</option>
+</select>
+
 
   <br><br>
 
@@ -109,16 +111,18 @@
       // 5. Codifica a mensagem para ser usada na URL
       const mensagemURL = encodeURIComponent(mensagemCompleta);
 
-      // 6. Monta o link para compartilhar no Telegram
-      //    - Para enviar diretamente para um usuário ou grupo específico, use:
-      //      const linkTelegram = `https://t.me/SeuUsuarioOuGrupo?text=${mensagemURL}`;
-      const linkTelegram = `tg://share?text=${mensagemURL}`;
+      // 6. Defina aqui uma URL que você queira compartilhar (se não precisar de URL, pode usar algo fictício ou vazio)
+      //    Vamos supor que você queira compartilhar o link do seu site ou algo semelhante:
+      const urlParaCompartilhar = encodeURIComponent("https://seusiteexemplo.com");
 
-      // 7. Exibe o link gerado na página (como texto)
+      // 7. Monta o link para compartilhar no Telegram (usando t.me/share?url=<url>&text=<text>)
+      const linkTelegram = `https://t.me/share?url=${urlParaCompartilhar}&text=${mensagemURL}`;
+
+      // 8. Exibe o link gerado na página (como texto)
       const textoLinkGerado = document.getElementById("textoLinkGerado");
       textoLinkGerado.value = linkTelegram;
 
-      // 8. Deixa o botão/link clicável
+      // 9. Deixa o botão/link clicável
       const linkGerado = document.getElementById("linkGerado");
       linkGerado.href = linkTelegram;
     }
