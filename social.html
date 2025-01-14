@@ -2,8 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Gerador de Link para Telegram</title>
-  <!-- Você pode adicionar seu CSS aqui -->
+  <title>Gerador de Link para Compartilhar no Telegram</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -22,7 +21,7 @@
       padding: 10px;
       min-height: 50px;
       border: 1px solid #ccc;
-      white-space: pre-wrap; /* para manter quebras de linha, se houver */
+      white-space: pre-wrap;
     }
     #linkGerado {
       color: blue;
@@ -33,7 +32,7 @@
   </style>
 </head>
 <body>
-  <h1>Gerador de Link para Telegram</h1>
+  <h1>Gerador de Link para Compartilhar no Telegram</h1>
 
   <form>
     <label for="mensagemBase">Escolha uma mensagem pré-definida:</label>
@@ -50,12 +49,8 @@
       placeholder="Insira seu texto aqui" 
     />
 
-    <label for="usuarioTelegram">Usuário do Telegram (sem @):</label>
-    <input 
-      type="text" 
-      id="usuarioTelegram" 
-      placeholder="Ex: Marcelo_VP" 
-    />
+    <!-- Note que removemos o campo para inserir usuário do Telegram,
+         pois agora a ideia é apenas compartilhar no Telegram -->
 
     <button type="button" onclick="gerarLink()">Gerar Link</button>
   </form>
@@ -68,20 +63,23 @@
 
   <script>
     function gerarLink() {
-      // Obter valores dos campos do formulário
+      // Obter valores dos campos
       const mensagemBase = document.getElementById("mensagemBase").value;
       const textoPersonalizado = document.getElementById("textoPersonalizado").value;
-      const usuarioTelegram = document.getElementById("usuarioTelegram").value.trim();
 
-      // Montar a mensagem final (se preferir, coloque um espaço ou quebra de linha antes do texto adicional)
+      // Montar a mensagem final
       const mensagemFinal = mensagemBase + (textoPersonalizado ? " " + textoPersonalizado : "");
 
       // Codificar a mensagem para uso na URL
       const mensagemUrlEncoded = encodeURIComponent(mensagemFinal);
 
-      // Montar o link para o Telegram
-      // Exemplo: https://t.me/<usuario>?text=<mensagem_url_encoded>
-      const link = `https://t.me/${usuarioTelegram}?text=${mensagemUrlEncoded}`;
+      // Neste exemplo, iremos compartilhar uma URL fictícia.
+      // Se quiser, pode personalizar e pegar a URL de algum campo ou gerar dinamicamente.
+      const urlParaCompartilhar = encodeURIComponent("https://minha-pagina-de-destino.com");
+
+      // Montar o link de compartilhamento no Telegram
+      // Formato: https://t.me/share/url?url=<URL>&text=<MENSAGEM>
+      const link = `https://t.me/share/url?url=${urlParaCompartilhar}&text=${mensagemUrlEncoded}`;
 
       // Mostrar o preview da mensagem na tela
       document.getElementById("previewMensagem").textContent = mensagemFinal;
