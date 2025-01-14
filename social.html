@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Gerar Link Telegram</title>
+  <title>Generate Telegram Link</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -44,102 +44,90 @@
 </head>
 
 <body>
-  <h1>Gerar Link de Mensagem para o Telegram...</h1>
+  <h1>Generate a Telegram Message Link...</h1>
 
-  <!-- Dropdown com placeholder -->
-<label for="mensagemDropdown">Choose a predefined message:</label><br>
-<select id="mensagemDropdown" style="width: 100%;">
-  <option value="" disabled selected hidden>Select below</option>
-
-  <!-- As 10 que você já tinha -->
-  <option value="New post is live! Let's spread the word!">New post is live! Let's spread the word!</option>
-  <option value="Time to rally the community and share our latest update!">Time to rally the community and share our latest update!</option>
-  <option value="We've just published something big. Help us reach everyone!">We've just published something big. Help us reach everyone!</option>
-  <option value="Your support matters! Let's get this out to the world!">Your support matters! Let's get this out to the world!</option>
-  <option value="Join the hype and make some noise for our new post!">Join the hype and make some noise for our new post!</option>
-  <option value="Another update is out—share it far and wide!">Another update is out—share it far and wide!</option>
-  <option value="Ready, set, engage! Spread the excitement now!">Ready, set, engage! Spread the excitement now!</option>
-  <option value="We can't do this alone. Help us reach new horizons!">We can't do this alone. Help us reach new horizons!</option>
-  <option value="We're counting on you—invite everyone in!">We're counting on you—invite everyone in!</option>
-  <option value="Spread the love—it's time to go global!">Spread the love—it's time to go global!</option>
-  <option value="Big news awaits—let's share it loud and proud!">Big news awaits—let's share it loud and proud!</option>
-  <option value="Our latest update is huge—amplify our reach together!">Our latest update is huge—amplify our reach together!</option>
-  <option value="We’re stronger as one—rally everyone for this reveal!">We’re stronger as one—rally everyone for this reveal!</option>
-  <option value="Don't miss out—tell your friends and let's go viral!">Don't miss out—tell your friends and let's go viral!</option>
-  <option value="Power up our mission—spread this post far and wide!">Power up our mission—spread this post far and wide!</option>
-  <option value="This is epic—team up and make a global impact!">This is epic—team up and make a global impact!</option>
-  <option value="We need your voice—fuel this update with your shares!">We need your voice—fuel this update with your shares!</option>
-  <option value="A spark can light a fire—let's ignite this post worldwide!">A spark can light a fire—let's ignite this post worldwide!</option>
-  <option value="Shout it loud—our community is unstoppable together!">Shout it loud—our community is unstoppable together!</option>
-  <option value="Stand with us—spreading this update is just the beginning!">Stand with us—spreading this update is just the beginning!</option>
-</select>
-
+  <!-- Dropdown with placeholder -->
+  <label for="mensagemDropdown">Choose a predefined message:</label><br>
+  <select id="mensagemDropdown" style="width: 100%;">
+    <option value="" disabled selected hidden>Select below</option>
+    <option value="New post is live! Let's spread the word!">New post is live! Let's spread the word!</option>
+    <option value="Time to rally the community and share our latest update!">Time to rally the community and share our latest update!</option>
+    <option value="We've just published something big. Help us reach everyone!">We've just published something big. Help us reach everyone!</option>
+    <option value="Your support matters! Let's get this out to the world!">Your support matters! Let's get this out to the world!</option>
+    <option value="Join the hype and make some noise for our new post!">Join the hype and make some noise for our new post!</option>
+    <option value="Another update is out—share it far and wide!">Another update is out—share it far and wide!</option>
+    <option value="Ready, set, engage! Spread the excitement now!">Ready, set, engage! Spread the excitement now!</option>
+    <option value="We can't do this alone. Help us reach new horizons!">We can't do this alone. Help us reach new horizons!</option>
+    <option value="We're counting on you—invite everyone in!">We're counting on you—invite everyone in!</option>
+    <option value="Spread the love—it's time to go global!">Spread the love—it's time to go global!</option>
+  </select>
 
   <br><br>
 
-  <!-- Campo para texto adicional -->
-  <label for="textoAdicional">Insira um texto extra (opcional):</label><br>
-  <input 
-    type="text" 
-    id="textoAdicional" 
-    placeholder="Digite aqui algo a mais..." 
+  <!-- Additional text field -->
+  <label for="textoAdicional">Insert extra text (optional):</label><br>
+  <input
+    type="text"
+    id="textoAdicional"
+    placeholder="Type something here..."
     style="width: 100%;"
   >
 
   <br><br>
 
-  <!-- Botão para gerar o link -->
-  <button onclick="gerarLink()">Gerar link</button>
+  <!-- Button to generate the link -->
+  <button onclick="gerarLink()">Generate link</button>
 
   <br><br>
 
-  <!-- Preview da mensagem resultante -->
-  <label for="previewMensagem">Preview da mensagem:</label>
+  <!-- Preview of the resulting message -->
+  <label for="previewMensagem">Message preview:</label>
   <textarea id="previewMensagem" readonly></textarea>
 
   <br>
 
-  <!-- Link final (exibido como texto) -->
-  <label for="textoLinkGerado">Link gerado:</label>
+  <!-- Final link (displayed as text) -->
+  <label for="textoLinkGerado">Generated link:</label>
   <textarea id="textoLinkGerado" readonly></textarea>
 
   <br>
 
-  <!-- Link clicável para abrir o Telegram -->
-  <a id="linkGerado" href="#" target="_blank">Abrir no Telegram</a>
+  <!-- Clickable link to open Telegram -->
+  <a id="linkGerado" href="#" target="_blank">Open in Telegram</a>
 
-  <!-- Script principal -->
+  <!-- Main script -->
   <script>
     function gerarLink() {
-      // 1. Obtém a mensagem selecionada no dropdown
+      // 1. Get the selected message from the dropdown
       const mensagemSelecionada = document.getElementById("mensagemDropdown").value;
 
-      // 2. Obtém o texto adicional digitado
+      // 2. Get the additional typed text
       const textoAdicional = document.getElementById("textoAdicional").value;
 
-      // 3. Monta a mensagem completa, incluindo quebra de linha:
-      //    Ex: <mensagem pré-definida>
-      //        <texto adicional>
-      //    Se quiser 2 quebras, use "\n\n"
+      // 3. Assemble the complete message, including line breaks:
+      //    e.g.:
+      //       <predefined message>
+      //       <additional text>
+      //    If you want two line breaks, use "\n\n"
       const mensagemCompleta = "\n" + mensagemSelecionada + "\n\n" + textoAdicional;
 
-      // 4. Atualiza o preview da mensagem
+      // 4. Update the message preview
       document.getElementById("previewMensagem").value = mensagemCompleta;
 
-      // 5. Codifica a mensagem para ser usada na URL
+      // 5. Encode the message to be used in the URL
       const mensagemURL = encodeURIComponent(mensagemCompleta);
 
-      // 6. Sua URL para compartilhar (caso queira)
+      // 6. Your URL to share (if you want)
       const urlParaCompartilhar = encodeURIComponent("✅ A new post has been published on social media. 🦈");
 
-      // 7. Monta o link para compartilhar no Telegram
+      // 7. Build the link to share on Telegram
       const linkTelegram = `https://t.me/share?url=${urlParaCompartilhar}&text=${mensagemURL}`;
 
-      // 8. Exibe o link gerado na página (como texto)
+      // 8. Display the generated link on the page (as text)
       const textoLinkGerado = document.getElementById("textoLinkGerado");
       textoLinkGerado.value = linkTelegram;
 
-      // 9. Deixa o botão/link clicável
+      // 9. Make the button/link clickable
       const linkGerado = document.getElementById("linkGerado");
       linkGerado.href = linkTelegram;
     }
