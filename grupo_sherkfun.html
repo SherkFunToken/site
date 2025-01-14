@@ -69,12 +69,12 @@
             // Define o link do grupo
             const groupLink = "https://t.me/Sherkfun";
 
-            // Codifica o link do vídeo e a mensagem personalizada
+            // Codifica a mensagem personalizada e o link do vídeo
             const encodedVideoLink = encodeURIComponent(videoLink);
-            const encodedMessage = encodeURIComponent(customMessage);
+            const encodedMessage = encodeURIComponent(`${customMessage}\n\n🔗 Confira o vídeo aqui:`);
 
             // Monta o link final
-            const finalLink = `https://t.me/share/url?url=${encodedVideoLink}&text=${encodedMessage}%0A%0A🔗 Entre no grupo: ${encodeURIComponent(groupLink)}`;
+            const finalLink = `https://t.me/share/url?url=${encodedVideoLink}&text=${encodedMessage}`;
 
             // Exibe o link gerado
             document.getElementById('result').innerHTML = `
