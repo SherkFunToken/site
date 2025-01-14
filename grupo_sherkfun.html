@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Links para Grupo Específico no Telegram</title>
+    <title>Gerador de Links para TikTok no Grupo Sherkfun</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -39,8 +39,11 @@
     </style>
 </head>
 <body>
-    <h1>Gerador de Links para o Grupo Sherkfun no Telegram</h1>
+    <h1>Gerador de Links para TikTok no Grupo Sherkfun</h1>
     <form id="linkForm">
+        <label for="videoLink">Link do Vídeo no TikTok:</label>
+        <input type="text" id="videoLink" placeholder="https://www.tiktok.com/@usuario/video/123456" required>
+
         <label for="customMessage">Mensagem Personalizada:</label>
         <textarea id="customMessage" rows="4" placeholder="Digite sua mensagem personalizada..." required></textarea>
 
@@ -54,22 +57,24 @@
         document.getElementById('linkForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Define o link do grupo
-            const groupLink = "https://t.me/Sherkfun";
-
-            // Obtem a mensagem personalizada do formulário
+            // Obtem os valores do formulário
+            const videoLink = document.getElementById('videoLink').value.trim();
             const customMessage = document.getElementById('customMessage').value.trim();
 
-            if (!customMessage) {
-                alert('Por favor, preencha a mensagem personalizada!');
+            if (!videoLink || !customMessage) {
+                alert('Por favor, preencha todos os campos!');
                 return;
             }
 
-            // Codifica a mensagem personalizada
+            // Define o link do grupo
+            const groupLink = "https://t.me/Sherkfun";
+
+            // Codifica o link do vídeo e a mensagem personalizada
+            const encodedVideoLink = encodeURIComponent(videoLink);
             const encodedMessage = encodeURIComponent(customMessage);
 
             // Monta o link final
-            const finalLink = `https://t.me/share/url?url=${encodeURIComponent(groupLink)}&text=${encodedMessage}`;
+            const finalLink = `https://t.me/share/url?url=${encodedVideoLink}&text=${encodedMessage}%0A%0A🔗 Entre no grupo: ${encodeURIComponent(groupLink)}`;
 
             // Exibe o link gerado
             document.getElementById('result').innerHTML = `
