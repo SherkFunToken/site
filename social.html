@@ -40,7 +40,6 @@
 
   <h1>Gerador de Link para Telegram</h1>
 
-  <!-- Mensagens pré-definidas -->
   <label for="mensagemSelect">Escolha uma mensagem:</label>
   <select id="mensagemSelect">
     <option value="Olá, tudo bem? Dá uma olhada nesse link:">Olá, tudo bem? Dá uma olhada nesse link:</option>
@@ -49,17 +48,12 @@
     <option value="Descobri algo interessante, olha só:">Descobri algo interessante, olha só:</option>
   </select>
 
-  <!-- Campo para inserir o link -->
   <label for="linkInput">Cole seu link (YouTube, Instagram, TikTok, etc.):</label>
   <input type="text" id="linkInput" placeholder="https://www.youtube.com/..." />
 
-  <!-- Botão para gerar link -->
   <button id="gerarLinkBtn">Gerar Link</button>
 
-  <!-- Prévia da mensagem -->
   <div id="preview"></div>
-
-  <!-- Link Gerado -->
   <div id="linkGerado"></div>
 
   <script>
@@ -70,28 +64,20 @@
     const linkGeradoDiv = document.getElementById('linkGerado');
 
     gerarLinkBtn.addEventListener('click', function() {
-      // Pega a mensagem selecionada e o link
       const mensagem = mensagemSelect.value;
       const link = linkInput.value.trim();
-
-      // Monta a mensagem completa
       const mensagemCompleta = mensagem + ' ' + link;
 
       // Exibe a prévia da mensagem
       previewDiv.textContent = 'Prévia: ' + mensagemCompleta;
 
-      // Monta o link para compartilhamento no Telegram
-      // Usamos encodeURIComponent para garantir que espaços e caracteres especiais sejam tratados corretamente
-      const telegramUrl = 'https://t.me/share/url?url=' 
-        + encodeURIComponent(link) 
-        + '&text=' + encodeURIComponent(mensagemCompleta);
+      // Monta o link para compartilhamento no Telegram usando apenas o text=
+      const telegramUrl = 'https://t.me/share/url?text=' + encodeURIComponent(mensagemCompleta);
 
       // Exibe o link gerado
       linkGeradoDiv.innerHTML = `
-        Link Gerado: 
-        <a href="${telegramUrl}" target="_blank">
-          Enviar pelo Telegram
-        </a>
+        Link Gerado:
+        <a href="${telegramUrl}" target="_blank">Enviar pelo Telegram</a>
       `;
     });
   </script>
