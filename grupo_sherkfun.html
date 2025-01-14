@@ -83,7 +83,7 @@
             const formattedMessage = `Novo vídeo postado no Tik Tok\n\n${customMessage}\n\n🔗 Confira o vídeo aqui:\n${videoLink}`;
             const encodedMessage = encodeURIComponent(formattedMessage);
 
-            // Monta o link final para compartilhamento no Telegram
+            // Monta o link final para compartilhamento
             const finalLink = `https://t.me/share/url?text=${encodedMessage}`;
 
             // Exibe o link gerado
