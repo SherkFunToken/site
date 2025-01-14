@@ -39,7 +39,7 @@
     </style>
 </head>
 <body>
-    <h1>Gerador de Links para TikTok no Grupo Sherkfun</h1>
+    <h1>Gerador de Links para TikTok no Grupo Sherkfun...</h1>
     <form id="linkForm">
         <label for="videoLink">Link do Vídeo no TikTok:</label>
         <input type="text" id="videoLink" placeholder="https://www.tiktok.com/@usuario/video/123456" required>
@@ -84,7 +84,7 @@
             const encodedMessage = encodeURIComponent(formattedMessage);
 
             // Monta o link final para compartilhamento
-            const finalLink = `tg://msg_url?url=${encodeURIComponent(videoLink)}&text=${encodedMessage}`;
+            const finalLink = `https://t.me/share/url?text=${encodedMessage}`;
 
             // Exibe o link gerado
             document.getElementById('result').innerHTML = `
