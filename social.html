@@ -112,7 +112,7 @@
       // 6. Monta o link para compartilhar no Telegram
       //    - Para enviar diretamente para um usuário ou grupo específico, use:
       //      const linkTelegram = `https://t.me/SeuUsuarioOuGrupo?text=${mensagemURL}`;
-      const linkTelegram = `https://t.me/share/url?url=&text=${mensagemURL}`;
+      const linkTelegram = `tg://share?text=${mensagemURL}`;
 
       // 7. Exibe o link gerado na página (como texto)
       const textoLinkGerado = document.getElementById("textoLinkGerado");
