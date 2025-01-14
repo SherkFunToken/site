@@ -17,7 +17,7 @@
         label {
             font-weight: bold;
         }
-        input, textarea, button {
+        select, input, button {
             width: 100%;
             margin: 10px 0;
             padding: 10px;
@@ -44,8 +44,14 @@
         <label for="videoLink">Link do Vídeo no TikTok:</label>
         <input type="text" id="videoLink" placeholder="https://www.tiktok.com/@usuario/video/123456" required>
 
-        <label for="customMessage">Mensagem Personalizada:</label>
-        <textarea id="customMessage" rows="4" placeholder="Digite sua mensagem personalizada..." required></textarea>
+<label for="customMessage">Escolha uma Mensagem:</label>
+<select id="customMessage" required>
+    <option value="Agora é a vez de vocês! Curtam, deem likes e comentem o vídeo!">Agora é a vez de vocês! Curtam, deem likes e comentem o vídeo!</option>
+    <option value="O vídeo já está no ar! Mostrem seu apoio com likes, comentários e compartilhamentos!">O vídeo já está no ar! Mostrem seu apoio com likes, comentários e compartilhamentos!</option>
+    <option value="Comunidade, este é o momento! Engajem no vídeo: curtam, comentem e compartilhem!">Comunidade, este é o momento! Engajem no vídeo: curtam, comentem e compartilhem!</option>
+    <option value="Chegou a hora! Comentem, curtam e ajudem a impulsionar o vídeo agora!">Chegou a hora! Comentem, curtam e ajudem a impulsionar o vídeo agora!</option>
+</select>
+
 
         <button type="submit">Gerar Link</button>
     </form>
@@ -67,7 +73,7 @@
             }
 
             // Codifica a mensagem personalizada e o link do vídeo
-            const formattedMessage = `🦈${customMessage}\n\n🔗 Confira o vídeo aqui:\n\n${videoLink}`;
+            const formattedMessage = `${customMessage}\n\n🔗 Confira o vídeo aqui:\n${videoLink}`;
             const encodedMessage = encodeURIComponent(formattedMessage);
 
             // Monta o link final para compartilhamento
