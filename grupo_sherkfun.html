@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Links para Grupo Específico no Telegram</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, textarea, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gerador de Links para o Grupo Sherkfun no Telegram</h1>
+    <form id="linkForm">
+        <label for="customMessage">Mensagem Personalizada:</label>
+        <textarea id="customMessage" rows="4" placeholder="Digite sua mensagem personalizada..." required></textarea>
+
+        <button type="submit">Gerar Link</button>
+    </form>
+
+    <h2>Link Gerado:</h2>
+    <p id="result"></p>
+
+    <script>
+        document.getElementById('linkForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Define o link do grupo
+            const groupLink = "https://t.me/Sherkfun";
+
+            // Obtem a mensagem personalizada do formulário
+            const customMessage = document.getElementById('customMessage').value.trim();
+
+            if (!customMessage) {
+                alert('Por favor, preencha a mensagem personalizada!');
+                return;
+            }
+
+            // Codifica a mensagem personalizada
+            const encodedMessage = encodeURIComponent(customMessage);
+
+            // Monta o link final
+            const finalLink = `https://t.me/share/url?url=${encodeURIComponent(groupLink)}&text=${encodedMessage}`;
+
+            // Exibe o link gerado
+            document.getElementById('result').innerHTML = `
+                <a href="${finalLink}" target="_blank">${finalLink}</a>
+            `;
+        });
+    </script>
+</body>
+</html>
