@@ -63,7 +63,7 @@
 </head>
 
 <body>
-  <h1>Generate a Telegram Message to Share.</h1>
+  <h1>Generate a Telegram Message to Share...</h1>
 
   <!-- Dropdown with placeholder -->
   <label for="mensagemDropdown">Choose a predefined message:</label><br>
@@ -138,39 +138,40 @@
     // 2. Get the additional typed text
     const textoAdicional = document.getElementById("textoAdicional").value;
 
-    // 3. Define the image link (hidden in the message)
-    const linkImagem = "https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/NewPost.png"; // Link da imagem
+    // 3. Define the image link
+    const linkImagem = "https://example.com/path/to/image.jpg"; // Link da imagem
 
-    // 4. Define the custom text to display
-    const textoPersonalizado = "✅ A new post has been published on social media. 🦈";
+    // 4. Assemble the complete message, including line breaks:
+    const mensagemCompleta = "\n" + mensagemSelecionada + "\n\n" + textoAdicional + "\n\n" + "Veja a imagem aqui: " + linkImagem;
 
-    // 5. Assemble the complete message without showing the image URL or text "Veja a imagem aqui:"
-    const mensagemCompleta = "\n" + mensagemSelecionada + "\n\n" + textoAdicional;
+    // 5. Update the message preview
+    document.getElementById("previewMensagem").value = mensagemCompleta;
 
-    // 6. Update the message preview (without encoding it)
-    document.getElementById("previewMensagem").value = textoPersonalizado + "\n" + mensagemCompleta;
-
-    // 7. Encode the message for the URL (don't encode the display text)
+    // 6. Encode the message to be used in the URL
     const mensagemURL = encodeURIComponent(mensagemCompleta);
 
-    // 8. Construct the final text to be displayed (with text and encoded message)
-    const textoFinal = `${textoPersonalizado}\n${mensagemURL}`;
+    // 7. Detect if the device is mobile or desktop
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
-    // 9. Generate the link for Telegram (ensure image link is hidden in the URL)
-    const linkTelegram = `https://t.me/share?url=${encodeURIComponent(linkImagem)}&text=${encodeURIComponent(textoFinal)}`;
+    // 8. Adjust the URL depending on the device type
+    let linkTelegram;
+    if (isMobile) {
+      // For mobile devices, use tg:// schema
+      linkTelegram = `tg://msg_url?url=${encodeURIComponent(linkImagem)}&text=${mensagemURL}`;
+    } else {
+      // For desktop, use https://t.me/share
+      linkTelegram = `https://t.me/share?url=${encodeURIComponent(linkImagem)}&text=${mensagemURL}`;
+    }
 
-    // 10. Display the generated link on the page (as text)
+    // 9. Display the generated link on the page (as text)
     const textoLinkGerado = document.getElementById("textoLinkGerado");
     textoLinkGerado.value = linkTelegram;
 
-    // 11. Make the button/link clickable
+    // 10. Make the button/link clickable
     const linkGerado = document.getElementById("linkGerado");
     linkGerado.href = linkTelegram;
   }
 </script>
-
-
-
 
 
 </body>
