@@ -45,17 +45,43 @@
 </head>
 
 <body>
-  <h1>Generate a Telegram Message to Share...</h1>
+  <h1>Generate a Telegram Message to Share.</h1>
 
   <!-- Dropdown with placeholder -->
   <label for="mensagemDropdown">Choose a predefined message:</label><br>
   <select id="mensagemDropdown" style="width: 100%;">
-    <option value="" disabled selected hidden>Select below</option>
-    <option value="New post is live! Let's spread the word!">New post is live! Let's spread the word!</option>
-    <option value="Time to rally the community and share our latest update!">Time to rally the community and share our latest update!</option>
-    <option value="We've just published something big. Help us reach everyone!">We've just published something big. Help us reach everyone!</option>
-    <!-- Add other options as needed -->
-  </select>
+  <option value="" disabled selected hidden>Select below</option>
+  <option value="New post is live! Let's spread the word!">New post is live! Let's spread the word!</option>
+  <option value="Time to rally the community and share our latest update!">Time to rally the community and share our latest update!</option>
+  <option value="We've just published something big. Help us reach everyone!">We've just published something big. Help us reach everyone!</option>
+  <option value="Your support matters! Let's get this out to the world!">Your support matters! Let's get this out to the world!</option>
+  <option value="Join the hype and make some noise for our new post!">Join the hype and make some noise for our new post!</option>
+  <option value="Another update is out—share it far and wide!">Another update is out—share it far and wide!</option>
+  <option value="Ready, set, engage! Spread the excitement now!">Ready, set, engage! Spread the excitement now!</option>
+  <option value="We can't do this alone. Help us reach new horizons!">We can't do this alone. Help us reach new horizons!</option>
+  <option value="We're counting on you—invite everyone in!">We're counting on you—invite everyone in!</option>
+  <option value="Spread the love—it's time to go global!">Spread the love—it's time to go global!</option>
+  <option value="Big news awaits—let's share it loud and proud!">Big news awaits—let's share it loud and proud!</option>
+  <option value="Our latest update is huge—amplify our reach together!">Our latest update is huge—amplify our reach together!</option>
+  <option value="We’re stronger as one—rally everyone for this reveal!">We’re stronger as one—rally everyone for this reveal!</option>
+  <option value="Don't miss out—tell your friends and let's go viral!">Don't miss out—tell your friends and let's go viral!</option>
+  <option value="Power up our mission—spread this post far and wide!">Power up our mission—spread this post far and wide!</option>
+  <option value="This is epic—team up and make a global impact!">This is epic—team up and make a global impact!</option>
+  <option value="We need your voice—fuel this update with your shares!">We need your voice—fuel this update with your shares!</option>
+  <option value="A spark can light a fire—let's ignite this post worldwide!">A spark can light a fire—let's ignite this post worldwide!</option>
+  <option value="Shout it loud—our community is unstoppable together!">Shout it loud—our community is unstoppable together!</option>
+  <option value="Stand with us—spreading this update is just the beginning!">Stand with us—spreading this update is just the beginning!</option>
+<option value="Fresh off the press—help us spread the excitement!">Fresh off the press—help us spread the excitement!</option>
+<option value="Our biggest news yet—take it to every corner!">Our biggest news yet—take it to every corner!</option>
+<option value="Ready for action? Unite and push this post to the max!">Ready for action? Unite and push this post to the max!</option>
+<option value="No time to wait—share this update and keep the momentum!">No time to wait—share this update and keep the momentum!</option>
+<option value="We’re going big—join the wave and make this post shine!">We’re going big—join the wave and make this post shine!</option>
+<option value="Your turn to shine—spread the word and spark a chain reaction!">Your turn to shine—spread the word and spark a chain reaction!</option>
+<option value="This update is too good to miss—blast it everywhere!">This update is too good to miss—blast it everywhere!</option>
+<option value="We need every voice—turn up the volume on our new release!">We need every voice—turn up the volume on our new release!</option>
+<option value="Calling all champions—rally around this post and make history!">Calling all champions—rally around this post and make history!</option>
+<option value="All hands on deck—share now and lead us to new heights!">All hands on deck—share now and lead us to new heights!</option>
+</select>
 
   <br><br>
 
@@ -94,8 +120,11 @@
       // 2. Get the additional typed text
       const textoAdicional = document.getElementById("textoAdicional").value;
 
+      // 2.1. Texto adicional fixo
+      const textoSubstituto = "Visit Sherk Linktree: https://linktr.ee/sherkonsol"; // Substitua o texto "XXX-LL" pelo que voce quer na mensagem
+
       // 3. Assemble the complete message, including line breaks:
-      const mensagemCompleta = "\n" + mensagemSelecionada + "\n\n" + textoAdicional;
+      const mensagemCompleta = "\n" + mensagemSelecionada + "\n\n" + textoAdicional + "\n\n" + textoSubstituto;
 
       // 4. Update the message preview
       document.getElementById("previewMensagem").value = mensagemCompleta;
