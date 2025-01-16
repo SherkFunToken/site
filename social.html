@@ -63,7 +63,7 @@
 </head>
 
 <body>
-  <h1>Generate a Telegram Message to Share.</h1>
+  <h1>Generate a Telegram Message to Share...</h1>
 
   <!-- Dropdown with placeholder -->
   <label for="mensagemDropdown">Choose a predefined message:</label><br>
@@ -130,48 +130,136 @@
   <a id="linkGerado" href="#" target="_blank">Click to share in Telegram</a>
 
   <!-- Main script -->
-<script>
-  function gerarLink() {
-    // 1. Get the selected message from the dropdown
-    const mensagemSelecionada = document.getElementById("mensagemDropdown").value;
-
-    // 2. Get the additional typed text
-    const textoAdicional = document.getElementById("textoAdicional").value;
-
-    // 3. Define the image link
-    const linkImagem = "https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/NewPost.png"; // Link da imagem
-
-    // 4. Assemble the complete message, including line breaks:
-    const mensagemCompleta = "\n" + mensagemSelecionada + "\n\n" + textoAdicional + "\n\n";
-
-    // 5. Update the message preview
-    document.getElementById("previewMensagem").value = mensagemCompleta;
-
-    // 6. Encode the message to be used in the URL
-    const mensagemURL = encodeURIComponent(mensagemCompleta);
-
-    // 7. Detect if the device is mobile or desktop
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-
-    // 8. Adjust the URL depending on the device type
-    let linkTelegram;
-    if (isMobile) {
-      // For mobile devices, use tg:// schema
-      linkTelegram = `tg://msg_url?url=${encodeURIComponent(linkImagem)}&text=${mensagemURL}`;
-    } else {
-      // For desktop, use https://t.me/share
-      linkTelegram = `https://t.me/share?url=${encodeURIComponent(linkImagem)}&text=${mensagemURL}`;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="telegram-icon.png">
+  <title>Generate Telegram Message</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      max-width: 600px;
     }
+    label {
+      font-weight: bold;
+    }
+    #previewMensagem {
+      width: 100%;
+      height: 60px;
+      margin-top: 8px;
+      resize: none;
+    }
+    #textoLinkGerado {
+      margin-top: 8px;
+      padding: 6px;
+      background: #f5f5f5;
+      border: 1px solid #ccc;
+      width: 100%;
+      font-family: inherit;
+      resize: none;
+    }
+    #linkGerado {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 8px 16px;
+      background-color: #0088cc;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+    #linkGerado:hover {
+      background-color: #006fa3;
+    }
+  </style>
+</head>
 
-    // 9. Display the generated link on the page (as text)
-    const textoLinkGerado = document.getElementById("textoLinkGerado");
-    textoLinkGerado.value = linkTelegram;
+<body>
+  <h1>Generate a Telegram Message to Share...</h1>
 
-    // 10. Make the button/link clickable
-    const linkGerado = document.getElementById("linkGerado");
-    linkGerado.href = linkTelegram;
-  }
-</script>
+  <!-- Dropdown with placeholder -->
+  <label for="mensagemDropdown">Choose a predefined message:</label><br>
+  <select id="mensagemDropdown" style="width: 100%;">
+    <option value="" disabled selected hidden>Select below</option>
+    <option value="New post is live! Let's spread the word!">New post is live! Let's spread the word!</option>
+    <option value="Time to rally the community and share our latest update!">Time to rally the community and share our latest update!</option>
+    <option value="We've just published something big. Help us reach everyone!">We've just published something big. Help us reach everyone!</option>
+    <!-- Add other options as needed -->
+  </select>
+
+  <br><br>
+
+  <!-- Additional text field -->
+  <label for="textoAdicional">Insert the link to your post.:</label><br>
+  <input type="text" id="textoAdicional" placeholder="Instagram, Tik Tok, X, Youtube link here..." style="width: 100%;">
+
+  <br><br>
+
+  <!-- Button to generate the link -->
+  <button onclick="gerarLink()">Generate link</button>
+
+  <br><br>
+
+  <!-- Preview of the resulting message -->
+  <label for="previewMensagem">Message preview:</label>
+  <textarea id="previewMensagem" readonly></textarea>
+
+  <br>
+
+  <!-- Final link (displayed as text) -->
+  <label for="textoLinkGerado">Generated link:</label>
+  <textarea id="textoLinkGerado" readonly></textarea>
+
+  <br>
+
+  <!-- Clickable link to open Telegram -->
+  <a id="linkGerado" href="#" target="_blank">Click to share in Telegram</a>
+
+  <!-- Main script -->
+  <script>
+    function gerarLink() {
+      // 1. Get the selected message from the dropdown
+      const mensagemSelecionada = document.getElementById("mensagemDropdown").value;
+
+      // 2. Get the additional typed text
+      const textoAdicional = document.getElementById("textoAdicional").value;
+
+      // 3. Assemble the complete message, including line breaks:
+      const mensagemCompleta = "\n" + mensagemSelecionada + "\n\n" + textoAdicional;
+
+      // 4. Update the message preview
+      document.getElementById("previewMensagem").value = mensagemCompleta;
+
+      // 5. Encode the message to be used in the URL
+      const mensagemURL = encodeURIComponent(mensagemCompleta);
+
+      // 6. Detect if the device is mobile or desktop
+      const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+      // 7. Adjust the URL depending on the device type
+      let linkTelegram;
+      if (isMobile) {
+        // For mobile devices, use tg:// schema
+        linkTelegram = `tg://msg_url?url=${encodeURIComponent("✅ A new post has been published on social media. 🦈")}&text=${mensagemURL}`;
+      } else {
+        // For desktop, use https://t.me/share
+        linkTelegram = `https://t.me/share?url=${encodeURIComponent("✅ A new post has been published on social media. 🦈")}&text=${mensagemURL}`;
+      }
+
+      // 8. Display the generated link on the page (as text)
+      const textoLinkGerado = document.getElementById("textoLinkGerado");
+      textoLinkGerado.value = linkTelegram;
+
+      // 9. Make the button/link clickable
+      const linkGerado = document.getElementById("linkGerado");
+      linkGerado.href = linkTelegram;
+    }
+  </script>
+</body>
+</html>
+
 
 
 </body>
