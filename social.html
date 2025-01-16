@@ -54,14 +54,17 @@
         margin: 10px;
       }
       h1 {
-        font-size: 1.5em;
+        font-size: 1.6em; /* Aumentei o tamanho do título */
       }
       label, select, input, button, textarea {
-        font-size: 1em;
+        font-size: 1.1em; /* Aumentei o tamanho da fonte para melhor legibilidade */
       }
       #previewMensagem,
       #textoLinkGerado {
-        font-size: 0.9em;
+        font-size: 1em;
+      }
+      select, input, button, textarea {
+        width: 100%;
       }
     }
 
@@ -72,6 +75,9 @@
       }
       h1 {
         font-size: 1.75em;
+      }
+      label, select, input, button, textarea {
+        font-size: 1.2em;
       }
     }
 
@@ -98,7 +104,7 @@
   <label for="mensagemDropdown">Choose a predefined message:</label><br>
   <select id="mensagemDropdown" style="width: 100%;">
     <option value="" disabled selected hidden>Select below</option>
-<option value="Let's get the word out—share and make it go viral!">Let's get the word out—share and make it go viral!</option>
+    <option value="Let's get the word out—share and make it go viral!">Let's get the word out—share and make it go viral!</option>
 <option value="This is our moment—let's amplify it together!">This is our moment—let's amplify it together!</option>
 <option value="Help us spread the excitement—share the news now!">Help us spread the excitement—share the news now!</option>
 <option value="Our mission is unstoppable—join us in sharing the news!">Our mission is unstoppable—join us in sharing the news!</option>
