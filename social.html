@@ -45,7 +45,7 @@
 </head>
 
 <body>
-  <h1>Generate a Telegram Message to Share...</h1>
+  <h1>Generate a Telegram Message to Share.</h1>
 
   <!-- Dropdown with placeholder -->
   <label for="mensagemDropdown">Choose a predefined message:</label><br>
@@ -139,10 +139,10 @@
       let linkTelegram;
       if (isMobile) {
         // For mobile devices, use tg:// schema
-        linkTelegram = `tg://msg_url?url=${encodeURIComponent("✅ A new post has been published on social media. 🦈")}&text=${mensagemURL}`;
+        linkTelegram = `tg://msg_url?url=${encodeURIComponent("✅ New post live on social media! 🦈")}&text=${mensagemURL}`;
       } else {
         // For desktop, use https://t.me/share
-        linkTelegram = `https://t.me/share?url=${encodeURIComponent("✅ A new post has been published on social media. 🦈")}&text=${mensagemURL}`;
+        linkTelegram = `https://t.me/share?url=${encodeURIComponent("✅ New post live on social media! 🦈")}&text=${mensagemURL}`;
       }
 
       // 8. Display the generated link on the page (as text)
