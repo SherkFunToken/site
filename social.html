@@ -45,7 +45,7 @@
 </head>
 
 <body>
-  <h1>Generate a Telegram Message to Share.</h1>
+  <h1>Generate a Telegram Message to Share...</h1>
 
   <!-- Dropdown with placeholder -->
   <label for="mensagemDropdown">Choose a predefined message:</label><br>
@@ -124,7 +124,7 @@
       const textoSubstituto = "----------\n Visit Sherk Linktree: https://linktr.ee/sherkonsol"; // Substitua o texto "XXX-LL" pelo que voce quer na mensagem
 
       // 3. Assemble the complete message, including line breaks:
-      const mensagemCompleta = "\n" + mensagemSelecionada + "\n\n" + textoAdicional + "\n\n" + textoSubstituto;
+      const mensagemCompleta = "\n" + "*" + mensagemSelecionada + "*" + "\n\n" + textoAdicional + "\n\n" + textoSubstituto;
 
       // 4. Update the message preview
       document.getElementById("previewMensagem").value = mensagemCompleta;
