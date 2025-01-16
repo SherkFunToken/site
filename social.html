@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="telegram-icon.png">
   <title>Generate Telegram Message</title>
-    <style>
+  <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
@@ -91,13 +92,13 @@
 </head>
 
 <body>
-  <h1>Generate a Telegram Message to Share...</h1>
+  <h1>Generate a Telegram Message to Share.</h1>
 
   <!-- Dropdown with placeholder -->
   <label for="mensagemDropdown">Choose a predefined message:</label><br>
   <select id="mensagemDropdown" style="width: 100%;">
-  <option value="" disabled selected hidden>Select below</option>
-  <option value="Let's get the word out—share and make it go viral!">Let's get the word out—share and make it go viral!</option>
+    <option value="" disabled selected hidden>Select below</option>
+<option value="Let's get the word out—share and make it go viral!">Let's get the word out—share and make it go viral!</option>
 <option value="This is our moment—let's amplify it together!">This is our moment—let's amplify it together!</option>
 <option value="Help us spread the excitement—share the news now!">Help us spread the excitement—share the news now!</option>
 <option value="Our mission is unstoppable—join us in sharing the news!">Our mission is unstoppable—join us in sharing the news!</option>
@@ -147,12 +148,13 @@
 <option value="We need every voice—turn up the volume on our new release!">We need every voice—turn up the volume on our new release!</option>
 <option value="Calling all champions—rally around this post and make history!">Calling all champions—rally around this post and make history!</option>
 <option value="All hands on deck—share now and lead us to new heights!">All hands on deck—share now and lead us to new heights!</option>
-</select>
+    <!-- Add other options as needed -->
+  </select>
 
   <br><br>
 
   <!-- Additional text field -->
-  <label for="textoAdicional">Insert the link to your post.:</label><br>
+  <label for="textoAdicional">Insert the link to your post:</label><br>
   <input type="text" id="textoAdicional" placeholder="Instagram, Tik Tok, X, Youtube link here..." style="width: 100%;">
 
   <br><br>
