@@ -2,21 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="telegram-icon.png">
   <title>Generate Telegram Message</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
-      max-width: 600px;
+      max-width: 100%;
+      box-sizing: border-box;
     }
     label {
       font-weight: bold;
     }
-    #previewMensagem {
+    /* Ajustar largura dos campos e outros elementos */
+    select, input[type="text"], button, textarea {
       width: 100%;
-      height: 60px;
+      box-sizing: border-box;
       margin-top: 8px;
+    }
+    #previewMensagem {
+      height: 60px;
       resize: none;
     }
     #textoLinkGerado {
@@ -24,7 +30,6 @@
       padding: 6px;
       background: #f5f5f5;
       border: 1px solid #ccc;
-      width: 100%;
       font-family: inherit;
       resize: none;
     }
@@ -41,15 +46,28 @@
     #linkGerado:hover {
       background-color: #006fa3;
     }
+
+    /* Tornar a página mais responsiva */
+    @media (max-width: 600px) {
+      body {
+        margin: 10px;
+      }
+      h1 {
+        font-size: 1.5em;
+      }
+      label, select, input, button, textarea {
+        font-size: 1em;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <h1>Generate a Telegram Message to Share</h1>
+  <h1>Generate a Telegram Message to Share...</h1>
 
   <!-- Dropdown with placeholder -->
   <label for="mensagemDropdown">Choose a predefined message:</label><br>
-  <select id="mensagemDropdown" style="width: 100%;">
+  <select id="mensagemDropdown">
     <option value="" disabled selected hidden>Select below</option>
     <option value="New post is live! Let's spread the word!">New post is live! Let's spread the word!</option>
     <option value="Time to rally the community and share our latest update!">Time to rally the community and share our latest update!</option>
@@ -62,32 +80,13 @@
     <option value="We're counting on you—invite everyone in!">We're counting on you—invite everyone in!</option>
     <option value="Spread the love—it's time to go global!">Spread the love—it's time to go global!</option>
     <option value="Big news awaits—let's share it loud and proud!">Big news awaits—let's share it loud and proud!</option>
-    <option value="Our latest update is huge—amplify our reach together!">Our latest update is huge—amplify our reach together!</option>
-    <option value="We’re stronger as one—rally everyone for this reveal!">We’re stronger as one—rally everyone for this reveal!</option>
-    <option value="Don't miss out—tell your friends and let's go viral!">Don't miss out—tell your friends and let's go viral!</option>
-    <option value="Power up our mission—spread this post far and wide!">Power up our mission—spread this post far and wide!</option>
-    <option value="This is epic—team up and make a global impact!">This is epic—team up and make a global impact!</option>
-    <option value="We need your voice—fuel this update with your shares!">We need your voice—fuel this update with your shares!</option>
-    <option value="A spark can light a fire—let's ignite this post worldwide!">A spark can light a fire—let's ignite this post worldwide!</option>
-    <option value="Shout it loud—our community is unstoppable together!">Shout it loud—our community is unstoppable together!</option>
-    <option value="Stand with us—spreading this update is just the beginning!">Stand with us—spreading this update is just the beginning!</option>
-    <option value="Fresh off the press—help us spread the excitement!">Fresh off the press—help us spread the excitement!</option>
-    <option value="Our biggest news yet—take it to every corner!">Our biggest news yet—take it to every corner!</option>
-    <option value="Ready for action? Unite and push this post to the max!">Ready for action? Unite and push this post to the max!</option>
-    <option value="No time to wait—share this update and keep the momentum!">No time to wait—share this update and keep the momentum!</option>
-    <option value="We’re going big—join the wave and make this post shine!">We’re going big—join the wave and make this post shine!</option>
-    <option value="Your turn to shine—spread the word and spark a chain reaction!">Your turn to shine—spread the word and spark a chain reaction!</option>
-    <option value="This update is too good to miss—blast it everywhere!">This update is too good to miss—blast it everywhere!</option>
-    <option value="We need every voice—turn up the volume on our new release!">We need every voice—turn up the volume on our new release!</option>
-    <option value="Calling all champions—rally around this post and make history!">Calling all champions—rally around this post and make history!</option>
-    <option value="All hands on deck—share now and lead us to new heights!">All hands on deck—share now and lead us to new heights!</option>
   </select>
 
   <br><br>
 
   <!-- Additional text field -->
   <label for="textoAdicional">Insert the link to your post.:</label><br>
-  <input type="text" id="textoAdicional" placeholder="Instagram, Tik Tok, X, Youtube link here..." style="width: 100%;">
+  <input type="text" id="textoAdicional" placeholder="Instagram, Tik Tok, X, Youtube link here...">
 
   <br><br>
 
