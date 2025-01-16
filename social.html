@@ -63,7 +63,7 @@
 </head>
 
 <body>
-  <h1>Generate a Telegram Message to Share...</h1>
+  <h1>Generate a Telegram Message to Share.</h1>
 
   <!-- Dropdown with placeholder -->
   <label for="mensagemDropdown">Choose a predefined message:</label><br>
@@ -141,37 +141,41 @@
     // 3. Define the image link (hidden in the message)
     const linkImagem = "https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/NewPost.png"; // Link da imagem
 
-    // 4. Assemble the complete message without showing the image URL or text "Veja a imagem aqui:"
+    // 4. Define the custom text to display
+    const textoPersonalizado = "✅ A new post has been published on social media. 🦈";
+
+    // 5. Assemble the complete message without showing the image URL or text "Veja a imagem aqui:"
     const mensagemCompleta = "\n" + mensagemSelecionada + "\n\n" + textoAdicional;
 
-    // 5. Update the message preview
+    // 6. Update the message preview
     document.getElementById("previewMensagem").value = mensagemCompleta;
 
-    // 6. Encode the message to be used in the URL
+    // 7. Encode the message to be used in the URL
     const mensagemURL = encodeURIComponent(mensagemCompleta);
 
-    // 7. Detect if the device is mobile or desktop
+    // 8. Detect if the device is mobile or desktop
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
-    // 8. Adjust the URL depending on the device type
+    // 9. Adjust the URL depending on the device type
     let linkTelegram;
     if (isMobile) {
       // For mobile devices, use tg:// schema
-      linkTelegram = `tg://msg_url?url=${encodeURIComponent(linkImagem)}&text=${mensagemURL}`;
+      linkTelegram = `tg://msg_url?url=${encodeURIComponent(linkImagem)}&text=${encodeURIComponent(textoPersonalizado + mensagemURL)}`;
     } else {
       // For desktop, use https://t.me/share
-      linkTelegram = `https://t.me/share?url=${encodeURIComponent(linkImagem)}&text=${mensagemURL}`;
+      linkTelegram = `https://t.me/share?url=${encodeURIComponent(linkImagem)}&text=${encodeURIComponent(textoPersonalizado + mensagemURL)}`;
     }
 
-    // 9. Display the generated link on the page (as text)
+    // 10. Display the generated link on the page (as text)
     const textoLinkGerado = document.getElementById("textoLinkGerado");
     textoLinkGerado.value = linkTelegram;
 
-    // 10. Make the button/link clickable
+    // 11. Make the button/link clickable
     const linkGerado = document.getElementById("linkGerado");
     linkGerado.href = linkTelegram;
   }
 </script>
+
 
 
 </body>
