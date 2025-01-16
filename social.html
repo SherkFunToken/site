@@ -63,7 +63,7 @@
 </head>
 
 <body>
-  <h1>Generate a Telegram Message to Share...</h1>
+  <h1>Generate a Telegram Message to Share.</h1>
 
   <!-- Dropdown with placeholder -->
   <label for="mensagemDropdown">Choose a predefined message:</label><br>
@@ -139,10 +139,10 @@
     const textoAdicional = document.getElementById("textoAdicional").value;
 
     // 3. Define the image link
-    const linkImagem = "https://example.com/path/to/image.jpg"; // Link da imagem
+    const linkImagem = "https://raw.githubusercontent.com/SherkFunToken/site/refs/heads/main/NewPost.png"; // Link da imagem
 
     // 4. Assemble the complete message, including line breaks:
-    const mensagemCompleta = "\n" + mensagemSelecionada + "\n\n" + textoAdicional + "\n\n" + "Veja a imagem aqui: " + linkImagem;
+    const mensagemCompleta = "\n" + mensagemSelecionada + "\n\n" + textoAdicional + "\n\n";
 
     // 5. Update the message preview
     document.getElementById("previewMensagem").value = mensagemCompleta;
