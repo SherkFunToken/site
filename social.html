@@ -249,32 +249,28 @@
     function gerarLink() {
       const mensagemSelecionada = document.getElementById("mensagemDropdown").value;
       const textoAdicional = document.getElementById("textoAdicional").value;
+      const textoSubstituto = "----------\nSherk's Linktree: linktr.ee/sherkonsol"; 
 
-      // Alteração para usar o formato Markdown para links no Telegram
-      const textoSubstituto = "----------\nSherk's Linktree: [Sherk's Linktree](https://linktr.ee/sherkonsol)";
-
-      // Montagem da mensagem completa
       const mensagemCompleta = "\n" + "**" + mensagemSelecionada + "**" + "\n\n" + textoAdicional + "\n\n" + textoSubstituto;
 
       // Exibir a mensagem no campo "Message preview"
       document.getElementById("previewMensagem").textContent = mensagemCompleta;
 
-      // Codificar a mensagem para ser usada na URL
       const mensagemURL = encodeURIComponent(mensagemCompleta);
 
       const isMobile = /Mobi|Android/i.test(navigator.userAgent);
       let linkTelegram;
       if (isMobile) {
-        linkTelegram = `tg://msg_url?url=${encodeURIComponent("✅ New post live on social media! 🦈")}&text=${mensagemURL}`;
+        linkTelegram = tg://msg_url?url=${encodeURIComponent("✅ New post live on social media! 🦈")}&text=${mensagemURL};
       } else {
-        linkTelegram = `https://t.me/share?url=${encodeURIComponent("✅ New post live on social media! 🦈")}&text=${mensagemURL}`;
+        linkTelegram = https://t.me/share?url=${encodeURIComponent("✅ New post live on social media! 🦈")}&text=${mensagemURL};
       }
 
       // Exibir o link no campo "Generated link"
       document.getElementById("textoLinkGerado").textContent = linkTelegram;
       document.getElementById("linkGerado").href = linkTelegram;
     }
-</script>
+  </script>
 
 
 </body>
