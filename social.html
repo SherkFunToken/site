@@ -250,14 +250,14 @@
       const mensagemSelecionada = document.getElementById("mensagemDropdown").value;
       const textoAdicional = document.getElementById("textoAdicional").value;
 
-      // Alteração para incorporar o link ao texto "Sherk's Linktree"
-      const textoSubstituto = "----------\nSherk's Linktree: <a href='https://linktr.ee/sherkonsol' target='_blank'>Sherk's Linktree</a>";
+      // Alteração para usar o formato Markdown para links no Telegram
+      const textoSubstituto = "----------\nSherk's Linktree: [Sherk's Linktree](https://linktr.ee/sherkonsol)";
 
       // Montagem da mensagem completa
       const mensagemCompleta = "\n" + "**" + mensagemSelecionada + "**" + "\n\n" + textoAdicional + "\n\n" + textoSubstituto;
 
       // Exibir a mensagem no campo "Message preview"
-      document.getElementById("previewMensagem").innerHTML = mensagemCompleta;
+      document.getElementById("previewMensagem").textContent = mensagemCompleta;
 
       // Codificar a mensagem para ser usada na URL
       const mensagemURL = encodeURIComponent(mensagemCompleta);
@@ -275,6 +275,7 @@
       document.getElementById("linkGerado").href = linkTelegram;
     }
 </script>
+
 
 </body>
 </html>
