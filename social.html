@@ -245,17 +245,21 @@
     <a id="linkGerado" href="#" target="_blank">Click to share in Telegram</a>
   </div>
 
-  <script>
+<script>
     function gerarLink() {
       const mensagemSelecionada = document.getElementById("mensagemDropdown").value;
       const textoAdicional = document.getElementById("textoAdicional").value;
-      const textoSubstituto = "----------\nSherk's Linktree: linktr.ee/sherkonsol"; 
 
+      // Alteração para incorporar o link ao texto "Sherk's Linktree"
+      const textoSubstituto = "----------\nSherk's Linktree: <a href='https://linktr.ee/sherkonsol' target='_blank'>Sherk's Linktree</a>";
+
+      // Montagem da mensagem completa
       const mensagemCompleta = "\n" + "**" + mensagemSelecionada + "**" + "\n\n" + textoAdicional + "\n\n" + textoSubstituto;
 
       // Exibir a mensagem no campo "Message preview"
-      document.getElementById("previewMensagem").textContent = mensagemCompleta;
+      document.getElementById("previewMensagem").innerHTML = mensagemCompleta;
 
+      // Codificar a mensagem para ser usada na URL
       const mensagemURL = encodeURIComponent(mensagemCompleta);
 
       const isMobile = /Mobi|Android/i.test(navigator.userAgent);
@@ -270,6 +274,7 @@
       document.getElementById("textoLinkGerado").textContent = linkTelegram;
       document.getElementById("linkGerado").href = linkTelegram;
     }
-  </script>
+</script>
+
 </body>
 </html>
