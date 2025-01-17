@@ -247,28 +247,44 @@
 
 <script>
     function gerarLink() {
+      // 1. Get the selected message from the dropdown
       const mensagemSelecionada = document.getElementById("mensagemDropdown").value;
-      const textoAdicional = document.getElementById("textoAdicional").value;
-      const textoSubstituto = "----------\nSherk's Linktree: linktr.ee/sherkonsol"; 
 
+      // 2. Get the additional typed text
+      const textoAdicional = document.getElementById("textoAdicional").value;
+
+      // 2.1. Texto adicional fixo
+      const textoSubstituto = "----------\nSherk's Linktree: linktr.ee/sherkonsol"; // Substitua o texto "XXX-LL" pelo que voce quer na mensagem
+
+      // 3. Assemble the complete message, including line breaks:
       const mensagemCompleta = "\n" + "**" + mensagemSelecionada + "**" + "\n\n" + textoAdicional + "\n\n" + textoSubstituto;
 
-      // Exibir a mensagem no campo "Message preview"
-      document.getElementById("previewMensagem").textContent = mensagemCompleta;
+      // 4. Update the message preview
+      document.getElementById("previewMensagem").value = mensagemCompleta;
 
+      // 5. Encode the message to be used in the URL
       const mensagemURL = encodeURIComponent(mensagemCompleta);
 
+      // 6. Detect if the device is mobile or desktop
       const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+      // 7. Adjust the URL depending on the device type
       let linkTelegram;
       if (isMobile) {
-        linkTelegram = tg://msg_url?url=${encodeURIComponent("✅ New post live on social media! 🦈")}&text=${mensagemURL};
+        // For mobile devices, use tg:// schema
+        linkTelegram = `tg://msg_url?url=${encodeURIComponent("✅ New post live on social media! 🦈")}&text=${mensagemURL}`;
       } else {
-        linkTelegram = https://t.me/share?url=${encodeURIComponent("✅ New post live on social media! 🦈")}&text=${mensagemURL};
+        // For desktop, use https://t.me/share
+        linkTelegram = `https://t.me/share?url=${encodeURIComponent("✅ New post live on social media! 🦈")}&text=${mensagemURL}`;
       }
 
-      // Exibir o link no campo "Generated link"
-      document.getElementById("textoLinkGerado").textContent = linkTelegram;
-      document.getElementById("linkGerado").href = linkTelegram;
+      // 8. Display the generated link on the page (as text)
+      const textoLinkGerado = document.getElementById("textoLinkGerado");
+      textoLinkGerado.value = linkTelegram;
+
+      // 9. Make the button/link clickable
+      const linkGerado = document.getElementById("linkGerado");
+      linkGerado.href = linkTelegram;
     }
   </script>
 
