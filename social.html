@@ -241,7 +241,7 @@
       const textoAdicional = document.getElementById("textoAdicional").value;
 
       // 3.1. Captura o valor do novo campo de texto adicional fixo 2
-      const textoSubstituto = document.getElementById("----------\n + textoAdicionalFixo2").value || "----------\nSherk's Linktree: linktr.ee/sherkonsol"; // Usar valor digitado ou o valor padrão
+      const textoSubstituto = document.getElementById("----------\n" + "textoAdicionalFixo2").value || "----------\nSherk's Linktree: linktr.ee/sherkonsol"; // Usar valor digitado ou o valor padrão
 
       // 4. Assemble the complete message, including line breaks:
       const mensagemCompleta = "\n" + "**" + mensagemSelecionada + "**" + "\n\n" + textoAdicional + "\n\n" + textoSubstituto;
