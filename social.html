@@ -206,8 +206,18 @@
 
     <br><br>
 
-<label for="textoAdicionalFixo2">Texto adicional fixo 2:</label><br>
-<input type="text" id="textoAdicionalFixo2" placeholder="Digite o texto adicional fixo 2 aqui..." style="width: 100%;">
+<label for="textoAdicionalFixo2">Escolha o texto adicional fixo:</label><br>
+<select id="textoAdicionalFixo2" style="width: 100%;">
+  <option value="Sherk's Linktree: linktr.ee/sherkonsol">Sherk's Linktree: linktr.ee/sherkonsol</option>
+  <option value="Visit our Revenue Share page: revenue.sherk.io">Visit our Revenue Share page: revenue.sherk.io</option>
+  <option value="Check out SherkFun: sherkfun.io">Check out SherkFun: sherkfun.io</option>
+  <option value="Follow Sherk X: x.com/SherkOnSOL">Follow Sherk X: x.com/SherkOnSOL</option>
+  <option value="Join us on Instagram: instagram.com/sherkonsol">Join us on Instagram: instagram.com/sherkonsol</option>
+  <option value="TikTok: tiktok.com/@sherksol">TikTok: tiktok.com/@sherksol</option>
+  <option value="Shop our Merch: shop.sherk.io">Shop our Merch: shop.sherk.io</option>
+  <option value="Recent Posts: tr.ee/3nn7QNh6D3">Recent Posts: tr.ee/3nn7QNh6D3</option>
+</select>
+
 
 <br><br>
 
@@ -237,14 +247,14 @@
       // 2. Get the custom status message from the new dropdown
       const mensagemStatus = document.getElementById("mensagemStatus").value;
 
-      // 3. Get the additional typed text
+      // 3. Get the additional typed text (now it's a dropdown)
       const textoAdicional = document.getElementById("textoAdicional").value;
 
-      // 3.1. Captura o valor do novo campo de texto adicional fixo 2
-      const textoSubstituto = "----------\n" + (document.getElementById("textoAdicionalFixo2").value || "Sherk's Linktree: linktr.ee/sherkonsol"); // Usar valor digitado ou o valor padrão
+      // 3.1. Captura o valor do dropdown de texto adicional fixo 2
+      const textoSubstituto = "----------\n" + document.getElementById("textoAdicionalFixo2").value; // Usar valor do dropdown
 
       // 4. Assemble the complete message, including line breaks:
-      const mensagemCompleta = "\n" + "**" + mensagemSelecionada + "**" + "\n\n" + textoAdicional + "\n\n" + textoSubstituto;
+      const mensagemCompleta = "\n" + "**" + mensagemSelecionada + "**" + "\n\n" + mensagemStatus + "\n\n" + textoAdicional + "\n\n" + textoSubstituto;
 
       // 5. Update the message preview
       document.getElementById("previewMensagem").value = mensagemCompleta;
@@ -272,6 +282,7 @@
       linkGerado.href = linkTelegram;
     }
 </script>
+
 
 <ul>
     <li>Revenue Share: revenue.sherk.io</li>
