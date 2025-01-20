@@ -32,7 +32,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(255, 255, 255, 0.5); /* 50% de transparência */
+      background-color: rgba(255, 255, 255, 0.3); /* 50% de transparência */
       z-index: -1;
     }
 
@@ -131,8 +131,8 @@
   </div>
 
   <div class="content">
-   <label for="mensagemStatus">Title for the message:</label><br>
-    <select id="mensagemStatus" style="width: 100%;">
+    <label for="mensagemStatus">Title for the message:</label><br>
+    <select id="mensagemStatus" style="width: 100%;" onchange="gerarLink()">
 <option value="" disabled selected hidden>Choose an option from the list</option>
 <option value="✅ New post live! 🦈">✅ New post live! 🦈</option>
 <option value="🚀 Update is live—share now!">🚀 Update is live—share now!</option>
@@ -153,9 +153,7 @@
     <br><br>
 
     <label for="mensagemDropdown">Choose a motivational predefined message:</label><br>
-    <select id="mensagemDropdown" style="width: 100%;">
-      <option value="" disabled selected hidden>Select below</option>
-      <option value="Let's get the word out—share and make it go viral!">Let's get the word out—share and make it go viral!</option>
+    <select id="mensagemDropdown" style="width: 100%;" onchange="gerarLink()">
 <option value="This is our moment—let's amplify it together!">This is our moment—let's amplify it together!</option>
 <option value="Help us spread the excitement—share the news now!">Help us spread the excitement—share the news now!</option>
 <option value="Our mission is unstoppable—join us in sharing the news!">Our mission is unstoppable—join us in sharing the news!</option>
@@ -262,16 +260,15 @@
 <option value="Time to spread the hype—share this now!">Time to spread the hype—share this now!</option>
 <option value="The revolution is starting—share it now!">The revolution is starting—share it now!</option>
     </select>
-
     <br><br>
 
     <label for="textoAdicional">Insert the link to your post:</label><br>
-    <input type="text" id="textoAdicional" placeholder="Instagram, Tik Tok, X, Youtube link here..." style="width: 100%;"> 
+    <input type="text" id="textoAdicional" placeholder="Instagram, Tik Tok, X, Youtube link here..." style="width: 100%;" onchange="gerarLink()">
 
     <br><br>
 
-<label for="textoAdicionalFixo2">Choose the Advertisement message:</label><br>
-<select id="textoAdicionalFixo2" style="width: 100%;">
+    <label for="textoAdicionalFixo2">Choose the Advertisement message:</label><br>
+    <select id="textoAdicionalFixo2" style="width: 100%;" onchange="gerarLink()">
   <option value="" disabled selected hidden>Select the Ad</option>
   <option value="Sherk's Linktree: linktr.ee/sherkonsol">Sherk's Linktree: linktr.ee/sherkonsol</option>
   <option value="Revenue Share page: revenue.sherk.io">Revenue Share page: revenue.sherk.io</option>
@@ -282,10 +279,9 @@
   <option value="Shop our Merch: shop.sherk.io">Shop our Merch: shop.sherk.io</option>
   <option value="Recent Posts: tr.ee/3nn7QNh6D3">Recent Posts: tr.ee/3nn7QNh6D3</option>
   <option value="Set up your Tip wallet: @SherkTipperBot">Set up Tip wallet: @SherkTipperBot</option>
-</select>
+    </select>
 
-
-<br><br>
+    <br><br>
 
     <label for="textoLinkGerado">Generated link:</label>
     <textarea id="textoLinkGerado" readonly style="width: 100%;"></textarea>
