@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="telegram-icon.png">
+  <title>Generate TG Message</title>
+  <style>
+
+    /* Estilo para centralizar o h1 */
+    h1 {
+      text-align: center;
+    }
+
+    /* Outros estilos */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-image: url('metaverso.gif');
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center;
+      color: #333;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.5); /* 50% de transparência */
+      z-index: -1;
+    }
+
+    .content {
+      background: rgba(255, 255, 255, 0.8); /* Fundo branco com leve transparência */
+      max-width: 800px;
+      margin: 20px auto;
+      text-align: center;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 8px;
+      padding: 35px;
+      font-size: 1.1em;
+      resize: auto;
+      background-color: #f5f5f5;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #0088cc;
+      color: white;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #006fa3;
+    }
+
+    #linkGerado {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 8px 16px;
+      background-color: #0088cc;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+
+    #linkGerado:hover {
+      background-color: #006fa3;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      body {
+        margin: 10px;
+      }
+
+      h1 {
+        font-size: 1.6em;
+      }
+
+      label, select, input, button, textarea {
+        font-size: 1.1em;
+      }
+
+      #previewMensagem, #textoLinkGerado {
+        font-size: 1.1em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.4em;
+      }
+
+      textarea {
+        font-size: 1em;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="content">
+  <h1>Generate a TG Message to Share.</h1>
+  </div>
+
+  <div class="content">
+    <label for="mensagemStatus">Title for the message:</label><br>
+    <select id="mensagemStatus" style="width: 100%;">
+      <option value="" disabled selected hidden>Choose an option from the list</option>
+      <option value="✅ New post live! 🦈">✅ New post live! 🦈</option>
+      <option value="🚀 Update is live—share now!">🚀 Update is live—share now!</option>
+      <option value="🔥 Big news! Spread the hype!">🔥 Big news! Spread the hype!</option>
+      <option value="🌍 New post is here—share it!">🌍 New post is here—share it!</option>
+      <option value="🎉 Let’s make this viral!">🎉 Let’s make this viral!</option>
+      <option value="📣 Help us spread the word!">📣 Help us spread the word!</option>
+      <option value="🎯 Share the excitement now!">🎯 Share the excitement now!</option>
+      <option value="🔥 Our post is fire—share it!">🔥 Our post is fire—share it!</option>
+      <option value="🌟 Spread the love—share now!">🌟 Spread the love—share now!</option>
+      <option value="🎤 Get the world talking—share it!">🎤 Get the world talking—share it!</option>
+      <option value="💥 Don’t miss this—spread the news!">💥 Don’t miss this—spread the news!</option>
+      <option value="🚨 Big update—share it far and wide!">🚨 Big update—share it far and wide!</option>
+      <option value="⚡ Spread the energy—share now!">⚡ Spread the energy—share now!</option>
+      <option value="💬 Get everyone talking—share now!">💬 Get everyone talking—share now!</option>
+      <option value="🔥 It’s live—let’s make it huge!">🔥 It’s live—let’s make it huge!</option>
+    </select>
+    <br><br>
+
+    <label for="mensagemDropdown">Choose a motivational predefined message:</label><br>
+    <select id="mensagemDropdown" style="width: 100%;">
+      <option value="" disabled selected hidden>Select below</option>
+      <option value="Let's get the word out—share and make it go viral!">Let's get the word out—share and make it go viral!</option>
+      <option value="This is our moment—let's amplify it together!">This is our moment—let's amplify it together!</option>
+      <option value="Help us spread the excitement—share the news now!">Help us spread the excitement—share the news now!</option>
+      <option value="Our mission is unstoppable—join us in sharing the news!">Our mission is unstoppable—join us in sharing the news!</option>
+      <option value="The world needs to know—share this and spread the hype!">The world needs to know—share this and spread the hype!</option>
+      <option value="It's time to shine—let's make this post go global!">It's time to shine—let's make this post go global!</option>
+      <option value="Get ready for the wave—let’s make some noise together!">Get ready for the wave—let’s make some noise together!</option>
+      <option value="We’re creating history—be part of the movement and share!">We’re creating history—be part of the movement and share!</option>
+      <option value="Tell your friends—our biggest update is here!">Tell your friends—our biggest update is here!</option>
+      <option value="Together, we’ll make this go far and wide—share the news!">Together, we’ll make this go far and wide—share the news!</option>
+      <option value="This is a game changer—share it and let’s go big!">This is a game changer—share it and let’s go big!</option>
+      <option value="It’s time to rally—let’s make this post go viral!">It’s time to rally—let’s make this post go viral!</option>
+      <option value="Every share counts—let's get the word out everywhere!">Every share counts—let's get the word out everywhere!</option>
+      <option value="The excitement is real—spread the word far and wide!">The excitement is real—spread the word far and wide!</option>
+      <option value="We can make this go global—share and spread the message!">We can make this go global—share and spread the message!</option>
+      <option value="The more, the merrier—join the excitement and share now!">The more, the merrier—join the excitement and share now!</option>
+      <option value="Let’s turn this into a movement—share the update!">Let’s turn this into a movement—share the update!</option>
+      <option value="This is it—let's spread the word and make it huge!">This is it—let's spread the word and make it huge!</option>
+      <option value="Be a part of the wave—share this and make it epic!">Be a part of the wave—share this and make it epic!</option>
+      <option value="Let’s get everyone talking—share this now and spread the word!">Let’s get everyone talking—share this now and spread the word!</option>
+      <option value="New post is live! Let's spread the word!">New post is live! Let's spread the word!</option>
+      <option value="Time to rally the community and share our latest update!">Time to rally the community and share our latest update!</option>
+      <option value="We've just published something big. Help us reach everyone!">We've just published something big. Help us reach everyone!</option>
+      <option value="Your support matters! Let's get this out to the world!">Your support matters! Let's get this out to the world!</option>
+      <option value="Join the hype and make some noise for our new post!">Join the hype and make some noise for our new post!</option>
+      <option value="Another update is out—share it far and wide!">Another update is out—share it far and wide!</option>
+      <option value="Ready, set, engage! Spread the excitement now!">Ready, set, engage! Spread the excitement now!</option>
+      <option value="We can't do this alone. Help us reach new horizons!">We can't do this alone. Help us reach new horizons!</option>
+      <option value="We're counting on you—invite everyone in!">We're counting on you—invite everyone in!</option>
+      <option value="Spread the love—it's time to go global!">Spread the love—it's time to go global!</option>
+      <option value="Big news awaits—let's share it loud and proud!">Big news awaits—let's share it loud and proud!</option>
+      <option value="Our latest update is huge—amplify our reach together!">Our latest update is huge—amplify our reach together!</option>
+      <option value="We’re stronger as one—rally everyone for this reveal!">We’re stronger as one—rally everyone for this reveal!</option>
+      <option value="Don't miss out—tell your friends and let's go viral!">Don't miss out—tell your friends and let's go viral!</option>
+      <option value="Power up our mission—spread this post far and wide!">Power up our mission—spread this post far and wide!</option>
+      <option value="This is epic—team up and make a global impact!">This is epic—team up and make a global impact!</option>
+      <option value="We need your voice—fuel this update with your shares!">We need your voice—fuel this update with your shares!</option>
+      <option value="A spark can light a fire—let's ignite this post worldwide!">A spark can light a fire—let's ignite this post worldwide!</option>
+      <option value="Shout it loud—our community is unstoppable together!">Shout it loud—our community is unstoppable together!</option>
+      <option value="Stand with us—spreading this update is just the beginning!">Stand with us—spreading this update is just the beginning!</option>
+      <option value="Fresh off the press—help us spread the excitement!">Fresh off the press—help us spread the excitement!</option>
+      <option value="Our biggest news yet—take it to every corner!">Our biggest news yet—take it to every corner!</option>
+      <option value="Ready for action? Unite and push this post to the max!">Ready for action? Unite and push this post to the max!</option>
+      <option value="No time to wait—share this update and keep the momentum!">No time to wait—share this update and keep the momentum!</option>
+      <option value="We’re going big—join the wave and make this post shine!">We’re going big—join the wave and make this post shine!</option>
+      <option value="Your turn to shine—spread the word and spark a chain reaction!">Your turn to shine—spread the word and spark a chain reaction!</option>
+      <option value="This update is too good to miss—blast it everywhere!">This update is too good to miss—blast it everywhere!</option>
+      <option value="We need every voice—turn up the volume on our new release!">We need every voice—turn up the volume on our new release!</option>
+      <option value="Calling all champions—rally around this post and make history!">Calling all champions—rally around this post and make history!</option>
+      <option value="All hands on deck—share now and lead us to new heights!">All hands on deck—share now and lead us to new heights!</option>
+    </select>
+    <br><br>
+
+    <label for="textoAdicional">Insert the link to your post:</label><br>
+    <input type="text" id="textoAdicional" placeholder="Instagram, Tik Tok, X, Youtube link here..." style="width: 100%;"> 
+
+    <br><br>
+
+    <label for="textoAdicionalFixo2">Choose the Advertisement message:</label><br>
+    <select id="textoAdicionalFixo2" style="width: 100%;">
+      <option value="" disabled selected hidden>Select the Ad</option>
+      <option value="Sherk's Linktree: linktr.ee/sherkonsol">Sherk's Linktree: linktr.ee/sherkonsol</option>
+      <option value="Revenue Share page: revenue.sherk.io">Revenue Share page: revenue.sherk.io</option>
+      <option value="Check out SherkFun: sherkfun.io">Check out SherkFun: sherkfun.io</option>
+      <option value="Sherk X: x.com/SherkOnSOL">Sherk X: x.com/SherkOnSOL</option>
+      <option value="Join us: instagram.com/sherkonsol">Join us: instagram.com/sherkonsol</option>
+      <option value="TikTok: tiktok.com/@sherksol">TikTok: tiktok.com/@sherksol</option>
+      <option value="Shop our Merch: shop.sherk.io">Shop our Merch: shop.sherk.io</option>
+      <option value="Recent Posts: tr.ee/3nn7QNh6D3">Recent Posts: tr.ee/3nn7QNh6D3</option>
+      <option value="Set up Tip wallet: @SherkTipperBot">Set up Tip wallet: @SherkTipperBot</option>
+    </select>
+
+    <br><br>
+
+    <button onclick="gerarLink()">Generate link</button>
+
+    <br><br>
+
+    <label for="previewMensagem">Message preview:</label>
+    <textarea id="previewMensagem" readonly></textarea>
+
+    <br>
+
+    <label for="textoLinkGerado">Generated link:</label>
+    <textarea id="textoLinkGerado" readonly></textarea>
+
+    <br>
+
+    <a id="linkGerado" href="#" target="_blank">Share into Telegram</a>
+  </div>
+
+<script>
+    function gerarLink() {
+      // 1. Get the selected message from the dropdown
+      const mensagemSelecionada = document.getElementById("mensagemDropdown").value;
+
+      // 2. Get the custom status message from the new dropdown
+      const mensagemStatus = document.getElementById("mensagemStatus").value;
+
+      // 3. Get the additional typed text (now it's a dropdown)
+      const textoAdicional = document.getElementById("textoAdicional").value;
+
+      // 3.1. Captura o valor do dropdown de texto adicional fixo 2
+      const textoSubstituto = "----------\n" + document.getElementById("textoAdicionalFixo2").value; // Usar valor do dropdown
+
+      // 4. Assemble the complete message, including line breaks:
+      const mensagemCompleta = "\n" + "**" + mensagemSelecionada + "**" + "\n\n" + textoAdicional + "\n\n" + textoSubstituto;
+
+      // 5. Update the message preview
+      document.getElementById("previewMensagem").value = mensagemCompleta;
+
+      // 6. Encode the message to be used in the URL
+      const mensagemURL = encodeURIComponent(mensagemCompleta);
+
+      // 7. Detect if the device is mobile or desktop
+      const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+      // 8. Adjust the URL depending on the device type
+      let linkTelegram;
+      if (isMobile) {
+        linkTelegram = `tg://msg_url?url=${encodeURIComponent(mensagemStatus)}&text=${mensagemURL}`;
+      } else {
+        linkTelegram = `https://t.me/share?url=${encodeURIComponent(mensagemStatus)}&text=${mensagemURL}`;
+      }
+
+      // 9. Display the generated link on the page (as text)
+      const textoLinkGerado = document.getElementById("textoLinkGerado");
+      textoLinkGerado.value = linkTelegram;
+
+      // 10. Make the button/link clickable
+      const linkGerado = document.getElementById("linkGerado");
+      linkGerado.href = linkTelegram;
+    }
+</script>
+  
+</body>
+</html>
