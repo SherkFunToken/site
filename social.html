@@ -17,7 +17,7 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-image: url('token4fun.png');
+      background-image: url('metaverso.gif');
       background-size: 100%;
       background-repeat: no-repeat;
       background-attachment: fixed;
@@ -107,7 +107,7 @@
         font-size: 1.1em;
       }
 
-      #previewMensagem, #textoLinkGerado {
+      #textoLinkGerado {
         font-size: 1.1em;
       }
     }
@@ -287,19 +287,8 @@
 
 <br><br>
 
-    
-    <button onclick="gerarLink()">Generate link</button>
-
-    <br><br>
-
-    <label for="previewMensagem">Message preview:</label>
-    <textarea id="previewMensagem" readonly></textarea>
-
-    <br>
-
     <label for="textoLinkGerado">Generated link:</label>
-    <textarea id="textoLinkGerado" readonly></textarea>
-
+    <textarea id="textoLinkGerado" readonly style="width: 100%;"></textarea>
     <br>
 
     <a id="linkGerado" href="#" target="_blank">Share into Telegram</a>
@@ -322,16 +311,13 @@
       // 4. Assemble the complete message, including line breaks:
       const mensagemCompleta = "\n" + "**" + mensagemSelecionada + "**" + "\n\n" + textoAdicional + "\n\n" + textoSubstituto;
 
-      // 5. Update the message preview
-      document.getElementById("previewMensagem").value = mensagemCompleta;
-
-      // 6. Encode the message to be used in the URL
+      // 5. Encode the message to be used in the URL
       const mensagemURL = encodeURIComponent(mensagemCompleta);
 
-      // 7. Detect if the device is mobile or desktop
+      // 6. Detect if the device is mobile or desktop
       const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
-      // 8. Adjust the URL depending on the device type
+      // 7. Adjust the URL depending on the device type
       let linkTelegram;
       if (isMobile) {
         linkTelegram = `tg://msg_url?url=${encodeURIComponent(mensagemStatus)}&text=${mensagemURL}`;
@@ -339,11 +325,11 @@
         linkTelegram = `https://t.me/share?url=${encodeURIComponent(mensagemStatus)}&text=${mensagemURL}`;
       }
 
-      // 9. Display the generated link on the page (as text)
+      // 8. Display the generated link on the page (as text)
       const textoLinkGerado = document.getElementById("textoLinkGerado");
       textoLinkGerado.value = linkTelegram;
 
-      // 10. Make the button/link clickable
+      // 9. Make the button/link clickable
       const linkGerado = document.getElementById("linkGerado");
       linkGerado.href = linkTelegram;
     }
