@@ -127,11 +127,11 @@
 
 <body>
   <div class="content">
-  <h1>Generate a TG Message to Share.</h1>
+  <h1>Create Your Shareable Telegram Message</h1>
   </div>
 
   <div class="content">
-    <label for="mensagemStatus">Title for the message:</label><br>
+    <label for="mensagemStatus">Select Message Title:</label><br>
     <select id="mensagemStatus" style="width: 100%;" onchange="gerarLink()">
 <option value="" disabled selected hidden>Choose an option from the list</option>
 <option value="✅ New post live! 🦈">✅ New post live! 🦈</option>
@@ -152,7 +152,7 @@
     </select>
     <br><br>
 
-    <label for="mensagemDropdown">Choose a motivational predefined message:</label><br>
+    <label for="mensagemDropdown">Pick a Motivational Message:</label><br>
     <select id="mensagemDropdown" style="width: 100%;" onchange="gerarLink()">
 <option value="This is our moment—let's amplify it together!">This is our moment—let's amplify it together!</option>
 <option value="Help us spread the excitement—share the news now!">Help us spread the excitement—share the news now!</option>
@@ -262,12 +262,12 @@
     </select>
     <br><br>
 
-    <label for="textoAdicional">Insert the link to your post:</label><br>
+    <label for="textoAdicional">Add Your Post Link or Custom Message:</label><br>
     <input type="text" id="textoAdicional" placeholder="Instagram, Tik Tok, X, Youtube link here..." style="width: 100%;" onchange="gerarLink()">
 
     <br><br>
 
-    <label for="textoAdicionalFixo2">Choose the Advertisement message:</label><br>
+    <label for="textoAdicionalFixo2">Select an Advertisement Message:</label><br>
     <select id="textoAdicionalFixo2" style="width: 100%;" onchange="gerarLink()">
   <option value="" disabled selected hidden>Select the Ad</option>
   <option value="Sherk's Linktree: linktr.ee/sherkonsol">Sherk's Linktree: linktr.ee/sherkonsol</option>
@@ -283,11 +283,11 @@
 
     <br><br>
 
-    <label for="textoLinkGerado">Generated link:</label>
+    <label for="textoLinkGerado">Shareable Link:</label>
     <textarea id="textoLinkGerado" readonly style="width: 100%;"></textarea>
     <br>
 
-    <a id="linkGerado" href="#" target="_blank">Share into Telegram</a>
+    <a id="linkGerado" href="#" target="_blank">Blast it on Telegram</a>
   </div>
 
 <script>
