@@ -80,6 +80,16 @@
             }
         }
 
+        /* Animação de brilho neon vermelho */
+        @keyframes neon-glow-red {
+            from {
+                filter: drop-shadow(0 0 2px #ff0000) drop-shadow(0 0 5px #ff4500) drop-shadow(0 0 10px #ff0000);
+            }
+            to {
+                filter: drop-shadow(0 0 5px #ff4500) drop-shadow(0 0 10px #ff0000) drop-shadow(0 0 20px #ff4500);
+            }
+        }
+
         /* Texto de datilografia responsivo */
         .typing-text {
             position: absolute;
@@ -90,7 +100,7 @@
             max-font-size: 32px;
             font-weight: bold;
             color: #00ff00;
-            text-shadow: 0 0 10px #00ff00, 0 0 20px #008000;
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000;
             text-align: center;
             white-space: nowrap;
             overflow: hidden;
@@ -107,7 +117,7 @@
         /* Responsividade */
         @media (max-width: 768px) {
             .typing-text {
-                font-size: 5vw; /* Ajusta o tamanho do texto para telas menores */
+                font-size: 5vw;
             }
 
             .floating-image {
@@ -147,7 +157,7 @@
     // Movimentação da imagem "SHERK" com velocidade ajustada
     let xPos = Math.random() * (window.innerWidth - 200);
     let yPos = Math.random() * (window.innerHeight - 200);
-    let xSpeed = 1.0;  // Reduz velocidade para um efeito mais suave
+    let xSpeed = 1.0;
     let ySpeed = 1.0;
     let glowToggle = true;
 
@@ -156,20 +166,21 @@
         yPos += ySpeed;
 
         if (xPos + floatingImage.width >= window.innerWidth || xPos <= 0) {
-            xSpeed *= -1;  // Inverte a direção horizontal
+            xSpeed *= -1;
         }
 
         if (yPos + floatingImage.height >= window.innerHeight || yPos <= 0) {
-            ySpeed *= -1;  // Inverte a direção vertical
+            ySpeed *= -1;
         }
 
         floatingImage.style.left = xPos + 'px';
         floatingImage.style.top = yPos + 'px';
 
+        // Alternar entre brilho verde e vermelho
         if (Math.random() > 0.99) {
             floatingImage.style.animation = glowToggle 
-                ? "float 3s ease-in-out infinite, neon-glow-green 1.5s infinite alternate"
-                : "float 3s ease-in-out infinite, neon-glow-blue 1.5s infinite alternate";
+                ? "float 3s ease-in-out infinite, neon-glow-red 1.5s infinite alternate"
+                : "float 3s ease-in-out infinite, neon-glow-green 1.5s infinite alternate";
             glowToggle = !glowToggle;
         }
 
