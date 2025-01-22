@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Floating SHERK</title>
+    <title>Matrix SHERK</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             background: black;
+            color: #00ff00;
+            font-family: monospace;
             overflow: hidden;
         }
 
@@ -46,13 +48,33 @@
             position: absolute;
             width: 150px;
             height: auto;
-            animation: float linear infinite;
+        }
+
+        .sherk-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 60px;
+            font-weight: bold;
+            color: #00ff00;
+            text-shadow: 0 0 20px #00ff00, 0 0 40px #008000;
+            text-align: center;
+            opacity: 0;
+            animation: fadeInOut 3s infinite ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
         }
     </style>
 </head>
 <body>
 
 <div class="matrix-container"></div>
+<div class="sherk-text">SHERK To the Moon</div>
 <img src="Sherk.png" alt="Floating SHERK" class="floating-image" id="floatingImage">
 
 <script>
@@ -77,11 +99,11 @@
 
     setInterval(createFallingLetter, 10);
 
-    // Movimentação da imagem "SHERK"
+    // Movimentação da imagem "SHERK" com velocidade ajustada
     let xPos = Math.random() * (window.innerWidth - 150);
     let yPos = Math.random() * (window.innerHeight - 150);
-    let xSpeed = 3;
-    let ySpeed = 3;
+    let xSpeed = 1.5;  // Velocidade mais lenta
+    let ySpeed = 1.5;  // Velocidade mais lenta
 
     function moveImage() {
         xPos += xSpeed;
