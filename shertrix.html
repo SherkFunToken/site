@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matrix SHERK</title>
+    <title>Floating SHERK</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             background: black;
-            color: #00ff00;
-            font-family: monospace;
             overflow: hidden;
         }
 
@@ -44,54 +42,66 @@
             }
         }
 
-        .sherk-text {
+        .floating-image {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 60px;
-            font-weight: bold;
-            color: #00ff00;
-            text-shadow: 0 0 20px #00ff00, 0 0 40px #008000;
-            text-align: center;
-            opacity: 0;
-            animation: fadeInOut 2s infinite ease-in-out;
-        }
-
-        @keyframes fadeInOut {
-            0% { opacity: 0; }
-            50% { opacity: 1; }
-            100% { opacity: 0; }
+            width: 150px;
+            height: auto;
+            animation: float linear infinite;
         }
     </style>
 </head>
 <body>
 
 <div class="matrix-container"></div>
-<div class="sherk-text">SHERK to the Moon</div>
+<img src="Sherk.png" alt="Floating SHERK" class="floating-image" id="floatingImage">
 
 <script>
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const container = document.querySelector('.matrix-container');
+    const floatingImage = document.getElementById('floatingImage');
 
     function createFallingLetter() {
         const letter = document.createElement('span');
         letter.classList.add('falling-letter');
         letter.innerText = alphabet[Math.floor(Math.random() * alphabet.length)];
         letter.style.left = Math.random() * 100 + 'vw';
-        letter.style.top = '-5vh';  // Começa um pouco acima da tela
-        letter.style.animationDuration = (Math.random() * 3 + 2) + 's';  // Velocidade mais rápida
+        letter.style.top = '-5vh';
+        letter.style.animationDuration = (Math.random() * 3 + 2) + 's';
         letter.style.animationDelay = Math.random() * 2 + 's';
         container.appendChild(letter);
 
-        // Remove letras para otimizar desempenho
         setTimeout(() => {
             letter.remove();
         }, 5000);
     }
 
-    // Criação contínua de letras sobrepostas para encher a tela
     setInterval(createFallingLetter, 10);
+
+    // Movimentação da imagem "SHERK"
+    let xPos = Math.random() * (window.innerWidth - 150);
+    let yPos = Math.random() * (window.innerHeight - 150);
+    let xSpeed = 3;
+    let ySpeed = 3;
+
+    function moveImage() {
+        xPos += xSpeed;
+        yPos += ySpeed;
+
+        if (xPos + floatingImage.width >= window.innerWidth || xPos <= 0) {
+            xSpeed *= -1;  // Inverte a direção horizontal
+        }
+
+        if (yPos + floatingImage.height >= window.innerHeight || yPos <= 0) {
+            ySpeed *= -1;  // Inverte a direção vertical
+        }
+
+        floatingImage.style.left = xPos + 'px';
+        floatingImage.style.top = yPos + 'px';
+
+        requestAnimationFrame(moveImage);
+    }
+
+    moveImage();
 </script>
 
 </body>
