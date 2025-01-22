@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matrix SHERK</title>
+    <title>Floating SHERK</title>
     <style>
         body {
             margin: 0;
@@ -44,10 +44,45 @@
             }
         }
 
+        /* Efeito de flutuação e brilho para o Sherk */
         .floating-image {
             position: absolute;
             width: 150px;
             height: auto;
+            animation: float 3s ease-in-out infinite, neon-glow-green 1.5s infinite alternate;
+        }
+
+        /* Animação de flutuação */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        /* Animação de brilho neon verde */
+        @keyframes neon-glow-green {
+            from {
+                filter: drop-shadow(0 0 2px #39ff14) drop-shadow(0 0 5px #00ff00) drop-shadow(0 0 10px #39ff14);
+            }
+            to {
+                filter: drop-shadow(0 0 5px #00ff00) drop-shadow(0 0 10px #39ff14) drop-shadow(0 0 20px #00ff00);
+            }
+        }
+
+        /* Animação de brilho neon azul */
+        @keyframes neon-glow-blue {
+            from {
+                filter: drop-shadow(0 0 2px #00f0ff) drop-shadow(0 0 5px #0077ff) drop-shadow(0 0 10px #00f0ff);
+            }
+            to {
+                filter: drop-shadow(0 0 5px #0077ff) drop-shadow(0 0 10px #00f0ff) drop-shadow(0 0 20px #0077ff);
+            }
         }
 
         .sherk-text {
@@ -102,8 +137,9 @@
     // Movimentação da imagem "SHERK" com velocidade ajustada
     let xPos = Math.random() * (window.innerWidth - 150);
     let yPos = Math.random() * (window.innerHeight - 150);
-    let xSpeed = 1.5;  // Velocidade mais lenta
-    let ySpeed = 1.5;  // Velocidade mais lenta
+    let xSpeed = 1.2;  // Velocidade mais lenta
+    let ySpeed = 1.2;  // Velocidade mais lenta
+    let glowToggle = true;
 
     function moveImage() {
         xPos += xSpeed;
@@ -119,6 +155,14 @@
 
         floatingImage.style.left = xPos + 'px';
         floatingImage.style.top = yPos + 'px';
+
+        // Alternar entre brilho verde e azul
+        if (Math.random() > 0.99) {
+            floatingImage.style.animation = glowToggle 
+                ? "float 3s ease-in-out infinite, neon-glow-blue 1.5s infinite alternate"
+                : "float 3s ease-in-out infinite, neon-glow-green 1.5s infinite alternate";
+            glowToggle = !glowToggle;
+        }
 
         requestAnimationFrame(moveImage);
     }
