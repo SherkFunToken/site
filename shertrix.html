@@ -72,13 +72,14 @@
         }
 
         /* Imagem animada flutuante com brilho alternado */
-        .floating-image {
-            position: absolute;
-            width: 10%;
-            max-width: 350px;
-            height: auto;
-            animation: float 3s ease-in-out infinite, neon-glow-red-green 2s infinite alternate;
-        }
+.floating-image {
+    position: absolute;
+    width: 15%;  /* Aumentado de 10% para 15% (50% maior) */
+    max-width: 225px;  /* Aumentado de 150px para 225px (50% maior) */
+    height: auto;
+    animation: float 3s ease-in-out infinite, neon-glow-red-green 2s infinite alternate;
+}
+
 
         /* Animação de flutuação */
         @keyframes float {
