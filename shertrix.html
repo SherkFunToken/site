@@ -12,6 +12,10 @@
             color: #00ff00;
             font-family: monospace;
             overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
         .matrix-container {
@@ -47,7 +51,8 @@
         /* Efeito de flutuação e brilho para o Sherk */
         .floating-image {
             position: absolute;
-            width: 150px;
+            width: 15%;
+            max-width: 200px;
             height: auto;
             animation: float 3s ease-in-out infinite, neon-glow-green 1.5s infinite alternate;
         }
@@ -75,23 +80,14 @@
             }
         }
 
-        /* Animação de brilho neon azul */
-        @keyframes neon-glow-blue {
-            from {
-                filter: drop-shadow(0 0 2px #00f0ff) drop-shadow(0 0 5px #0077ff) drop-shadow(0 0 10px #00f0ff);
-            }
-            to {
-                filter: drop-shadow(0 0 5px #0077ff) drop-shadow(0 0 10px #00f0ff) drop-shadow(0 0 20px #0077ff);
-            }
-        }
-
-        /* Texto de datilografia estilo Matrix */
+        /* Texto de datilografia responsivo */
         .typing-text {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 32px;
+            top: 60%;
+            width: 90%;
+            max-width: 900px;
+            font-size: 4vw;
+            max-font-size: 32px;
             font-weight: bold;
             color: #00ff00;
             text-shadow: 0 0 10px #00ff00, 0 0 20px #008000;
@@ -105,6 +101,17 @@
         @keyframes blinkCursor {
             50% {
                 border-right-color: transparent;
+            }
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .typing-text {
+                font-size: 5vw; /* Ajusta o tamanho do texto para telas menores */
+            }
+
+            .floating-image {
+                width: 25%;
             }
         }
     </style>
@@ -138,10 +145,10 @@
     setInterval(createFallingLetter, 10);
 
     // Movimentação da imagem "SHERK" com velocidade ajustada
-    let xPos = Math.random() * (window.innerWidth - 150);
-    let yPos = Math.random() * (window.innerHeight - 150);
-    let xSpeed = 1.2;
-    let ySpeed = 1.2;
+    let xPos = Math.random() * (window.innerWidth - 200);
+    let yPos = Math.random() * (window.innerHeight - 200);
+    let xSpeed = 1.0;  // Reduz velocidade para um efeito mais suave
+    let ySpeed = 1.0;
     let glowToggle = true;
 
     function moveImage() {
@@ -149,11 +156,11 @@
         yPos += ySpeed;
 
         if (xPos + floatingImage.width >= window.innerWidth || xPos <= 0) {
-            xSpeed *= -1;
+            xSpeed *= -1;  // Inverte a direção horizontal
         }
 
         if (yPos + floatingImage.height >= window.innerHeight || yPos <= 0) {
-            ySpeed *= -1;
+            ySpeed *= -1;  // Inverte a direção vertical
         }
 
         floatingImage.style.left = xPos + 'px';
@@ -161,8 +168,8 @@
 
         if (Math.random() > 0.99) {
             floatingImage.style.animation = glowToggle 
-                ? "float 3s ease-in-out infinite, neon-glow-blue 1.5s infinite alternate"
-                : "float 3s ease-in-out infinite, neon-glow-green 1.5s infinite alternate";
+                ? "float 3s ease-in-out infinite, neon-glow-green 1.5s infinite alternate"
+                : "float 3s ease-in-out infinite, neon-glow-blue 1.5s infinite alternate";
             glowToggle = !glowToggle;
         }
 
