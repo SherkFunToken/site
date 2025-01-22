@@ -23,10 +23,11 @@
 
         .falling-letter {
             position: absolute;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: bold;
             animation: fall linear infinite;
             color: rgba(0, 255, 0, 0.8);
+            opacity: 0.7;
         }
 
         @keyframes fall {
@@ -48,11 +49,19 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 50px;
+            font-size: 60px;
             font-weight: bold;
             color: #00ff00;
-            text-shadow: 0 0 10px #00ff00, 0 0 20px #008000;
+            text-shadow: 0 0 20px #00ff00, 0 0 40px #008000;
             text-align: center;
+            opacity: 0;
+            animation: fadeInOut 2s infinite ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
         }
     </style>
 </head>
@@ -62,7 +71,7 @@
 <div class="sherk-text">SHERK To the Moon</div>
 
 <script>
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const container = document.querySelector('.matrix-container');
 
     function createFallingLetter() {
@@ -70,18 +79,19 @@
         letter.classList.add('falling-letter');
         letter.innerText = alphabet[Math.floor(Math.random() * alphabet.length)];
         letter.style.left = Math.random() * 100 + 'vw';
-        letter.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        letter.style.top = '-5vh';  // Começa um pouco acima da tela
+        letter.style.animationDuration = (Math.random() * 3 + 2) + 's';  // Velocidade mais rápida
         letter.style.animationDelay = Math.random() * 2 + 's';
         container.appendChild(letter);
 
-        // Remove letter after animation ends to optimize performance
+        // Remove letras para otimizar desempenho
         setTimeout(() => {
             letter.remove();
         }, 5000);
     }
 
-    // Create falling letters continuously
-    setInterval(createFallingLetter, 100);
+    // Criação contínua de letras sobrepostas para encher a tela
+    setInterval(createFallingLetter, 10);
 </script>
 
 </body>
