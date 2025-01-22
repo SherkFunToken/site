@@ -50,4 +50,38 @@
             transform: translate(-50%, -50%);
             font-size: 50px;
             font-weight: bold;
-            color: #0
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #008000;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="matrix-container"></div>
+<div class="sherk-text">SHERK To the Moon</div>
+
+<script>
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const container = document.querySelector('.matrix-container');
+
+    function createFallingLetter() {
+        const letter = document.createElement('span');
+        letter.classList.add('falling-letter');
+        letter.innerText = alphabet[Math.floor(Math.random() * alphabet.length)];
+        letter.style.left = Math.random() * 100 + 'vw';
+        letter.style.animationDuration = (Math.random() * 2 + 3) + 's';
+        letter.style.animationDelay = Math.random() * 5 + 's';
+        container.appendChild(letter);
+
+        // Remove letter after animation ends
+        setTimeout(() => {
+            letter.remove();
+        }, 6000);
+    }
+
+    setInterval(createFallingLetter, 100);
+</script>
+
+</body>
+</html>
