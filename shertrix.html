@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Floating SHERK</title>
+    <title>Matrix SHERK</title>
     <style>
         body {
             margin: 0;
@@ -85,32 +85,35 @@
             }
         }
 
-        .sherk-text {
+        /* Texto de datilografia estilo Matrix */
+        .typing-text {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 60px;
+            font-size: 32px;
             font-weight: bold;
             color: #00ff00;
-            text-shadow: 0 0 20px #00ff00, 0 0 40px #008000;
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #008000;
             text-align: center;
-            opacity: 0;
-            animation: fadeInOut 3s infinite ease-in-out;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid #00ff00;
+            animation: blinkCursor 0.8s infinite;
         }
 
-        @keyframes fadeInOut {
-            0% { opacity: 0; }
-            50% { opacity: 1; }
-            100% { opacity: 0; }
+        @keyframes blinkCursor {
+            50% {
+                border-right-color: transparent;
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="matrix-container"></div>
-<div class="sherk-text">SHERK to the Moon</div>
-<img src="Sherk.png" alt="Floating SHERK" class="floating-image" id="floatingImage">
+<div class="typing-text" id="typing-text"></div>
+<img src="sherk.png" alt="Floating SHERK" class="floating-image" id="floatingImage">
 
 <script>
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -137,8 +140,8 @@
     // Movimentação da imagem "SHERK" com velocidade ajustada
     let xPos = Math.random() * (window.innerWidth - 150);
     let yPos = Math.random() * (window.innerHeight - 150);
-    let xSpeed = 1.2;  // Velocidade mais lenta
-    let ySpeed = 1.2;  // Velocidade mais lenta
+    let xSpeed = 1.2;
+    let ySpeed = 1.2;
     let glowToggle = true;
 
     function moveImage() {
@@ -146,17 +149,16 @@
         yPos += ySpeed;
 
         if (xPos + floatingImage.width >= window.innerWidth || xPos <= 0) {
-            xSpeed *= -1;  // Inverte a direção horizontal
+            xSpeed *= -1;
         }
 
         if (yPos + floatingImage.height >= window.innerHeight || yPos <= 0) {
-            ySpeed *= -1;  // Inverte a direção vertical
+            ySpeed *= -1;
         }
 
         floatingImage.style.left = xPos + 'px';
         floatingImage.style.top = yPos + 'px';
 
-        // Alternar entre brilho verde e azul
         if (Math.random() > 0.99) {
             floatingImage.style.animation = glowToggle 
                 ? "float 3s ease-in-out infinite, neon-glow-blue 1.5s infinite alternate"
@@ -168,6 +170,27 @@
     }
 
     moveImage();
+
+    // Efeito de datilografia para o texto
+    const textElement = document.getElementById('typing-text');
+    const typingText = "The push has begun, we are making moves already bit by bit.";
+    let index = 0;
+
+    function typeEffect() {
+        if (index < typingText.length) {
+            textElement.innerHTML += typingText.charAt(index);
+            index++;
+            setTimeout(typeEffect, 100);
+        } else {
+            setTimeout(() => {
+                textElement.innerHTML = "";
+                index = 0;
+                typeEffect();
+            }, 2000);
+        }
+    }
+
+    typeEffect();
 </script>
 
 </body>
