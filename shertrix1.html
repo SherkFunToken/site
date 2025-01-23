@@ -12,10 +12,10 @@
             color: #00ff00;
             font-family: monospace;
             overflow: hidden;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             flex-direction: column;
         }
 
@@ -26,7 +26,7 @@
             overflow: hidden;
         }
 
-        .falling-letter {
+        .falling-word {
             position: absolute;
             font-size: 22px;
             font-weight: bold;
@@ -49,20 +49,20 @@
             }
         }
 
-        /* Texto digitado com efeito neon e responsividade */
+        /* Texto digitado com efeito neon */
         .typing-container {
-            position: relative;
-            width: 80%;
-            max-width: 900px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
             font-size: 3vw;
-            max-font-size: 28px;
+            max-width: 900px;
             color: #00ff00;
-            text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000;
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000, 0 0 30px #0077ff;
             white-space: pre-wrap;
             border-right: 2px solid #00ff00;
             animation: blinkCursor 0.8s infinite;
-            line-height: 1.5;
         }
 
         @keyframes blinkCursor {
@@ -71,15 +71,13 @@
             }
         }
 
-/* Imagem animada flutuante com brilho alternado */
-.floating-image {
-    position: absolute;
-    width: 15%;  /* Mantido o tamanho aumentado */
-    max-width: 225px;
-    height: auto;
-    animation: float 3s ease-in-out infinite, neon-glow-blue-red 2s infinite alternate;
-}
-
+        /* Imagem animada flutuante */
+        .floating-image {
+            position: absolute;
+            width: 200px;
+            height: auto;
+            animation: float 3s ease-in-out infinite, neon-glow-blue-red 2s infinite alternate;
+        }
 
         /* Animação de flutuação */
         @keyframes float {
@@ -94,27 +92,16 @@
             }
         }
 
-/* Animação de brilho neon alternado entre azul e vermelho */
-@keyframes neon-glow-blue-red {
-    0% {
-        filter: drop-shadow(0 0 5px #0077ff) drop-shadow(0 0 10px #00f0ff) drop-shadow(0 0 20px #0077ff);
-    }
-    50% {
-        filter: drop-shadow(0 0 5px #ff0000) drop-shadow(0 0 10px #ff4500) drop-shadow(0 0 20px #ff0000);
-    }
-    100% {
-        filter: drop-shadow(0 0 5px #0077ff) drop-shadow(0 0 10px #00f0ff) drop-shadow(0 0 20px #0077ff);
-    }
-}
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .typing-container {
-                font-size: 5vw;
+        /* Efeito neon alternado entre azul e vermelho */
+        @keyframes neon-glow-blue-red {
+            0% {
+                filter: drop-shadow(0 0 5px #0077ff) drop-shadow(0 0 10px #00f0ff) drop-shadow(0 0 20px #0077ff);
             }
-
-            .floating-image {
-                width: 20%;
+            50% {
+                filter: drop-shadow(0 0 5px #ff0000) drop-shadow(0 0 10px #ff4500) drop-shadow(0 0 20px #ff0000);
+            }
+            100% {
+                filter: drop-shadow(0 0 5px #0077ff) drop-shadow(0 0 10px #00f0ff) drop-shadow(0 0 20px #0077ff);
             }
         }
     </style>
@@ -122,67 +109,64 @@
 <body>
 
 <div class="matrix-container"></div>
+
 <div class="typing-container" id="typing-text"></div>
+
 <img src="Sherk.png" alt="Floating SHERK" class="floating-image" id="floatingImage">
 
-<style>
-    /* Estilo do texto digitado com efeito neon */
-    .typing-container {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 80%;
-        max-width: 900px;
-        text-align: center;
-        font-size: 3vw;
-        color: #00ff00;  /* Cor verde neon */
-        font-family: 'Courier New', Courier, monospace;
-        white-space: pre-wrap;
-        border-right: 2px solid #00ff00;
-        animation: blinkCursor 0.8s infinite, neon-glow-blue-red 1.5s infinite alternate;
-        line-height: 1.5;
-    }
-
-    @keyframes blinkCursor {
-        50% {
-            border-right-color: transparent;
-        }
-    }
-
-    /* Efeito neon alternado entre azul e vermelho */
-    @keyframes neon-glow-blue-red {
-        0% {
-            text-shadow: 
-                0 0 10px #ff0000, /* Vermelho neon */
-                0 0 20px #0077ff, /* Azul neon */
-                0 0 30px #ff0000;
-        }
-        50% {
-            text-shadow: 
-                0 0 10px #0077ff, /* Azul neon */
-                0 0 20px #ff0000, /* Vermelho neon */
-                0 0 30px #0077ff;
-        }
-        100% {
-            text-shadow: 
-                0 0 20px #ff0000, /* Vermelho neon */
-                0 0 40px #0077ff, /* Azul neon */
-                0 0 60px #ff0000;
-        }
-    }
-
-    /* Responsividade para telas menores */
-    @media (max-width: 768px) {
-        .typing-container {
-            font-size: 5vw;
-        }
-    }
-</style>
-
-<div class="typing-container" id="typing-text"></div>
-
 <script>
+    const words = [
+        "HOLD", "SHERK", "MOON", "ECOSYSTEM", "SHERKFUN.IO", 
+        "REVENUE", "TAPPER GAME", "TIPPER BOT", "SHERK SHOPFY",
+        "SHARK TRUST", "SOLANA", "KRUEGER", "JB"
+    ];
+
+    const container = document.querySelector('.matrix-container');
+    const floatingImage = document.getElementById('floatingImage');
+
+    function createFallingWord() {
+        const word = document.createElement('span');
+        word.classList.add('falling-word');
+        word.innerText = words[Math.floor(Math.random() * words.length)];
+        word.style.left = Math.random() * 100 + 'vw';
+        word.style.top = '-5vh';
+        word.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        word.style.animationDelay = Math.random() * 2 + 's';
+        container.appendChild(word);
+
+        setTimeout(() => {
+            word.remove();
+        }, 5000);
+    }
+
+    setInterval(createFallingWord, 50);
+
+    // Movimentação da imagem
+    let xPos = Math.random() * (window.innerWidth - 200);
+    let yPos = Math.random() * (window.innerHeight - 200);
+    let xSpeed = 1;
+    let ySpeed = 1;
+
+    function moveImage() {
+        xPos += xSpeed;
+        yPos += ySpeed;
+
+        if (xPos + floatingImage.width >= window.innerWidth || xPos <= 0) {
+            xSpeed *= -1;
+        }
+
+        if (yPos + floatingImage.height >= window.innerHeight || yPos <= 0) {
+            ySpeed *= -1;
+        }
+
+        floatingImage.style.left = xPos + 'px';
+        floatingImage.style.top = yPos + 'px';
+
+        requestAnimationFrame(moveImage);
+    }
+
+    moveImage();
+
     // Texto datilografado com quebras de linha
     const textElement = document.getElementById('typing-text');
     const typingText = `The push has begun,\nwe are making moves\nalready bit by bit.`;
@@ -208,7 +192,6 @@
 
     typeEffect();
 </script>
-
 
 </body>
 </html>
