@@ -39,21 +39,19 @@
         }
 
         @keyframes glow-animation {
-            0% {
-                filter: drop-shadow(0 0 10px #00f0ff);
-            }
-            50% {
-                filter: drop-shadow(0 0 20px #ff0000);
-            }
-            100% {
-                filter: drop-shadow(0 0 10px #00f0ff);
-            }
+            0% { filter: drop-shadow(0 0 10px #00f0ff); }
+            50% { filter: drop-shadow(0 0 20px #ff0000); }
+            100% { filter: drop-shadow(0 0 10px #00f0ff); }
         }
 
         .glow-text {
             font-size: 4vw;
             color: #00ff00;
             text-shadow: 0 0 20px #00ff00, 0 0 40px #0077ff;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .instructions {
@@ -78,20 +76,16 @@
             box-shadow: 0 0 40px #ff0000;
         }
 
-        #start-screen, #winner-screen {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-        }
-
         #winner-message {
             font-size: 3vw;
             color: #00ff00;
             text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000, 0 0 30px #0077ff;
             white-space: pre-wrap;
             display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
         #ball {
@@ -99,23 +93,30 @@
             width: 40px;
             height: 40px;
         }
+
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            color: #00ff00;
+            font-size: 2vw;
+            text-shadow: 0 0 10px #00ff00;
+        }
     </style>
 </head>
 <body>
 
-<div id="start-screen">
-    <div class="instructions">Use the mouse to control Sherk.<br>Click "Play" to start the game.<br>First to 5 points wins!</div>
-    <button class="button" onclick="startGame()">Play</button>
-</div>
+<div class="glow-text">Sherk Pong</div>
 
 <canvas id="pongCanvas"></canvas>
 <img src="Sherk.png" id="sherk" class="player">
 <img src="Bonk.png" id="bonk" class="player">
 <img src="ball.png" id="ball">
-<div id="winner-screen" style="display: none;">
-    <div id="winner-message">SHERK always wins,<br>Listens to the Sherk</div>
+
+<div id="winner-message">SHERK always wins,<br>Listens to the Sherk<br>
     <button class="button" onclick="restartGame()">Play Again</button>
 </div>
+
+<div class="footer">Sherkfun.io</div>
 
 <script>
     const canvas = document.getElementById("pongCanvas");
@@ -127,8 +128,8 @@
     const ball = document.getElementById("ball");
     let ballX = canvas.width / 2;
     let ballY = canvas.height / 2;
-    let ballSpeedX = 3;
-    let ballSpeedY = 2;
+    let ballSpeedX = 2;  // Velocidade reduzida
+    let ballSpeedY = 1.5;
     let ballAngle = 0;
 
     const playerHeight = 150;
@@ -138,7 +139,7 @@
     let leftScore = 0;
     let rightScore = 0;
     let hitCount = 0;
-    let gameRunning = false;
+    let gameRunning = true;
     let bonkMissCounter = 0;
 
     document.addEventListener("mousemove", (e) => {
@@ -155,9 +156,6 @@
 
         ctx.fillStyle = rightScore > leftScore ? "#0077ff" : "#ff0000";
         ctx.fillText(rightScore, (canvas.width / 4) * 3, 50);
-
-        ctx.fillStyle = "#00ff00";
-        ctx.fillText("Sherk Pong", canvas.width / 2 - 150, 50);
     }
 
     function updateBall() {
@@ -177,7 +175,7 @@
 
         if (ballX >= canvas.width - 100 - ball.width) {
             if (bonkMissCounter % 3 === 0) {
-                rightScore++;
+                leftScore++;
                 bonkMissCounter++;
                 resetBall();
             } else if (ballY > bonkY && ballY < bonkY + playerHeight) {
@@ -204,13 +202,13 @@
 
     function showWinner() {
         gameRunning = false;
-        document.getElementById("winner-screen").style.display = "block";
+        document.getElementById("winner-message").style.display = "block";
     }
 
     function restartGame() {
         leftScore = 0;
         rightScore = 0;
-        document.getElementById("winner-screen").style.display = "none";
+        document.getElementById("winner-message").style.display = "none";
         gameRunning = true;
         gameLoop();
     }
@@ -240,11 +238,7 @@
         }
     }
 
-    function startGame() {
-        document.getElementById("start-screen").style.display = "none";
-        gameRunning = true;
-        gameLoop();
-    }
+    gameLoop();
 </script>
 
 </body>
