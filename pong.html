@@ -94,6 +94,31 @@
         .right-name {
             right: 20px;
         }
+
+        .player {
+            position: absolute;
+            height: 150px;
+            width: auto;
+            animation: glow-animation 1.5s infinite alternate;
+        }
+
+        #sherk {
+            left: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        #bonk {
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        @keyframes glow-animation {
+            0% { filter: drop-shadow(0 0 10px #00f0ff); }
+            50% { filter: drop-shadow(0 0 20px #ff0000); }
+            100% { filter: drop-shadow(0 0 10px #00f0ff); }
+        }
     </style>
 </head>
 <body>
@@ -112,6 +137,9 @@
 <div class="player-name left-name">Player: Sherk</div>
 <div class="player-name right-name">Player: Bonk</div>
 
+<img src="Sherk.png" id="sherk" class="player">
+<img src="Bonk.png" id="bonk" class="player">
+
 <div id="winner-message">
     SHERK always wins,<br>Listens to the Sherk<br>
     <button class="button" onclick="restartGame()">Play Again</button>
@@ -120,12 +148,9 @@
 <div class="footer">Sherkfun.io</div>
 
 <script>
-    let gameRunning = false;
-
     function startGame() {
         document.getElementById("instructions-container").style.display = "none";
         gameRunning = true;
-        gameLoop();
     }
 
     function showInstructions() {
@@ -133,7 +158,6 @@
     }
 
     function restartGame() {
-        gameRunning = false;
         document.getElementById("winner-message").style.display = "none";
         showInstructions();
     }
