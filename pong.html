@@ -110,6 +110,21 @@
             font-size: 2vw;
             text-shadow: 0 0 10px #00ff00;
         }
+
+        .player-name {
+            position: absolute;
+            font-size: 2vw;
+            color: #00ff00;
+            top: 10px;
+        }
+
+        .left-name {
+            left: 20px;
+        }
+
+        .right-name {
+            right: 20px;
+        }
     </style>
 </head>
 <body>
@@ -124,6 +139,9 @@
     </div>
     <button class="button" onclick="startGame()">Play</button>
 </div>
+
+<div class="player-name left-name">Player: Sherk</div>
+<div class="player-name right-name">Player: Bonk</div>
 
 <canvas id="pongCanvas"></canvas>
 <img src="Sherk.png" id="sherk" class="player">
@@ -149,7 +167,6 @@
     let ballY = canvas.height / 2;
     let ballSpeedX = 2;
     let ballSpeedY = 1.5;
-    let ballAngle = 0;
 
     const playerHeight = 150;
     let sherkY = canvas.height / 2 - playerHeight / 2;
@@ -158,7 +175,6 @@
     let leftScore = 0;
     let rightScore = 0;
     let gameRunning = false;
-    let missCounter = 0;
     let bonkMissNext = false;
 
     document.addEventListener("mousemove", (e) => {
@@ -180,8 +196,6 @@
     function updateBall() {
         ballX += ballSpeedX;
         ballY += ballSpeedY;
-        ballAngle += 5;
-        ball.style.transform = `rotate(${ballAngle}deg)`;
 
         if (ballY <= 0 || ballY + ball.height >= canvas.height) {
             ballSpeedY = -ballSpeedY;
@@ -198,7 +212,7 @@
                 resetBall();
             } else if (ballY > bonkY && ballY < bonkY + playerHeight) {
                 ballSpeedX = -ballSpeedX;
-                bonkMissNext = Math.random() < 0.3; // 30% chance de errar
+                bonkMissNext = Math.random() < 0.3;
             }
         }
 
@@ -232,26 +246,16 @@
 
     function moveBonk() {
         if (bonkMissNext) {
-            bonkY += (Math.random() > 0.5 ? 50 : -50);
-        } else {
-            const targetY = ballY - playerHeight / 2 + ball.height / 2;
-            bonkY += (targetY - bonkY) * 0.1; // Suaviza o movimento do Bonk
+            return;
         }
-        bonkY = Math.max(0, Math.min(bonkY, canvas.height - playerHeight));
-    }
-
-    function movePlayers() {
-        document.getElementById("sherk").style.top = `${sherkY}px`;
-        document.getElementById("bonk").style.top = `${bonkY}px`;
-        ball.style.left = `${ballX}px`;
-        ball.style.top = `${ballY}px`;
+        const targetY = ballY - playerHeight / 2 + ball.height / 2;
+        bonkY += (targetY - bonkY) * 0.05;
     }
 
     function gameLoop() {
         drawScore();
         moveBonk();
         updateBall();
-        movePlayers();
         if (gameRunning) requestAnimationFrame(gameLoop);
     }
 
@@ -261,7 +265,6 @@
         gameLoop();
     }
 </script>
-
 
 </body>
 </html>
