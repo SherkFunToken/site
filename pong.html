@@ -25,7 +25,7 @@
 
         .player {
             position: absolute;
-            height: 150px;  /* Ajustado para que Bonk e Sherk fiquem do mesmo tamanho */
+            height: 150px;
             width: auto;
             animation: glow-animation 1.5s infinite alternate;
         }
@@ -78,7 +78,7 @@
             box-shadow: 0 0 40px #ff0000;
         }
 
-        #start-screen {
+        #start-screen, #winner-screen {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -93,20 +93,29 @@
             white-space: pre-wrap;
             display: none;
         }
+
+        #ball {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+        }
     </style>
 </head>
 <body>
 
 <div id="start-screen">
-    <div class="instructions">Use the mouse to control Sherk.<br>Click "Play" to start the game.</div>
+    <div class="instructions">Use the mouse to control Sherk.<br>Click "Play" to start the game.<br>First to 5 points wins!</div>
     <button class="button" onclick="startGame()">Play</button>
 </div>
 
 <canvas id="pongCanvas"></canvas>
 <img src="Sherk.png" id="sherk" class="player">
 <img src="Bonk.png" id="bonk" class="player">
-<div id="winner-message">SHERK always wins,<br>Listens to the Sherk</div>
-<button id="restart-button" class="button" onclick="restartGame()" style="display: none;">Let's Play Again</button>
+<img src="ball.png" id="ball">
+<div id="winner-screen" style="display: none;">
+    <div id="winner-message">SHERK always wins,<br>Listens to the Sherk</div>
+    <button class="button" onclick="restartGame()">Play Again</button>
+</div>
 
 <script>
     const canvas = document.getElementById("pongCanvas");
@@ -115,11 +124,12 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    const ball = document.getElementById("ball");
     let ballX = canvas.width / 2;
     let ballY = canvas.height / 2;
-    let ballSpeedX = 2;
-    let ballSpeedY = 1.5;
-    const ballSize = 15;
+    let ballSpeedX = 3;
+    let ballSpeedY = 2;
+    let ballAngle = 0;
 
     const playerHeight = 150;
     let sherkY = canvas.height / 2 - playerHeight / 2;
@@ -129,6 +139,7 @@
     let rightScore = 0;
     let hitCount = 0;
     let gameRunning = false;
+    let bonkMissCounter = 0;
 
     document.addEventListener("mousemove", (e) => {
         if (gameRunning) {
@@ -136,14 +147,8 @@
         }
     });
 
-    function drawBall(x, y, size, color) {
-        ctx.fillStyle = color;
-        ctx.beginPath();
-        ctx.arc(x, y, size, 0, Math.PI * 2);
-        ctx.fill();
-    }
-
     function drawScore() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.font = "5vw Arial";
         ctx.fillStyle = leftScore > rightScore ? "#0077ff" : "#ff0000";
         ctx.fillText(leftScore, canvas.width / 4, 50);
@@ -151,7 +156,6 @@
         ctx.fillStyle = rightScore > leftScore ? "#0077ff" : "#ff0000";
         ctx.fillText(rightScore, (canvas.width / 4) * 3, 50);
 
-        ctx.font = "5vw Arial";
         ctx.fillStyle = "#00ff00";
         ctx.fillText("Sherk Pong", canvas.width / 2 - 150, 50);
     }
@@ -159,8 +163,10 @@
     function updateBall() {
         ballX += ballSpeedX;
         ballY += ballSpeedY;
+        ballAngle += 5;
+        ball.style.transform = `rotate(${ballAngle}deg)`;
 
-        if (ballY <= 0 || ballY >= canvas.height) {
+        if (ballY <= 0 || ballY + ball.height >= canvas.height) {
             ballSpeedY = -ballSpeedY;
         }
 
@@ -169,8 +175,15 @@
             hitCount++;
         }
 
-        if (ballX >= canvas.width - 100 - ballSize && ballY > bonkY && ballY < bonkY + playerHeight) {
-            ballSpeedX = -ballSpeedX;
+        if (ballX >= canvas.width - 100 - ball.width) {
+            if (bonkMissCounter % 3 === 0) {
+                rightScore++;
+                bonkMissCounter++;
+                resetBall();
+            } else if (ballY > bonkY && ballY < bonkY + playerHeight) {
+                ballSpeedX = -ballSpeedX;
+                bonkMissCounter++;
+            }
         }
 
         if (ballX < 0) {
@@ -178,12 +191,7 @@
             resetBall();
         }
 
-        if (ballX > canvas.width) {
-            leftScore++;
-            resetBall();
-        }
-
-        if (leftScore === 10) {
+        if (leftScore === 5) {
             showWinner();
         }
     }
@@ -192,27 +200,24 @@
         ballX = canvas.width / 2;
         ballY = canvas.height / 2;
         ballSpeedX = -ballSpeedX;
-        hitCount = 0;
     }
 
     function showWinner() {
         gameRunning = false;
-        document.getElementById("winner-message").style.display = "block";
-        document.getElementById("restart-button").style.display = "block";
+        document.getElementById("winner-screen").style.display = "block";
     }
 
     function restartGame() {
         leftScore = 0;
         rightScore = 0;
-        document.getElementById("winner-message").style.display = "none";
-        document.getElementById("restart-button").style.display = "none";
-        gameLoop();
+        document.getElementById("winner-screen").style.display = "none";
         gameRunning = true;
+        gameLoop();
     }
 
     function moveBonk() {
         if (hitCount % 3 === 0) {
-            bonkY += 100; 
+            bonkY += 100;
         } else {
             bonkY = ballY - playerHeight / 2;
         }
@@ -221,12 +226,12 @@
     function movePlayers() {
         document.getElementById("sherk").style.top = `${sherkY}px`;
         document.getElementById("bonk").style.top = `${bonkY}px`;
+        ball.style.left = `${ballX}px`;
+        ball.style.top = `${ballY}px`;
     }
 
     function gameLoop() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawScore();
-        drawBall(ballX, ballY, ballSize, "#fff");
         moveBonk();
         updateBall();
         movePlayers();
@@ -240,7 +245,6 @@
         gameRunning = true;
         gameLoop();
     }
-
 </script>
 
 </body>
