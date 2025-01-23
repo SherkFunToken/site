@@ -278,7 +278,7 @@ function moveBonk() {
     
     // Adiciona erro aleatório para simular falhas humanas
     let errorChance = Math.random();
-    if (errorChance < 0.1) {  // 10% de chance de errar
+    if (errorChance < 0.3) {  // 30% de chance de errar
         targetY += (Math.random() > 0.5 ? 100 : -100); // Move para cima ou para baixo inesperadamente
     }
 
