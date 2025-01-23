@@ -184,14 +184,14 @@
     // Adiciona suporte ao toque para dispositivos móveis
     document.addEventListener("mousemove", (e) => {
         if (gameRunning) {
-            sherkY = e.clientY - playerHeight / 2;
+            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight / 2));
         }
     });
 
     document.addEventListener("touchmove", (e) => {
         if (gameRunning) {
             const touch = e.touches[0];
-            sherkY = touch.clientY - playerHeight / 2;
+            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, touch.clientY - playerHeight / 2));
         }
     });
 
@@ -267,8 +267,15 @@
     }
 
     function moveBonk() {
-        const targetY = bonkMissNext ? canvas.height : ballY - playerHeight / 2;
+        let targetY;
+        if (bonkMissNext) {
+            targetY = canvas.height - playerHeight; // Bonk "erra" mas fica dentro da tela
+        } else {
+            targetY = ballY - playerHeight / 2;
+        }
+
         bonkY += (targetY - bonkY) * 0.05;
+        bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY)); // Garante que Bonk não saia da tela
     }
 
     function movePlayers() {
