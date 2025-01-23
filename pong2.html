@@ -217,6 +217,7 @@
 
         if (ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
             ballSpeedX = -ballSpeedX;
+            increaseBallSpeed();
         }
 
         if (ballX >= canvas.width - 100 - ball.width) {
@@ -226,6 +227,7 @@
                 resetBall();
             } else if (ballY > bonkY && ballY < bonkY + playerHeight) {
                 ballSpeedX = -ballSpeedX;
+                increaseBallSpeed();
                 bonkMissNext = Math.random() < 0.3;
             }
         }
@@ -240,10 +242,16 @@
         }
     }
 
+    function increaseBallSpeed() {
+        ballSpeedX *= 1.05;
+        ballSpeedY *= 1.05;
+    }
+
     function resetBall() {
         ballX = canvas.width / 2;
         ballY = canvas.height / 2;
-        ballSpeedX = -ballSpeedX;
+        ballSpeedX = Math.sign(ballSpeedX) * 2;
+        ballSpeedY = Math.sign(ballSpeedY) * 1.5;
     }
 
     function showWinner() {
