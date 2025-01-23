@@ -21,8 +21,8 @@
 
         .player {
             position: absolute;
-            width: 100px;
-            height: auto;
+            height: 100px;
+            width: auto;
             animation: glow-animation 1.5s infinite alternate;
         }
 
@@ -32,6 +32,7 @@
 
         #bonk {
             right: 20px;
+            height: 50px; /* Bonk reduzido em 50% */
         }
 
         @keyframes glow-animation {
@@ -47,20 +48,20 @@
         }
 
         .glow-text {
-            font-size: 50px;
+            font-size: 5vw;
             color: #00ff00;
             text-shadow: 0 0 20px #00ff00, 0 0 40px #0077ff;
         }
 
         .instructions {
-            font-size: 30px;
+            font-size: 3vw;
             color: #fff;
             margin-top: 50px;
         }
 
         .button {
             padding: 15px 30px;
-            font-size: 24px;
+            font-size: 2vw;
             color: #fff;
             background: linear-gradient(90deg, #00f0ff, #ff0000);
             border: none;
@@ -75,29 +76,11 @@
         }
 
         #winner-message {
-            font-size: 40px;
+            font-size: 4vw;
             color: #00ff00;
             text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000, 0 0 30px #0077ff;
             white-space: pre-wrap;
             display: none;
-        }
-
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
-        .typing-text {
-            overflow: hidden;
-            white-space: nowrap;
-            border-right: 3px solid #00ff00;
-            animation: typing 3s steps(40, end), blinkCursor 0.8s infinite;
-        }
-
-        @keyframes blinkCursor {
-            50% {
-                border-color: transparent;
-            }
         }
     </style>
 </head>
@@ -111,7 +94,7 @@
 <canvas id="pongCanvas"></canvas>
 <img src="Sherk.png" id="sherk" class="player">
 <img src="Bonk.png" id="bonk" class="player">
-<div id="winner-message" class="typing-text">SHERK always wins,<br>Listens to the Sherk</div>
+<div id="winner-message">SHERK always wins,<br>Listens to the Sherk</div>
 <button id="restart-button" class="button" onclick="restartGame()" style="display: none;">Let's Play Again</button>
 
 <script>
@@ -150,14 +133,14 @@
     }
 
     function drawScore() {
-        ctx.font = "40px Arial";
+        ctx.font = "5vw Arial";
         ctx.fillStyle = leftScore > rightScore ? "#0077ff" : "#ff0000";
         ctx.fillText(leftScore, canvas.width / 4, 50);
 
         ctx.fillStyle = rightScore > leftScore ? "#0077ff" : "#ff0000";
         ctx.fillText(rightScore, (canvas.width / 4) * 3, 50);
 
-        ctx.font = "50px Arial";
+        ctx.font = "5vw Arial";
         ctx.fillStyle = "#00ff00";
         ctx.fillText("Sherk Pong", canvas.width / 2 - 100, 50);
     }
@@ -170,12 +153,12 @@
             ballSpeedY = -ballSpeedY;
         }
 
-        if (ballX <= 50 && ballY > sherkY && ballY < sherkY + playerHeight) {
+        if (ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
             ballSpeedX = -ballSpeedX;
             hitCount++;
         }
 
-        if (ballX >= canvas.width - 50 - ballSize && ballY > bonkY && ballY < bonkY + playerHeight) {
+        if (ballX >= canvas.width - 100 - ballSize && ballY > bonkY && ballY < bonkY + playerHeight) {
             ballSpeedX = -ballSpeedX;
         }
 
@@ -218,7 +201,7 @@
 
     function moveBonk() {
         if (hitCount % 3 === 0) {
-            bonkY += 5;
+            bonkY += 100; 
         } else {
             bonkY = ballY - playerHeight / 2;
         }
@@ -246,6 +229,12 @@
         gameRunning = true;
         gameLoop();
     }
+
+    window.addEventListener("resize", () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+
 </script>
 
 </body>
