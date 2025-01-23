@@ -64,7 +64,7 @@
 
 .score-label {
     position: absolute;
-    font-size: 3vw;
+    font-size: 5vw;
     color: #00ff00;
     text-shadow: 0 0 10px #00ff00;
     font-weight: bold;
@@ -145,10 +145,10 @@
 
 <div class="glow-text">Sherk Pong</div>
 
-<div class="player-label player-left">Player: Sherk</div>
+<div class="player-label player-left">Player: Sherk</div><br>
 <div class="score-label player-left" id="sherkScore">0</div>
     
-<div class="player-label player-right">Player: Pepe</div>
+<div class="player-label player-right">Player: Pepe</div><br>
 <div class="score-label player-right" id="bonkScore">0</div>
 
 <div id="instructions-container" class="instructions-container">
@@ -281,11 +281,11 @@ function drawScore() {
         }
 
         if (leftScore === 5) {
-            showWinner("Sherk venceu!");
+            showWinner("Sherk Wins!");
         }
 
         if (rightScore === 5) {
-            showWinner("Bonk venceu!");
+            showWinner("Bonk Wins!");
         }
     }
 
