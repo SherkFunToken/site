@@ -40,14 +40,19 @@
             height: 150px;
             width: auto;
             animation: glow-animation 1.5s infinite alternate;
+            z-index: 2;
         }
 
         #sherk {
-            left: 20px;
+            left: 50px;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         #bonk {
-            right: 20px;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         @keyframes glow-animation {
@@ -90,6 +95,9 @@
         }
 
         .pause-button {
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
             padding: 10px 20px;
             font-size: 1vw;
             color: #fff;
@@ -97,6 +105,7 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
+            z-index: 3;
         }
 
         .instructions-container {
@@ -105,12 +114,16 @@
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            color: #fff;
+            color: #0f0;
+            font-size: 2vw;
+            white-space: pre;
+            font-family: monospace;
+            animation: typing 3s steps(50) forwards;
         }
 
-        .instructions {
-            font-size: 2vw;
-            margin-bottom: 20px;
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
         }
 
         .button {
@@ -122,24 +135,23 @@
             border-radius: 10px;
             cursor: pointer;
             box-shadow: 0 0 20px #00f0ff;
+            display: none;
         }
-
     </style>
 </head>
 <body>
 
 <div class="glow-text">Sherk Pong</div>
-<div class="player-label player-left">Player: Sherk</div>
-<div class="player-label player-right">Player: Bonk</div>
+<div class="player-label player-left">Player: Sherk 0</div>
+<div class="player-label player-right">Player: Bonk 0</div>
 
 <div id="instructions-container" class="instructions-container">
-    <div class="instructions">
-        Use the mouse to control Sherk.<br>
-        Click "Play" to start the game.<br>
-        First to 5 points wins!
-    </div>
-    <button class="button" onclick="startGame()">Play</button>
+    Use the mouse to control Sherk.<br>
+    Click "Play" to start the game.<br>
+    First to 5 points wins!
 </div>
+
+<button id="play-button" class="button" onclick="startGame()">Play</button>
 
 <button class="pause-button" onclick="togglePause()">Pause Game</button>
 
@@ -149,6 +161,10 @@
 <img src="Bonk.png" id="bonk" class="player">
 
 <script>
+    setTimeout(() => {
+        document.getElementById('play-button').style.display = 'block';
+    }, 3500);
+
     const canvas = document.getElementById("pongCanvas");
     const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth * 0.9;
@@ -165,6 +181,7 @@
 
     function startGame() {
         document.getElementById("instructions-container").style.display = "none";
+        document.getElementById("play-button").style.display = "none";
         gameRunning = true;
         gameLoop();
     }
