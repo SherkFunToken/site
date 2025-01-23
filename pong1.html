@@ -98,23 +98,55 @@
             border-radius: 10px;
             cursor: pointer;
         }
+
+        .instructions-container {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+        }
+
+        .instructions {
+            font-size: 2vw;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 2vw;
+            color: #fff;
+            background: linear-gradient(90deg, #00f0ff, #ff0000);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 20px #00f0ff;
+        }
+
     </style>
 </head>
 <body>
 
 <div class="glow-text">Sherk Pong</div>
-
 <div class="player-label player-left">Player: Sherk</div>
 <div class="player-label player-right">Player: Bonk</div>
 
-<div id="instructions-container">
-    <div class="instructions">3, 2, Play now!</div>
+<div id="instructions-container" class="instructions-container">
+    <div class="instructions">
+        Use the mouse to control Sherk.<br>
+        Click "Play" to start the game.<br>
+        First to 5 points wins!
+    </div>
+    <button class="button" onclick="startGame()">Play</button>
 </div>
 
 <button class="pause-button" onclick="togglePause()">Pause Game</button>
 
 <canvas id="pongCanvas"></canvas>
 <div class="divider"></div>
+<img src="Sherk.png" id="sherk" class="player">
+<img src="Bonk.png" id="bonk" class="player">
 
 <script>
     const canvas = document.getElementById("pongCanvas");
