@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Invaders -|</title>
+    <title>Sherk Invaders</title>
     <link rel="stylesheet" href="style.css">
     <style>
         body {
@@ -72,9 +72,7 @@
         const sherkImage = new Image();
         sherkImage.src = 'Sherk.png';
 
-        const enemyImages = [
-            'btc.png', 'bnb.png', 'sol.png', 'eth.png', 'tron.png', 'topbot.png', 'shiba.png'
-        ].map(src => {
+        const enemyImages = ['btc.png', 'ada.png', 'haters.png', 'eth.png'].map(src => {
             let img = new Image();
             img.src = src;
             return img;
@@ -95,7 +93,10 @@
         const enemyWidth = 40;
         const enemyHeight = 40;
         const enemyGap = 20;
-        const enemySpeed = 1;
+        let enemyDirection = 1;
+        let enemySpeed = 2;
+
+        const bullets = [];
 
         function drawSherk() {
             ctx.drawImage(sherkImage, sherk.x, sherk.y, sherk.width, sherk.height);
@@ -115,13 +116,17 @@
         }
 
         function updateEnemies() {
-            for (let i = 0; i < enemies.length; i++) {
-                enemies[i].y += enemySpeed;
-                if (enemies[i].y + enemyHeight > canvas.height) {
-                    document.getElementById("instructions-container").innerHTML = "<p>Game Over! Os haters venceram!</p><button class='button' onclick='restartGame()'>Reiniciar</button>";
-                    gameRunning = false;
-                    return;
+            let edgeReached = false;
+            enemies.forEach(enemy => {
+                enemy.x += enemyDirection * enemySpeed;
+                if (enemy.x + enemyWidth >= canvas.width || enemy.x <= 0) {
+                    edgeReached = true;
                 }
+            });
+            
+            if (edgeReached) {
+                enemyDirection *= -1;
+                enemies.forEach(enemy => enemy.y += enemyHeight);
             }
         }
 
@@ -136,15 +141,39 @@
             }
         }
 
+        function drawBullets() {
+            ctx.fillStyle = "#ff0000";
+            bullets.forEach(bullet => {
+                ctx.fillRect(bullet.x, bullet.y, 5, 15);
+            });
+        }
+
+        function updateBullets() {
+            bullets.forEach((bullet, index) => {
+                bullet.y -= 5;
+                enemies.forEach((enemy, enemyIndex) => {
+                    if (
+                        bullet.x > enemy.x && bullet.x < enemy.x + enemyWidth &&
+                        bullet.y < enemy.y + enemyHeight && bullet.y > enemy.y
+                    ) {
+                        enemies.splice(enemyIndex, 1);
+                        bullets.splice(index, 1);
+                    }
+                });
+            });
+        }
+
         function drawGame() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawSherk();
             drawEnemies();
+            drawBullets();
         }
 
         function updateGame() {
             moveSherk();
             updateEnemies();
+            updateBullets();
             drawGame();
             if (gameRunning) requestAnimationFrame(updateGame);
         }
@@ -156,25 +185,14 @@
             updateGame();
         }
 
-        function restartGame() {
-            enemies.length = 0;
-            leftScore = 0;
-            rightScore = 0;
-            startGame();
-        }
-
         document.addEventListener("keydown", (e) => {
-            if (e.key === "ArrowLeft") {
-                sherk.dx = -sherk.speed;
-            } else if (e.key === "ArrowRight") {
-                sherk.dx = sherk.speed;
-            }
+            if (e.key === "ArrowLeft") sherk.dx = -sherk.speed;
+            if (e.key === "ArrowRight") sherk.dx = sherk.speed;
+            if (e.key === " ") bullets.push({ x: sherk.x + sherk.width / 2, y: sherk.y });
         });
 
         document.addEventListener("keyup", (e) => {
-            if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-                sherk.dx = 0;
-            }
+            if (e.key === "ArrowLeft" || e.key === "ArrowRight") sherk.dx = 0;
         });
     </script>
 </body>
