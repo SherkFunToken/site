@@ -185,6 +185,21 @@
     text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000;
 "></div>
 
+    <div id="winner-message" style="
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4vw;
+    color: #00ff00;
+    text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000;
+    text-align: center;">
+    <p id="winner-text"></p>
+    <button onclick="restartGame()" class="button">Reiniciar</button>
+</div>
+
+
 <div id="instructions-container">
     <p>Use o mouse ou toque para jogar.</p>
     <button onclick="startGame()">Iniciar</button>
