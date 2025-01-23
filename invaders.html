@@ -45,6 +45,17 @@
             box-shadow: 0 0 20px #00f0ff;
         }
 
+        .countdown {
+            font-size: 8vw;
+            color: #ff0000;
+            text-shadow: 0 0 20px #ff0000;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
         canvas {
             display: block;
             margin: 0 auto;
@@ -60,8 +71,9 @@
     <div id="instructions-container" class="instructions-container">
         <p>Use the ← → arrows to move and Space to shoot.</p>
         <p>Defend Sherk's ecosystem from haters and rival cryptocurrencies!</p>
-        <button class="button" onclick="startGame()">Play</button>
+        <button class="button" onclick="startCountdown()">Play</button>
     </div>
+    <div id="countdown" class="countdown"></div>
 
     <script>
         const canvas = document.getElementById("gameCanvas");
@@ -73,7 +85,7 @@
         const sherkImage = new Image();
         sherkImage.src = 'Sherk.png';
 
-        const enemyImages = ['btc.png', 'ada.png', 'haters.png', 'eth.png'].map(src => {
+        const enemyImages = ['btc.png', 'sol.png', 'shiba.png', 'tron.png', 'eth.png'].map(src => {
             let img = new Image();
             img.src = src;
             return img;
@@ -99,36 +111,25 @@
 
         const bullets = [];
 
-        function drawSherk() {
-            ctx.drawImage(sherkImage, sherk.x, sherk.y, sherk.width, sherk.height);
-        }
-
-        function drawEnemies() {
-            for (let i = 0; i < enemies.length; i++) {
-                let img = enemyImages[i % enemyImages.length];
-                ctx.drawImage(img, enemies[i].x, enemies[i].y, enemyWidth, enemyHeight);
-            }
-        }
-
-        function moveSherk() {
-            sherk.x += sherk.dx;
-            if (sherk.x < 0) sherk.x = 0;
-            if (sherk.x + sherk.width > canvas.width) sherk.x = canvas.width - sherk.width;
-        }
-
-        function updateEnemies() {
-            let edgeReached = false;
-            enemies.forEach(enemy => {
-                enemy.x += enemyDirection * enemySpeed;
-                if (enemy.x + enemyWidth >= canvas.width || enemy.x <= 0) {
-                    edgeReached = true;
+        function startCountdown() {
+            document.getElementById("instructions-container").style.display = "none";
+            let countdownElement = document.getElementById("countdown");
+            countdownElement.style.display = "block";
+            let count = 3;
+            countdownElement.innerText = count;
+            let interval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownElement.innerText = count;
+                } else {
+                    countdownElement.innerText = "Let's Go!";
+                    setTimeout(() => {
+                        countdownElement.style.display = "none";
+                        startGame();
+                    }, 1000);
+                    clearInterval(interval);
                 }
-            });
-            
-            if (edgeReached) {
-                enemyDirection *= -1;
-                enemies.forEach(enemy => enemy.y += enemyHeight / 2);
-            }
+            }, 1000);
         }
 
         function createEnemies() {
@@ -142,59 +143,11 @@
             }
         }
 
-        function drawBullets() {
-            ctx.fillStyle = "#ff0000";
-            bullets.forEach(bullet => {
-                ctx.fillRect(bullet.x, bullet.y, 5, 15);
-            });
-        }
-
-        function updateBullets() {
-            bullets.forEach((bullet, index) => {
-                bullet.y -= 5;
-                enemies.forEach((enemy, enemyIndex) => {
-                    if (
-                        bullet.x > enemy.x && bullet.x < enemy.x + enemyWidth &&
-                        bullet.y < enemy.y + enemyHeight && bullet.y > enemy.y
-                    ) {
-                        enemies.splice(enemyIndex, 1);
-                        bullets.splice(index, 1);
-                    }
-                });
-            });
-        }
-
-        function drawGame() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawSherk();
-            drawEnemies();
-            drawBullets();
-        }
-
-        function updateGame() {
-            moveSherk();
-            updateEnemies();
-            updateBullets();
-            drawGame();
-            if (gameRunning) requestAnimationFrame(updateGame);
-        }
-
         function startGame() {
-            document.getElementById("instructions-container").style.display = "none";
             createEnemies();
             gameRunning = true;
             updateGame();
         }
-
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "ArrowLeft") sherk.dx = -sherk.speed;
-            if (e.key === "ArrowRight") sherk.dx = sherk.speed;
-            if (e.key === " ") bullets.push({ x: sherk.x + sherk.width / 2, y: sherk.y });
-        });
-
-        document.addEventListener("keyup", (e) => {
-            if (e.key === "ArrowLeft" || e.key === "ArrowRight") sherk.dx = 0;
-        });
     </script>
 </body>
 </html>
