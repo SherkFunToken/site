@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sherk Invaders</title>
-    <link rel="stylesheet" href="style.css">
     <style>
         body {
             margin: 0;
@@ -16,11 +15,11 @@
         }
 
         .glow-text {
-            font-size: 4vw;
+            font-size: 6vw;
             color: #00ff00;
             text-shadow: 0 0 20px #00ff00, 0 0 40px #0077ff;
             position: absolute;
-            top: 20px;
+            top: 5%;
             left: 50%;
             transform: translateX(-50%);
         }
@@ -32,12 +31,12 @@
             transform: translate(-50%, -50%);
             text-align: center;
             color: #fff;
-            font-size: 2vw;
+            font-size: 3vw;
         }
 
         .button {
             padding: 15px 30px;
-            font-size: 2vw;
+            font-size: 3vw;
             color: #fff;
             background: linear-gradient(90deg, #00f0ff, #ff0000);
             border: none;
@@ -49,6 +48,8 @@
         canvas {
             display: block;
             margin: 0 auto;
+            max-width: 100%;
+            height: auto;
             border: 2px solid #00ff00;
         }
     </style>
@@ -57,17 +58,17 @@
     <div class="glow-text">Sherk Invaders</div>
     <canvas id="gameCanvas"></canvas>
     <div id="instructions-container" class="instructions-container">
-        <p>Use as setas ← → para mover e Espaço para atirar.</p>
-        <p>Defenda o ecossistema Sherk contra os haters e outras criptomoedas!</p>
-        <button class="button" onclick="startGame()">Iniciar</button>
+        <p>Use the ← → arrows to move and Space to shoot.</p>
+        <p>Defend Sherk's ecosystem from haters and rival cryptocurrencies!</p>
+        <button class="button" onclick="startGame()">Play</button>
     </div>
 
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
 
-        canvas.width = 800;
-        canvas.height = 600;
+        canvas.width = window.innerWidth * 0.9;
+        canvas.height = window.innerHeight * 0.8;
 
         const sherkImage = new Image();
         sherkImage.src = 'Sherk.png';
@@ -79,22 +80,22 @@
         });
 
         const sherk = {
-            x: canvas.width / 2 - 25,
-            y: canvas.height - 60,
-            width: 50,
-            height: 50,
-            speed: 5,
+            x: canvas.width / 2 - 40,
+            y: canvas.height - 80,
+            width: 80,
+            height: 80,
+            speed: 10,
             dx: 0
         };
 
         const enemies = [];
         const enemyRows = 5;
-        const enemyCols = 10;
-        const enemyWidth = 40;
-        const enemyHeight = 40;
-        const enemyGap = 20;
+        const enemyCols = 8;
+        const enemyWidth = 60;
+        const enemyHeight = 60;
+        const enemyGap = 30;
         let enemyDirection = 1;
-        let enemySpeed = 2;
+        let enemySpeed = 1;
 
         const bullets = [];
 
@@ -126,7 +127,7 @@
             
             if (edgeReached) {
                 enemyDirection *= -1;
-                enemies.forEach(enemy => enemy.y += enemyHeight);
+                enemies.forEach(enemy => enemy.y += enemyHeight / 2);
             }
         }
 
