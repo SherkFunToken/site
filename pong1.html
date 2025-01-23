@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sherk Pong Games.</title>
+    <title>Sherk Pong Games</title>
     <style>
         body {
             margin: 0;
@@ -30,7 +30,7 @@
             top: 0;
             left: 50%;
             width: 5px;
-            height: 90%;
+            height: 100%;
             background: white;
             transform: translateX(-50%);
         }
@@ -88,12 +88,6 @@
             right: 10%;
         }
 
-        .footer {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-        }
-
         .pause-button {
             position: absolute;
             bottom: 10px;
@@ -108,26 +102,6 @@
             z-index: 3;
         }
 
-        .instructions-container {
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: #0f0;
-            font-size: 2vw;
-            white-space: nowrap;
-            overflow: hidden;
-            border-right: .15em solid #0f0;
-            width: 0;
-            animation: typing 3s steps(40, end) forwards;
-        }
-
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
         .button {
             padding: 15px 30px;
             font-size: 2vw;
@@ -137,9 +111,8 @@
             border-radius: 10px;
             cursor: pointer;
             box-shadow: 0 0 20px #00f0ff;
-            display: none;
-            margin-top: 20px;
         }
+
     </style>
 </head>
 <body>
@@ -148,14 +121,7 @@
 <div class="player-label player-left">Player: Sherk 0</div>
 <div class="player-label player-right">Player: Bonk 0</div>
 
-<div id="instructions-container" class="instructions-container">
-    Use the mouse or touch to control Sherk.<br>
-    Click "Play" to start the game.<br>
-    First to 5 points wins!
-</div>
-
 <button id="play-button" class="button" onclick="startCountdown()">Play</button>
-
 <button class="pause-button" onclick="togglePause()">Pause Game</button>
 
 <canvas id="pongCanvas"></canvas>
@@ -164,12 +130,91 @@
 <img src="Bonk.png" id="bonk" class="player">
 
 <script>
-    setTimeout(() => {
-        document.getElementById('play-button').style.display = 'block';
-    }, 3500);
+    const canvas = document.getElementById("pongCanvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let sherkY = canvas.height / 2 - 75;
+    let bonkY = canvas.height / 2 - 75;
+    let ballX = canvas.width / 2;
+    let ballY = canvas.height / 2;
+    let ballSpeedX = 3;
+    let ballSpeedY = 2;
+    let leftScore = 0;
+    let rightScore = 0;
+    let gameRunning = false;
+    let bonkMissCounter = 0;
+
+    document.addEventListener("mousemove", (e) => {
+        if (gameRunning) {
+            sherkY = e.clientY - 75;
+            document.getElementById("sherk").style.top = `${sherkY}px`;
+        }
+    });
+
+    document.addEventListener("touchmove", (e) => {
+        if (gameRunning) {
+            sherkY = e.touches[0].clientY - 75;
+            document.getElementById("sherk").style.top = `${sherkY}px`;
+        }
+    });
+
+    function moveBonk() {
+        if (bonkMissCounter === 0) {
+            bonkY += (ballY - bonkY - 75) * 0.05;
+        }
+        if (Math.random() < 0.02) {
+            bonkMissCounter = bonkMissCounter === 0 ? Math.floor(Math.random() * 2) + 2 : bonkMissCounter - 1;
+        }
+        document.getElementById("bonk").style.top = `${bonkY}px`;
+    }
+
+    function updateBall() {
+        ballX += ballSpeedX;
+        ballY += ballSpeedY;
+        if (ballY <= 0 || ballY >= canvas.height) ballSpeedY *= -1;
+        if (ballX <= 100 && ballY > sherkY && ballY < sherkY + 150) {
+            ballSpeedX *= -1.05;
+        }
+        if (ballX >= canvas.width - 100 && bonkMissCounter === 0) {
+            ballSpeedX *= -1.05;
+        }
+        if (ballX < 0) {
+            rightScore++;
+            resetBall();
+        }
+        if (ballX > canvas.width) {
+            leftScore++;
+            resetBall();
+        }
+        drawScore();
+    }
+
+    function resetBall() {
+        ballX = canvas.width / 2;
+        ballY = canvas.height / 2;
+        ballSpeedX = 3;
+        ballSpeedY = 2;
+    }
+
+    function drawScore() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = "5vw Arial";
+        ctx.fillStyle = "#00ff00";
+        ctx.fillText(leftScore, canvas.width / 3, 50);
+        ctx.fillText(rightScore, (canvas.width / 3) * 2, 50);
+    }
+
+    function gameLoop() {
+        updateBall();
+        moveBonk();
+        if (gameRunning) requestAnimationFrame(gameLoop);
+    }
 
     function startCountdown() {
-        let countdown = ["3", "2", "Play now!"];
+        let countdown = ["3", "2", "Play Now!"];
         let index = 0;
         let countdownElement = document.createElement("div");
         countdownElement.style.position = "absolute";
@@ -177,25 +222,25 @@
         countdownElement.style.left = "50%";
         countdownElement.style.transform = "translate(-50%, -50%)";
         countdownElement.style.fontSize = "4vw";
-        countdownElement.style.color = "#0f0";
+        countdownElement.style.color = "#00ff00";
         document.body.appendChild(countdownElement);
 
         function showCountdown() {
             if (index < countdown.length) {
-                countdownElement.textContent = countdown[index];
-                index++;
+                countdownElement.textContent = countdown[index++];
                 setTimeout(showCountdown, 1000);
             } else {
                 countdownElement.remove();
-                startGame();
+                gameRunning = true;
+                gameLoop();
             }
         }
         showCountdown();
     }
 
-    function startGame() {
-        document.getElementById("instructions-container").style.display = "none";
-        document.getElementById("play-button").style.display = "none";
+    function togglePause() {
+        gameRunning = !gameRunning;
+        if (gameRunning) gameLoop();
     }
 </script>
 
