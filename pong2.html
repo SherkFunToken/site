@@ -180,6 +180,7 @@
     let rightScore = 0;
     let gameRunning = false;
     let bonkMissNext = false;
+    let ballOut = false;  // Flag para saber se a bola já saiu da tela
 
     document.addEventListener("mousemove", (e) => {
         if (gameRunning) {
@@ -221,14 +222,19 @@
 
         if (ballX >= canvas.width - 100 - ball.width) {
             if (bonkMissNext) {
-                leftScore++;
-                bonkMissNext = false;
-                resetBall();
+                ballOut = true;  // Permite que a bola continue até sair da tela
             } else if (ballY > bonkY && ballY < bonkY + playerHeight) {
                 ballSpeedX = -ballSpeedX;
                 increaseBallSpeed();
                 bonkMissNext = Math.random() < 0.3;
             }
+        }
+
+        // Quando a bola realmente sair da tela pela direita
+        if (ballX > canvas.width && ballOut) {
+            leftScore++;
+            ballOut = false;
+            resetBall();
         }
 
         if (ballX < 0) {
