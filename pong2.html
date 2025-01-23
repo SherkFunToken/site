@@ -246,56 +246,59 @@ function drawScore() {
         ctx.fillText(rightScore, (canvas.width / 3) * 2, 50);
     }
 */
-    function updateBall() {
-        ballX += ballSpeedX;
-        ballY += ballSpeedY;
-        ballAngle += 5;
-        ball.style.transform = `rotate(${ballAngle}deg)`;
+function updateBall() {
+    ballX += ballSpeedX;
+    ballY += ballSpeedY;
+    ballAngle += 5;
+    ball.style.transform = `rotate(${ballAngle}deg)`;
 
-        if (ballY <= 0 || ballY + ball.height >= canvas.height) {
-            ballSpeedY = -ballSpeedY;
-        }
+    if (ballY <= 0 || ballY + ball.height >= canvas.height) {
+        ballSpeedY = -ballSpeedY;
+    }
 
-        if (ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
+    if (ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
+        ballSpeedX = -ballSpeedX;
+        increaseBallSpeed();
+    }
+
+    if (ballX >= canvas.width - 100 - ball.width) {
+        if (bonkMissNext) {
+            ballOut = true;  // Permite que a bola continue até sair da tela
+        } else if (ballY > bonkY && ballY < bonkY + playerHeight) {
             ballSpeedX = -ballSpeedX;
             increaseBallSpeed();
-        }
-
-        if (ballX >= canvas.width - 100 - ball.width) {
-            if (bonkMissNext) {
-                ballOut = true;  // Permite que a bola continue até sair da tela
-            } else if (ballY > bonkY && ballY < bonkY + playerHeight) {
-                ballSpeedX = -ballSpeedX;
-                increaseBallSpeed();
-                bonkHitCount++;
-                if (bonkHitCount >= 3 && Math.random() < 0.5) {
-                    bonkMissNext = true;
-                    bonkHitCount = 0;  // Reseta o contador após o erro
-                }
+            bonkHitCount++;
+            if (bonkHitCount >= 3 && Math.random() < 0.5) {
+                bonkMissNext = true;
+                bonkHitCount = 0;  // Reseta o contador após o erro
             }
         }
+    }
 
-        // Quando a bola realmente sair da tela pela direita
-        if (ballX > canvas.width && ballOut) {
-            leftScore++;
-            ballOut = false;
-            bonkMissNext = false;
-            resetBall();
-        }
-
-        if (ballX < 0) {
-            rightScore++;
-            resetBall();
-        }
-
+    // Quando a bola realmente sair da tela pela direita
+    if (ballX > canvas.width && ballOut) {
+        leftScore++;
+        drawScore(); // Atualiza o placar visualmente antes de verificar a vitória
+        ballOut = false;
+        bonkMissNext = false;
         if (leftScore === 5) {
             showWinner("Sherk Wins!");
+            return;
         }
+        resetBall();
+    }
 
+    if (ballX < 0) {
+        rightScore++;
+        drawScore(); // Atualiza o placar visualmente antes de verificar a vitória
         if (rightScore === 5) {
             showWinner("Bonk Wins!");
+            return;
         }
+        resetBall();
     }
+}
+
 
     function increaseBallSpeed() {
         ballSpeedX *= 1.05;
