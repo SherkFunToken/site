@@ -12,11 +12,15 @@
             overflow: hidden;
             font-family: monospace;
             text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
         }
 
         canvas {
             display: block;
-            margin: auto;
         }
 
         .player {
@@ -48,15 +52,15 @@
         }
 
         .glow-text {
-            font-size: 5vw;
+            font-size: 4vw;
             color: #00ff00;
             text-shadow: 0 0 20px #00ff00, 0 0 40px #0077ff;
         }
 
         .instructions {
-            font-size: 3vw;
+            font-size: 2.5vw;
             color: #fff;
-            margin-top: 50px;
+            margin-bottom: 20px;
         }
 
         .button {
@@ -76,7 +80,7 @@
         }
 
         #winner-message {
-            font-size: 4vw;
+            font-size: 3vw;
             color: #00ff00;
             text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000, 0 0 30px #0077ff;
             white-space: pre-wrap;
@@ -106,8 +110,8 @@
 
     let ballX = canvas.width / 2;
     let ballY = canvas.height / 2;
-    let ballSpeedX = 3;
-    let ballSpeedY = 2;
+    let ballSpeedX = 2;
+    let ballSpeedY = 1.5;
     const ballSize = 15;
 
     const playerHeight = 100;
@@ -142,7 +146,7 @@
 
         ctx.font = "5vw Arial";
         ctx.fillStyle = "#00ff00";
-        ctx.fillText("Sherk Pong", canvas.width / 2 - 100, 50);
+        ctx.fillText("Sherk Pong", canvas.width / 2 - 150, 50);
     }
 
     function updateBall() {
