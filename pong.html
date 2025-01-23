@@ -11,16 +11,12 @@
             background: black;
             overflow: hidden;
             font-family: monospace;
+            text-align: center;
         }
 
         canvas {
             display: block;
             margin: auto;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
         }
 
         .player {
@@ -50,14 +46,39 @@
             }
         }
 
+        .glow-text {
+            font-size: 50px;
+            color: #00ff00;
+            text-shadow: 0 0 20px #00ff00, 0 0 40px #0077ff;
+        }
+
+        .instructions {
+            font-size: 30px;
+            color: #fff;
+            margin-top: 50px;
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 24px;
+            color: #fff;
+            background: linear-gradient(90deg, #00f0ff, #ff0000);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 20px #00f0ff;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            box-shadow: 0 0 40px #ff0000;
+        }
+
         #winner-message {
-            position: absolute;
             font-size: 40px;
             color: #00ff00;
             text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000, 0 0 30px #0077ff;
-            text-align: center;
-            width: 100%;
-            top: 40%;
+            white-space: pre-wrap;
             display: none;
         }
 
@@ -82,10 +103,16 @@
 </head>
 <body>
 
+<div id="start-screen">
+    <div class="instructions">Use the mouse to control Sherk.<br>Click "Play" to start the game.</div>
+    <button class="button" onclick="startGame()">Play</button>
+</div>
+
 <canvas id="pongCanvas"></canvas>
 <img src="Sherk.png" id="sherk" class="player">
 <img src="Bonk.png" id="bonk" class="player">
 <div id="winner-message" class="typing-text">SHERK always wins,<br>Listens to the Sherk</div>
+<button id="restart-button" class="button" onclick="restartGame()" style="display: none;">Let's Play Again</button>
 
 <script>
     const canvas = document.getElementById("pongCanvas");
@@ -96,8 +123,8 @@
 
     let ballX = canvas.width / 2;
     let ballY = canvas.height / 2;
-    let ballSpeedX = 6;
-    let ballSpeedY = 4;
+    let ballSpeedX = 3;
+    let ballSpeedY = 2;
     const ballSize = 15;
 
     const playerHeight = 100;
@@ -106,16 +133,14 @@
 
     let leftScore = 0;
     let rightScore = 0;
-    let winSequence = [1, 0, 1, 1, 0, 1, 1, 0, 1, 1]; // Sherk wins 2x, Bonk 1x
+    let hitCount = 0;
+    let gameRunning = false;
 
     document.addEventListener("mousemove", (e) => {
-        sherkY = e.clientY - playerHeight / 2;
+        if (gameRunning) {
+            sherkY = e.clientY - playerHeight / 2;
+        }
     });
-
-    function drawRect(x, y, width, height, color) {
-        ctx.fillStyle = color;
-        ctx.fillRect(x, y, width, height);
-    }
 
     function drawBall(x, y, size, color) {
         ctx.fillStyle = color;
@@ -131,6 +156,10 @@
 
         ctx.fillStyle = rightScore > leftScore ? "#0077ff" : "#ff0000";
         ctx.fillText(rightScore, (canvas.width / 4) * 3, 50);
+
+        ctx.font = "50px Arial";
+        ctx.fillStyle = "#00ff00";
+        ctx.fillText("Sherk Pong", canvas.width / 2 - 100, 50);
     }
 
     function updateBall() {
@@ -143,6 +172,7 @@
 
         if (ballX <= 50 && ballY > sherkY && ballY < sherkY + playerHeight) {
             ballSpeedX = -ballSpeedX;
+            hitCount++;
         }
 
         if (ballX >= canvas.width - 50 - ballSize && ballY > bonkY && ballY < bonkY + playerHeight) {
@@ -161,7 +191,6 @@
 
         if (leftScore === 10) {
             showWinner();
-            setTimeout(resetGame, 4000);
         }
     }
 
@@ -169,30 +198,29 @@
         ballX = canvas.width / 2;
         ballY = canvas.height / 2;
         ballSpeedX = -ballSpeedX;
-    }
-
-    function resetGame() {
-        leftScore = 0;
-        rightScore = 0;
-        document.getElementById("winner-message").style.display = "none";
-        gameLoop();
+        hitCount = 0;
     }
 
     function showWinner() {
+        gameRunning = false;
         document.getElementById("winner-message").style.display = "block";
-        ballSpeedX = 0;
-        ballSpeedY = 0;
+        document.getElementById("restart-button").style.display = "block";
+    }
+
+    function restartGame() {
+        leftScore = 0;
+        rightScore = 0;
+        document.getElementById("winner-message").style.display = "none";
+        document.getElementById("restart-button").style.display = "none";
+        gameLoop();
+        gameRunning = true;
     }
 
     function moveBonk() {
-        if (winSequence[rightScore] === 1) {
-            if (ballY > bonkY + playerHeight / 2) {
-                bonkY += 5;
-            } else {
-                bonkY -= 5;
-            }
+        if (hitCount % 3 === 0) {
+            bonkY += 5;
         } else {
-            bonkY += Math.random() > 0.5 ? 5 : -5;
+            bonkY = ballY - playerHeight / 2;
         }
     }
 
@@ -208,11 +236,16 @@
         moveBonk();
         updateBall();
         movePlayers();
-
-        requestAnimationFrame(gameLoop);
+        if (gameRunning) {
+            requestAnimationFrame(gameLoop);
+        }
     }
 
-    gameLoop();
+    function startGame() {
+        document.getElementById("start-screen").style.display = "none";
+        gameRunning = true;
+        gameLoop();
+    }
 </script>
 
 </body>
