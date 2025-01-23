@@ -178,9 +178,13 @@
     const sherk = document.getElementById("sherk");
     const bonk = document.getElementById("bonk");
 
+    // Velocidade inicial reduzida em 30%
+    const INITIAL_BALL_SPEED_X = 5 * 0.7;  
+    const INITIAL_BALL_SPEED_Y = 3 * 0.7;
+    
     let ballX, ballY;
-let ballSpeedX = 5 * 0.7;  // Reduzindo a velocidade em 30%
-let ballSpeedY = 3 * 0.7;  // Reduzindo a velocidade em 30%
+    let ballSpeedX = INITIAL_BALL_SPEED_X;
+    let ballSpeedY = INITIAL_BALL_SPEED_Y;
     let ballAngle = 0;
 
     const playerHeight = 150;
@@ -195,8 +199,8 @@ let ballSpeedY = 3 * 0.7;  // Reduzindo a velocidade em 30%
     function resetGameElements() {
         ballX = canvas.width / 2;
         ballY = canvas.height / 2;
-        ballSpeedX = 5;
-        ballSpeedY = 3;
+        ballSpeedX = INITIAL_BALL_SPEED_X;
+        ballSpeedY = INITIAL_BALL_SPEED_Y;
         sherkY = canvas.height / 2 - playerHeight / 2;
         bonkY = canvas.height / 2 - playerHeight / 2;
         updatePositions();
@@ -269,13 +273,13 @@ let ballSpeedY = 3 * 0.7;  // Reduzindo a velocidade em 30%
         updatePositions();
     }
 
-function resetBall() {
-    ballX = canvas.width / 2;
-    ballY = canvas.height / 2;
-    ballSpeedX = -ballSpeedX * 0.7;
-    ballSpeedY = ballSpeedY * 0.7;
-}
-
+    function resetBall() {
+        ballX = canvas.width / 2;
+        ballY = canvas.height / 2;
+        // Mantendo a velocidade constante e reiniciando direção aleatória
+        ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * INITIAL_BALL_SPEED_X;
+        ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * INITIAL_BALL_SPEED_Y;
+    }
 
     function showWinner() {
         gameRunning = false;
@@ -304,7 +308,6 @@ function resetBall() {
             requestAnimationFrame(gameLoop);
         }
     }
-
 </script>
 
 
