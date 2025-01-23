@@ -9,7 +9,6 @@
             margin: 0;
             padding: 0;
             background: black;
-            overflow: hidden;
             font-family: monospace;
             text-align: center;
             display: flex;
@@ -20,45 +19,20 @@
         }
 
         canvas {
-            display: block;
             border: 5px solid white;
+            width: 90vw;
+            height: 80vh;
             position: relative;
         }
 
         .divider {
             position: absolute;
-            top: 0;
+            top: 10%;
             left: 50%;
             width: 5px;
-            height: 100%;
+            height: 80%;
             background: white;
             transform: translateX(-50%);
-        }
-
-        .player {
-            position: absolute;
-            height: 150px;
-            width: auto;
-            animation: glow-animation 1.5s infinite alternate;
-            z-index: 2;
-        }
-
-        #sherk {
-            left: 50px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        #bonk {
-            right: 50px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        @keyframes glow-animation {
-            0% { filter: drop-shadow(0 0 10px #00f0ff); }
-            50% { filter: drop-shadow(0 0 20px #ff0000); }
-            100% { filter: drop-shadow(0 0 10px #00f0ff); }
         }
 
         .glow-text {
@@ -78,14 +52,32 @@
             text-shadow: 0 0 10px #00ff00;
         }
 
-        .player-left {
-            top: 10px;
-            left: 10%;
+        .player-left { top: 10px; left: 5%; }
+        .player-right { top: 10px; right: 5%; }
+
+        .instructions-container {
+            font-size: 2vw;
+            color: #00ff00;
+            white-space: pre-wrap;
+            text-shadow: 0 0 20px #00ff00;
+            animation: typing 4s steps(40, end);
         }
 
-        .player-right {
-            top: 10px;
-            right: 10%;
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 2vw;
+            color: #fff;
+            background: linear-gradient(90deg, #00f0ff, #ff0000);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 0 20px #00f0ff;
         }
 
         .pause-button {
@@ -99,49 +91,50 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            z-index: 3;
         }
 
-        .button {
-            padding: 15px 30px;
-            font-size: 2vw;
-            color: #fff;
-            background: linear-gradient(90deg, #00f0ff, #ff0000);
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 0 20px #00f0ff;
+        .flash {
+            animation: flash-red 0.5s 3;
         }
 
+        @keyframes flash-red {
+            0% { border-color: white; }
+            50% { border-color: red; }
+            100% { border-color: white; }
+        }
     </style>
 </head>
 <body>
 
 <div class="glow-text">Sherk Pong</div>
-<div class="player-label player-left">Player: Sherk 0</div>
-<div class="player-label player-right">Player: Bonk 0</div>
+<div class="player-label player-left">Player: Sherk <span id="scoreSherk">0</span></div>
+<div class="player-label player-right">Player: Bonk <span id="scoreBonk">0</span></div>
+
+<div id="instructions-container" class="instructions-container">
+    Use the mouse or touch to control Sherk.<br>
+    Click "Play" to start the game.<br>
+    First to 5 points wins!
+</div>
 
 <button id="play-button" class="button" onclick="startCountdown()">Play</button>
 <button class="pause-button" onclick="togglePause()">Pause Game</button>
 
 <canvas id="pongCanvas"></canvas>
 <div class="divider"></div>
-<img src="Sherk.png" id="sherk" class="player">
-<img src="Bonk.png" id="bonk" class="player">
 
 <script>
     const canvas = document.getElementById("pongCanvas");
     const ctx = canvas.getContext("2d");
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth * 0.9;
+    canvas.height = window.innerHeight * 0.8;
 
     let sherkY = canvas.height / 2 - 75;
     let bonkY = canvas.height / 2 - 75;
     let ballX = canvas.width / 2;
     let ballY = canvas.height / 2;
-    let ballSpeedX = 3;
-    let ballSpeedY = 2;
+    let ballSpeedX = 4;
+    let ballSpeedY = 3;
     let leftScore = 0;
     let rightScore = 0;
     let gameRunning = false;
@@ -150,92 +143,94 @@
     document.addEventListener("mousemove", (e) => {
         if (gameRunning) {
             sherkY = e.clientY - 75;
-            document.getElementById("sherk").style.top = `${sherkY}px`;
         }
     });
 
     document.addEventListener("touchmove", (e) => {
         if (gameRunning) {
             sherkY = e.touches[0].clientY - 75;
-            document.getElementById("sherk").style.top = `${sherkY}px`;
         }
     });
 
     function moveBonk() {
         if (bonkMissCounter === 0) {
-            bonkY += (ballY - bonkY - 75) * 0.05;
+            bonkY += (ballY - bonkY - 75) * 0.1;
         }
         if (Math.random() < 0.02) {
             bonkMissCounter = bonkMissCounter === 0 ? Math.floor(Math.random() * 2) + 2 : bonkMissCounter - 1;
         }
-        document.getElementById("bonk").style.top = `${bonkY}px`;
     }
 
     function updateBall() {
         ballX += ballSpeedX;
         ballY += ballSpeedY;
+
         if (ballY <= 0 || ballY >= canvas.height) ballSpeedY *= -1;
+
         if (ballX <= 100 && ballY > sherkY && ballY < sherkY + 150) {
             ballSpeedX *= -1.05;
         }
+
         if (ballX >= canvas.width - 100 && bonkMissCounter === 0) {
             ballSpeedX *= -1.05;
         }
+
         if (ballX < 0) {
             rightScore++;
+            updateScore();
+            flashBorder();
             resetBall();
         }
+
         if (ballX > canvas.width) {
             leftScore++;
+            updateScore();
+            flashBorder();
             resetBall();
         }
-        drawScore();
+
+        if (leftScore === 5 || rightScore === 5) {
+            alert(leftScore === 5 ? "Sherk Wins!" : "Bonk Wins!");
+            resetGame();
+        }
+    }
+
+    function flashBorder() {
+        canvas.classList.add("flash");
+        setTimeout(() => canvas.classList.remove("flash"), 1500);
+    }
+
+    function updateScore() {
+        document.getElementById("scoreSherk").textContent = leftScore;
+        document.getElementById("scoreBonk").textContent = rightScore;
     }
 
     function resetBall() {
         ballX = canvas.width / 2;
         ballY = canvas.height / 2;
-        ballSpeedX = 3;
-        ballSpeedY = 2;
+        ballSpeedX = 4;
+        ballSpeedY = 3;
     }
 
-    function drawScore() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.font = "5vw Arial";
-        ctx.fillStyle = "#00ff00";
-        ctx.fillText(leftScore, canvas.width / 3, 50);
-        ctx.fillText(rightScore, (canvas.width / 3) * 2, 50);
+    function resetGame() {
+        leftScore = 0;
+        rightScore = 0;
+        updateScore();
+        resetBall();
+        gameRunning = false;
+        document.getElementById("play-button").style.display = "block";
     }
 
     function gameLoop() {
-        updateBall();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         moveBonk();
+        updateBall();
         if (gameRunning) requestAnimationFrame(gameLoop);
     }
 
     function startCountdown() {
-        let countdown = ["3", "2", "Play Now!"];
-        let index = 0;
-        let countdownElement = document.createElement("div");
-        countdownElement.style.position = "absolute";
-        countdownElement.style.top = "50%";
-        countdownElement.style.left = "50%";
-        countdownElement.style.transform = "translate(-50%, -50%)";
-        countdownElement.style.fontSize = "4vw";
-        countdownElement.style.color = "#00ff00";
-        document.body.appendChild(countdownElement);
-
-        function showCountdown() {
-            if (index < countdown.length) {
-                countdownElement.textContent = countdown[index++];
-                setTimeout(showCountdown, 1000);
-            } else {
-                countdownElement.remove();
-                gameRunning = true;
-                gameLoop();
-            }
-        }
-        showCountdown();
+        document.getElementById("play-button").style.display = "none";
+        setTimeout(() => { gameRunning = true; gameLoop(); }, 3000);
     }
 
     function togglePause() {
