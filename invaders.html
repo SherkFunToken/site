@@ -118,8 +118,9 @@
             for (let i = 0; i < enemies.length; i++) {
                 enemies[i].y += enemySpeed;
                 if (enemies[i].y + enemyHeight > canvas.height) {
-                    alert("Game Over! Os haters venceram!");
-                    document.location.reload();
+                    document.getElementById("instructions-container").innerHTML = "<p>Game Over! Os haters venceram!</p><button class='button' onclick='restartGame()'>Reiniciar</button>";
+                    gameRunning = false;
+                    return;
                 }
             }
         }
@@ -145,13 +146,21 @@
             moveSherk();
             updateEnemies();
             drawGame();
-            requestAnimationFrame(updateGame);
+            if (gameRunning) requestAnimationFrame(updateGame);
         }
 
         function startGame() {
             document.getElementById("instructions-container").style.display = "none";
             createEnemies();
+            gameRunning = true;
             updateGame();
+        }
+
+        function restartGame() {
+            enemies.length = 0;
+            leftScore = 0;
+            rightScore = 0;
+            startGame();
         }
 
         document.addEventListener("keydown", (e) => {
