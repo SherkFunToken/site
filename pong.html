@@ -10,6 +10,7 @@
             padding: 0;
             background: black;
             overflow: hidden;
+            font-family: monospace;
         }
 
         canvas {
@@ -22,39 +23,36 @@
             bottom: 0;
         }
 
-        /* Animação de brilho neon azul e vermelho */
-        @keyframes neon-glow-blue-red {
-            0% {
-                filter: drop-shadow(0 0 5px #0077ff) drop-shadow(0 0 10px #00f0ff) drop-shadow(0 0 20px #0077ff);
-            }
-            50% {
-                filter: drop-shadow(0 0 5px #ff0000) drop-shadow(0 0 10px #ff4500) drop-shadow(0 0 20px #ff0000);
-            }
-            100% {
-                filter: drop-shadow(0 0 5px #0077ff) drop-shadow(0 0 10px #00f0ff) drop-shadow(0 0 20px #0077ff);
-            }
+        .player {
+            position: absolute;
+            width: 100px;
+            height: auto;
+            animation: glow-animation 1.5s infinite alternate;
         }
 
         #sherk {
-            position: absolute;
-            width: 80px;
-            height: auto;
             left: 20px;
-            animation: neon-glow-blue-red 1.5s infinite alternate;
         }
 
         #bonk {
-            position: absolute;
-            width: 80px;
-            height: auto;
             right: 20px;
-            animation: neon-glow-blue-red 1.5s infinite alternate;
+        }
+
+        @keyframes glow-animation {
+            0% {
+                filter: drop-shadow(0 0 10px #00f0ff);
+            }
+            50% {
+                filter: drop-shadow(0 0 20px #ff0000);
+            }
+            100% {
+                filter: drop-shadow(0 0 10px #00f0ff);
+            }
         }
 
         #winner-message {
             position: absolute;
-            font-family: 'Poppins', sans-serif;
-            font-size: 50px;
+            font-size: 40px;
             color: #00ff00;
             text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000, 0 0 30px #0077ff;
             text-align: center;
@@ -62,14 +60,32 @@
             top: 40%;
             display: none;
         }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .typing-text {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid #00ff00;
+            animation: typing 3s steps(40, end), blinkCursor 0.8s infinite;
+        }
+
+        @keyframes blinkCursor {
+            50% {
+                border-color: transparent;
+            }
+        }
     </style>
 </head>
 <body>
 
 <canvas id="pongCanvas"></canvas>
-<img src="Sherk.png" id="sherk">
-<img src="Bonk.png" id="bonk">
-<div id="winner-message">SHERK always wins,<br>Listens to the Sherk</div>
+<img src="Sherk.png" id="sherk" class="player">
+<img src="Bonk.png" id="bonk" class="player">
+<div id="winner-message" class="typing-text">SHERK always wins,<br>Listens to the Sherk</div>
 
 <script>
     const canvas = document.getElementById("pongCanvas");
@@ -80,21 +96,20 @@
 
     let ballX = canvas.width / 2;
     let ballY = canvas.height / 2;
-    let ballSpeedX = 5;
-    let ballSpeedY = 5;
+    let ballSpeedX = 6;
+    let ballSpeedY = 4;
     const ballSize = 15;
 
-    const paddleWidth = 15;
-    const paddleHeight = 100;
-
-    let leftPaddleY = canvas.height / 2 - paddleHeight / 2;
-    let rightPaddleY = canvas.height / 2 - paddleHeight / 2;
+    const playerHeight = 100;
+    let sherkY = canvas.height / 2 - playerHeight / 2;
+    let bonkY = canvas.height / 2 - playerHeight / 2;
 
     let leftScore = 0;
     let rightScore = 0;
+    let winSequence = [1, 0, 1, 1, 0, 1, 1, 0, 1, 1]; // Sherk wins 2x, Bonk 1x
 
     document.addEventListener("mousemove", (e) => {
-        leftPaddleY = e.clientY - paddleHeight / 2;
+        sherkY = e.clientY - playerHeight / 2;
     });
 
     function drawRect(x, y, width, height, color) {
@@ -126,11 +141,11 @@
             ballSpeedY = -ballSpeedY;
         }
 
-        if (ballX <= paddleWidth && ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
+        if (ballX <= 50 && ballY > sherkY && ballY < sherkY + playerHeight) {
             ballSpeedX = -ballSpeedX;
         }
 
-        if (ballX >= canvas.width - paddleWidth - ballSize && ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
+        if (ballX >= canvas.width - 50 - ballSize && ballY > bonkY && ballY < bonkY + playerHeight) {
             ballSpeedX = -ballSpeedX;
         }
 
@@ -145,8 +160,8 @@
         }
 
         if (leftScore === 10) {
-            document.getElementById("winner-message").style.display = "block";
-            resetGame();
+            showWinner();
+            setTimeout(resetGame, 4000);
         }
     }
 
@@ -159,28 +174,40 @@
     function resetGame() {
         leftScore = 0;
         rightScore = 0;
+        document.getElementById("winner-message").style.display = "none";
+        gameLoop();
     }
 
-    function drawPaddles() {
-        drawRect(0, leftPaddleY, paddleWidth, paddleHeight, "#00ff00");
-        drawRect(canvas.width - paddleWidth, rightPaddleY, paddleWidth, paddleHeight, "#ff0000");
+    function showWinner() {
+        document.getElementById("winner-message").style.display = "block";
+        ballSpeedX = 0;
+        ballSpeedY = 0;
     }
 
-    function moveRightPaddle() {
-        if (ballY > rightPaddleY + paddleHeight / 2) {
-            rightPaddleY += 6;
+    function moveBonk() {
+        if (winSequence[rightScore] === 1) {
+            if (ballY > bonkY + playerHeight / 2) {
+                bonkY += 5;
+            } else {
+                bonkY -= 5;
+            }
         } else {
-            rightPaddleY -= 6;
+            bonkY += Math.random() > 0.5 ? 5 : -5;
         }
+    }
+
+    function movePlayers() {
+        document.getElementById("sherk").style.top = `${sherkY}px`;
+        document.getElementById("bonk").style.top = `${bonkY}px`;
     }
 
     function gameLoop() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawPaddles();
-        drawBall(ballX, ballY, ballSize, "#fff");
         drawScore();
-        moveRightPaddle();
+        drawBall(ballX, ballY, ballSize, "#fff");
+        moveBonk();
         updateBall();
+        movePlayers();
 
         requestAnimationFrame(gameLoop);
     }
