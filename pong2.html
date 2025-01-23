@@ -181,6 +181,7 @@
     let gameRunning = false;
     let bonkMissNext = false;
     let ballOut = false;  // Flag para saber se a bola já saiu da tela
+    let bonkHitCount = 0; // Contador de rebatidas do Bonk
 
     document.addEventListener("mousemove", (e) => {
         if (gameRunning) {
@@ -226,7 +227,11 @@
             } else if (ballY > bonkY && ballY < bonkY + playerHeight) {
                 ballSpeedX = -ballSpeedX;
                 increaseBallSpeed();
-                bonkMissNext = Math.random() < 0.3;
+                bonkHitCount++;
+                if (bonkHitCount >= 3 && Math.random() < 0.5) {
+                    bonkMissNext = true;
+                    bonkHitCount = 0;  // Reseta o contador após o erro
+                }
             }
         }
 
@@ -234,6 +239,7 @@
         if (ballX > canvas.width && ballOut) {
             leftScore++;
             ballOut = false;
+            bonkMissNext = false;
             resetBall();
         }
 
@@ -257,6 +263,7 @@
         ballY = canvas.height / 2;
         ballSpeedX = Math.sign(ballSpeedX) * 2;
         ballSpeedY = Math.sign(ballSpeedY) * 1.5;
+        bonkMissNext = false;  // Resetando a variável para próximo round
     }
 
     function showWinner() {
