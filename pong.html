@@ -25,18 +25,17 @@
 
         .player {
             position: absolute;
-            height: 20vh;
+            height: 150px;
             width: auto;
             animation: glow-animation 1.5s infinite alternate;
-            transition: transform 0.5s ease-in-out;
         }
 
         #sherk {
-            left: 5%;
+            left: 20px;
         }
 
         #bonk {
-            right: 5%;
+            right: 20px;
         }
 
         @keyframes glow-animation {
@@ -50,9 +49,26 @@
             color: #00ff00;
             text-shadow: 0 0 20px #00ff00, 0 0 40px #0077ff;
             position: absolute;
-            top: 5%;
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
+        }
+
+        .player-label {
+            position: absolute;
+            font-size: 2vw;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .player-left {
+            top: 10px;
+            left: 20px;
+        }
+
+        .player-right {
+            top: 10px;
+            right: 20px;
         }
 
         .instructions-container {
@@ -100,8 +116,16 @@
 
         #ball {
             position: absolute;
-            width: 4vw;
-            height: 4vw;
+            width: 40px;
+            height: 40px;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            color: #00ff00;
+            font-size: 2vw;
+            text-shadow: 0 0 10px #00ff00;
         }
     </style>
 </head>
@@ -113,11 +137,14 @@
 
 <div class="glow-text">Sherk Pong</div>
 
+<div class="player-label player-left">Player: Sherk</div>
+<div class="player-label player-right">Player: Pepe</div>
+
 <div id="instructions-container" class="instructions-container">
     <div class="instructions">
-        Use the mouse to control Pepe (the Bonk player).<br>
+        Use the mouse to control Sherk.<br>
         Click "Play" to start the game.<br>
-        Sherk always wins when he scores 5 points!
+        First to 5 points wins!
     </div>
     <button class="button" onclick="startGame()">Play</button>
 </div>
@@ -128,10 +155,11 @@
 <img src="ball.png" id="ball">
 
 <div id="winner-message">
-    SHERK always wins!<br>
-    Watch him defeat Pepe.<br>
+    SHERK always wins,<br>Listens to the Sherk<br>
     <button class="button" onclick="restartGame()">Play Again</button>
 </div>
+
+<div class="footer">Sherkfun.io</div>
 
 <script>
     const canvas = document.getElementById("pongCanvas");
@@ -141,24 +169,32 @@
     canvas.height = window.innerHeight;
 
     const hitSound = document.getElementById("hitSound");
+    function playHitSound() {
+        hitSound.currentTime = 0;
+        hitSound.play();
+    }
+
     const ball = document.getElementById("ball");
     const sherk = document.getElementById("sherk");
     const bonk = document.getElementById("bonk");
 
-    const INITIAL_BALL_SPEED_X = 3.5;
-    const INITIAL_BALL_SPEED_Y = 2.1;
+    // Velocidade inicial reduzida em 30%
+    const INITIAL_BALL_SPEED_X = 5 * 0.7;  
+    const INITIAL_BALL_SPEED_Y = 3 * 0.7;
     
     let ballX, ballY;
     let ballSpeedX = INITIAL_BALL_SPEED_X;
     let ballSpeedY = INITIAL_BALL_SPEED_Y;
     let ballAngle = 0;
 
-    const playerHeight = window.innerHeight * 0.2;
-    let bonkY = canvas.height / 2 - playerHeight / 2;
+    const playerHeight = 150;
     let sherkY = canvas.height / 2 - playerHeight / 2;
+    let bonkY = canvas.height / 2 - playerHeight / 2;
 
     let leftScore = 0;
+    let rightScore = 0;
     let gameRunning = false;
+    let bonkMissNext = false;
 
     function resetGameElements() {
         ballX = canvas.width / 2;
@@ -171,24 +207,36 @@
     }
 
     function updatePositions() {
-        bonk.style.top = `${bonkY}px`;
-        sherk.style.top = `${sherkY}px`;
-        ball.style.left = `${ballX}px`;
-        ball.style.top = `${ballY}px`;
+        sherk.style.top = ${sherkY}px;
+        bonk.style.top = ${bonkY}px;
+        ball.style.left = ${ballX}px;
+        ball.style.top = ${ballY}px;
     }
 
     document.addEventListener("mousemove", (e) => {
         if (gameRunning) {
-            bonkY = e.clientY - playerHeight / 2;
-            bonkY = Math.max(0, Math.min(bonkY, canvas.height - playerHeight));
+            sherkY = e.clientY - playerHeight / 2;
+            if (sherkY < 0) sherkY = 0;
+            if (sherkY + playerHeight > canvas.height) sherkY = canvas.height - playerHeight;
             updatePositions();
         }
     });
 
+    function drawScore() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = "5vw Arial";
+        ctx.fillStyle = leftScore > rightScore ? "#0077ff" : "#ff0000";
+        ctx.fillText(leftScore, canvas.width / 3, 50);
+
+        ctx.fillStyle = rightScore > leftScore ? "#0077ff" : "#ff0000";
+        ctx.fillText(rightScore, (canvas.width / 3) * 2, 50);
+    }
+
     function updateBall() {
         ballX += ballSpeedX;
         ballY += ballSpeedY;
-        ball.style.transform = `rotate(${ballAngle += 5}deg)`;
+        ballAngle += 5;
+        ball.style.transform = rotate(${ballAngle}deg);
 
         if (ballY <= 0 || ballY + ball.height >= canvas.height) {
             ballSpeedY = -ballSpeedY;
@@ -198,35 +246,52 @@
         if (ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
             ballSpeedX = -ballSpeedX;
             playHitSound();
-            leftScore++;
         }
 
         if (ballX >= canvas.width - 100 - ball.width) {
-            ballSpeedX = -ballSpeedX;
-            playHitSound();
+            if (bonkMissNext) {
+                leftScore++;
+                bonkMissNext = false;
+                resetBall();
+            } else if (ballY > bonkY && ballY < bonkY + playerHeight) {
+                ballSpeedX = -ballSpeedX;
+                bonkMissNext = Math.random() < 0.3;
+                playHitSound();
+            }
         }
 
-        if (leftScore === 5) {
+        if (ballX < 0) {
+            rightScore++;
+            resetBall();
+        }
+
+        if (leftScore === 5 || rightScore === 5) {
             showWinner();
         }
 
+        bonkY += (ballY - bonkY - playerHeight / 2) * 0.1;
         updatePositions();
+    }
+
+    function resetBall() {
+        ballX = canvas.width / 2;
+        ballY = canvas.height / 2;
+        // Mantendo a velocidade constante e reiniciando direção aleatória
+        ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * INITIAL_BALL_SPEED_X;
+        ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * INITIAL_BALL_SPEED_Y;
     }
 
     function showWinner() {
         gameRunning = false;
         document.getElementById("winner-message").style.display = "block";
-        sherk.style.transform = "translateX(80vw) rotate(20deg)";
-        bonk.style.transform = "translateX(10vw) rotate(90deg)";
     }
 
     function restartGame() {
         leftScore = 0;
+        rightScore = 0;
         resetGameElements();
         document.getElementById("winner-message").style.display = "none";
         document.getElementById("instructions-container").style.display = "block";
-        sherk.style.transform = "translateX(0)";
-        bonk.style.transform = "translateX(0)";
     }
 
     function startGame() {
@@ -237,10 +302,14 @@
     }
 
     function gameLoop() {
+        drawScore();
         updateBall();
-        if (gameRunning) requestAnimationFrame(gameLoop);
+        if (gameRunning) {
+            requestAnimationFrame(gameLoop);
+        }
     }
 </script>
+
 
 </body>
 </html>
