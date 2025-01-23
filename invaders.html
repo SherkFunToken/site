@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sherk Invaders</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glow-text">Sherk Invaders</div>
+    <canvas id="gameCanvas"></canvas>
+    <div id="instructions-container" class="instructions-container">
+        <div class="instructions">
+            Defenda o ecossistema do Sherk!<br>
+            Use as setas ← → para mover e Espaço para atirar.<br>
+            Destrua os haters e outras criptomoedas antes que cheguem ao fundo!<br>
+        </div>
+        <button class="button" onclick="startGame()">Play</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = 800;
+        canvas.height = 600;
+
+        const sherk = {
+            x: canvas.width / 2 - 25,
+            y: canvas.height - 60,
+            width: 50,
+            height: 50,
+            speed: 5,
+            dx: 0
+        };
+
+        const enemies = [];
+        const enemyRows = 5;
+        const enemyCols = 10;
+        const enemyWidth = 40;
+        const enemyHeight = 40;
+        const enemyGap = 20;
+        const enemySpeed = 1;
+
+        function drawSherk() {
+            ctx.fillStyle = "#00ff00";
+            ctx.fillRect(sherk.x, sherk.y, sherk.width, sherk.height);
+        }
+
+        function drawEnemies() {
+            ctx.fillStyle = "#ff0000";
+            for (let i = 0; i < enemies.length; i++) {
+                ctx.fillRect(enemies[i].x, enemies[i].y, enemyWidth, enemyHeight);
+            }
+        }
+
+        function moveSherk() {
+            sherk.x += sherk.dx;
+            if (sherk.x < 0) sherk.x = 0;
+            if (sherk.x + sherk.width > canvas.width) sherk.x = canvas.width - sherk.width;
+        }
+
+        function updateEnemies() {
+            for (let i = 0; i < enemies.length; i++) {
+                enemies[i].y += enemySpeed;
+                if (enemies[i].y + enemyHeight > canvas.height) {
+                    alert("Game Over! Os haters venceram!");
+                    document.location.reload();
+                }
+            }
+        }
+
+        function createEnemies() {
+            for (let row = 0; row < enemyRows; row++) {
+                for (let col = 0; col < enemyCols; col++) {
+                    enemies.push({
+                        x: col * (enemyWidth + enemyGap) + 50,
+                        y: row * (enemyHeight + enemyGap) + 50
+                    });
+                }
+            }
+        }
+
+        function drawGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawSherk();
+            drawEnemies();
+        }
+
+        function updateGame() {
+            moveSherk();
+            updateEnemies();
+            drawGame();
+            requestAnimationFrame(updateGame);
+        }
+
+        function startGame() {
+            document.getElementById("instructions-container").style.display = "none";
+            createEnemies();
+            updateGame();
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowLeft") {
+                sherk.dx = -sherk.speed;
+            } else if (e.key === "ArrowRight") {
+                sherk.dx = sherk.speed;
+            }
+        });
+
+        document.addEventListener("keyup", (e) => {
+            if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+                sherk.dx = 0;
+            }
+        });
+    </script>
+</body>
+</html>
