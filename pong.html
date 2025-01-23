@@ -179,8 +179,8 @@
     const bonk = document.getElementById("bonk");
 
     let ballX, ballY;
-    let ballSpeedX = 5;
-    let ballSpeedY = 3;
+let ballSpeedX = 5 * 0.7;  // Reduzindo a velocidade em 30%
+let ballSpeedY = 3 * 0.7;  // Reduzindo a velocidade em 30%
     let ballAngle = 0;
 
     const playerHeight = 150;
@@ -269,11 +269,13 @@
         updatePositions();
     }
 
-    function resetBall() {
-        ballX = canvas.width / 2;
-        ballY = canvas.height / 2;
-        ballSpeedX = -ballSpeedX;
-    }
+function resetBall() {
+    ballX = canvas.width / 2;
+    ballY = canvas.height / 2;
+    ballSpeedX = -ballSpeedX * 0.7;
+    ballSpeedY = ballSpeedY * 0.7;
+}
+
 
     function showWinner() {
         gameRunning = false;
