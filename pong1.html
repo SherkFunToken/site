@@ -101,6 +101,12 @@
         #sherk { left: 50px; top: 50%; transform: translateY(-50%); }
         #bonk { right: 50px; top: 50%; transform: translateY(-50%); }
         #ball { left: 50%; top: 50%; transform: translate(-50%, -50%); }
+
+        @keyframes flash {
+            0% { border-color: white; }
+            50% { border-color: red; }
+            100% { border-color: white; }
+        }
     </style>
 </head>
 <body>
@@ -179,25 +185,13 @@
 
         if (ballX < 0) {
             rightScore++;
-            updateScore();
             resetBall();
         }
 
         if (ballX > canvas.width) {
             leftScore++;
-            updateScore();
             resetBall();
         }
-
-        if (leftScore === 5 || rightScore === 5) {
-            alert(leftScore === 5 ? "Sherk Wins!" : "Bonk Wins!");
-            resetGame();
-        }
-    }
-
-    function updateScore() {
-        document.getElementById("scoreSherk").textContent = leftScore;
-        document.getElementById("scoreBonk").textContent = rightScore;
     }
 
     function resetBall() {
