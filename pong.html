@@ -25,7 +25,7 @@
 
         .player {
             position: absolute;
-            height: 100px;
+            height: 150px;  /* Ajustado para que Bonk e Sherk fiquem do mesmo tamanho */
             width: auto;
             animation: glow-animation 1.5s infinite alternate;
         }
@@ -36,7 +36,6 @@
 
         #bonk {
             right: 20px;
-            height: 50px; /* Bonk reduzido em 50% */
         }
 
         @keyframes glow-animation {
@@ -79,6 +78,14 @@
             box-shadow: 0 0 40px #ff0000;
         }
 
+        #start-screen {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
         #winner-message {
             font-size: 3vw;
             color: #00ff00;
@@ -114,7 +121,7 @@
     let ballSpeedY = 1.5;
     const ballSize = 15;
 
-    const playerHeight = 100;
+    const playerHeight = 150;
     let sherkY = canvas.height / 2 - playerHeight / 2;
     let bonkY = canvas.height / 2 - playerHeight / 2;
 
@@ -233,11 +240,6 @@
         gameRunning = true;
         gameLoop();
     }
-
-    window.addEventListener("resize", () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    });
 
 </script>
 
