@@ -25,11 +25,10 @@
 
         .player {
             position: absolute;
-            height: 20%;
+            height: 150px;
             width: auto;
-            max-height: 150px;
             animation: glow-animation 1.5s infinite alternate;
-            transition: left 1s ease-in-out, right 1s ease-in-out;
+            transition: all 1s ease-in-out;
         }
 
         #sherk {
@@ -54,6 +53,23 @@
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
+        }
+
+        .player-label {
+            position: absolute;
+            font-size: 2vw;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .player-left {
+            top: 10px;
+            left: 20px;
+        }
+
+        .player-right {
+            top: 10px;
+            right: 20px;
         }
 
         .instructions-container {
@@ -122,11 +138,14 @@
 
 <div class="glow-text">Sherk Pong</div>
 
+<div class="player-label player-left">Player: Sherk (You)</div>
+<div class="player-label player-right">Player: Pepe</div>
+
 <div id="instructions-container" class="instructions-container">
     <div class="instructions">
-        Use the mouse or touch to control Pepe (Bonk).<br>
+        Use the mouse to control Sherk.<br>
         Click "Play" to start the game.<br>
-        First to 5 points wins!
+        Sherk always wins after scoring 5 points!
     </div>
     <button class="button" onclick="startGame()">Play</button>
 </div>
@@ -137,7 +156,7 @@
 <img src="ball.png" id="ball">
 
 <div id="winner-message">
-    SHERK always wins,<br>Listens to the Sherk<br>
+    SHERK always wins!<br> Watch him crush Pepe!<br>
     <button class="button" onclick="restartGame()">Play Again</button>
 </div>
 
@@ -151,27 +170,25 @@
     canvas.height = window.innerHeight;
 
     const hitSound = document.getElementById("hitSound");
-    function playHitSound() {
-        hitSound.currentTime = 0;
-        hitSound.play();
-    }
-
     const ball = document.getElementById("ball");
     const sherk = document.getElementById("sherk");
     const bonk = document.getElementById("bonk");
 
-    const INITIAL_BALL_SPEED_X = 5 * 0.7;
-    const INITIAL_BALL_SPEED_Y = 3 * 0.7;
-
     let ballX = canvas.width / 2;
     let ballY = canvas.height / 2;
-    let ballSpeedX = INITIAL_BALL_SPEED_X;
-    let ballSpeedY = INITIAL_BALL_SPEED_Y;
+    let ballSpeedX = 4;
+    let ballSpeedY = 3;
+    let sherkY = canvas.height / 2 - 75;
+    let bonkY = canvas.height / 2 - 75;
+    let leftScore = 0;
     let gameRunning = false;
 
     document.addEventListener("mousemove", (e) => {
         if (gameRunning) {
-            bonk.style.top = `${e.clientY}px`;
+            sherkY = e.clientY - sherk.height / 2;
+            if (sherkY < 0) sherkY = 0;
+            if (sherkY + sherk.height > canvas.height) sherkY = canvas.height - sherk.height;
+            sherk.style.top = `${sherkY}px`;
         }
     });
 
@@ -182,18 +199,20 @@
         ball.style.top = `${ballY}px`;
 
         if (ballY <= 0 || ballY + ball.height >= canvas.height) {
-            ballSpeedY = -ballSpeedY;
+            ballSpeedY *= -1;
         }
 
-        if (ballX <= 100) {
-            ballSpeedX = -ballSpeedX;
+        if (ballX <= 100 && ballY > sherkY && ballY < sherkY + sherk.height) {
+            ballSpeedX *= -1;
+            hitSound.play();
         }
 
         if (ballX >= canvas.width - 100) {
-            ballSpeedX = -ballSpeedX;
+            leftScore++;
+            resetBall();
         }
 
-        if (ballX < 0) {
+        if (leftScore === 5) {
             showWinner();
         }
 
@@ -202,27 +221,32 @@
         }
     }
 
+    function resetBall() {
+        ballX = canvas.width / 2;
+        ballY = canvas.height / 2;
+        ballSpeedX = -4;
+        ballSpeedY = 3;
+    }
+
     function showWinner() {
         gameRunning = false;
         document.getElementById("winner-message").style.display = "block";
-        sherk.style.left = "80%";
-        bonk.style.right = "-200px";
-    }
-
-    function restartGame() {
-        document.getElementById("winner-message").style.display = "none";
-        sherk.style.left = "20px";
-        bonk.style.right = "20px";
-        ballX = canvas.width / 2;
-        ballY = canvas.height / 2;
-        ballSpeedX = INITIAL_BALL_SPEED_X;
-        ballSpeedY = INITIAL_BALL_SPEED_Y;
+        sherk.style.left = `${canvas.width / 2}px`;
+        bonk.style.right = `-200px`;
     }
 
     function startGame() {
         document.getElementById("instructions-container").style.display = "none";
+        document.getElementById("winner-message").style.display = "none";
+        sherk.style.left = "20px";
+        bonk.style.right = "20px";
+        leftScore = 0;
         gameRunning = true;
         updateBall();
+    }
+
+    function restartGame() {
+        startGame();
     }
 </script>
 
