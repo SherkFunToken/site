@@ -213,23 +213,33 @@
         gameLoop();
     }
 
+let missCounter = 0;  // Contador para controlar os erros do Bonk
+
 function moveBonk() {
     const topBoundary = 0;
     const bottomBoundary = canvas.height - playerHeight;
-
-    if (hitCount % 3 === 0) {
-        // Bonk "erra" a bola propositalmente ao se mover para longe dela
-        bonkY += Math.random() > 0.5 ? 50 : -50;
-        bonkY = Math.max(topBoundary, Math.min(bonkY, bottomBoundary));
-    } else {
-        // Bonk tenta acertar a bola normalmente, mas com limites para evitar sair da tela
-        if (ballY > bonkY + playerHeight / 2) {
-            bonkY += 5; // Mover para baixo
-        } else if (ballY < bonkY + playerHeight / 2) {
-            bonkY -= 5; // Mover para cima
+    
+    // A cada 3 interações o Bonk erra a bola propositalmente
+    if (missCounter >= 3) {
+        if (Math.random() > 0.5) {
+            bonkY += 50; // Move para baixo para errar
+        } else {
+            bonkY -= 50; // Move para cima para errar
         }
-        bonkY = Math.max(topBoundary, Math.min(bonkY, bottomBoundary));
+        missCounter = 0;  // Reinicia o contador após errar
+    } else {
+        // Movimentação normal para tentar acertar a bola suavemente
+        const bonkSpeed = 3; // Velocidade reduzida para suavizar
+        if (ballY > bonkY + playerHeight / 2) {
+            bonkY += bonkSpeed; // Move para baixo
+        } else if (ballY < bonkY + playerHeight / 2) {
+            bonkY -= bonkSpeed; // Move para cima
+        }
+        missCounter++;
     }
+
+    // Garante que o Bonk não saia dos limites da tela
+    bonkY = Math.max(topBoundary, Math.min(bonkY, bottomBoundary));
 }
 
 
