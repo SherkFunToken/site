@@ -131,6 +131,10 @@
 </head>
 <body>
 
+<audio id="hitSound">
+    <source src="hit.mp3" type="audio/mpeg">
+</audio>
+
 <div class="glow-text">Sherk Pong</div>
 
 <div class="player-label player-left">Player: Sherk</div>
@@ -163,6 +167,12 @@
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
+    const hitSound = document.getElementById("hitSound");
+    function playHitSound() {
+        hitSound.currentTime = 0;
+        hitSound.play();
+    }
 
     const ball = document.getElementById("ball");
     let ballX = canvas.width / 2;
@@ -204,10 +214,12 @@
 
         if (ballY <= 0 || ballY + ball.height >= canvas.height) {
             ballSpeedY = -ballSpeedY;
+            playHitSound();
         }
 
         if (ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
             ballSpeedX = -ballSpeedX;
+            playHitSound();
         }
 
         if (ballX >= canvas.width - 100 - ball.width) {
@@ -217,7 +229,8 @@
                 resetBall();
             } else if (ballY > bonkY && ballY < bonkY + playerHeight) {
                 ballSpeedX = -ballSpeedX;
-                bonkMissNext = Math.random() < 0.3; 
+                bonkMissNext = Math.random() < 0.3;
+                playHitSound();
             }
         }
 
@@ -249,30 +262,16 @@
         document.getElementById("instructions-container").style.display = "block";
     }
 
-    function moveBonk() {
-        const targetY = bonkMissNext ? canvas.height : ballY - playerHeight / 2;
-        bonkY += (targetY - bonkY) * 0.05;
-    }
-
-    function movePlayers() {
-        document.getElementById("sherk").style.top = `${sherkY}px`;
-        document.getElementById("bonk").style.top = `${bonkY}px`;
-        ball.style.left = `${ballX}px`;
-        ball.style.top = `${ballY}px`;
-    }
-
-    function gameLoop() {
-        drawScore();
-        moveBonk();
-        updateBall();
-        movePlayers();
-        if (gameRunning) requestAnimationFrame(gameLoop);
-    }
-
     function startGame() {
         document.getElementById("instructions-container").style.display = "none";
         gameRunning = true;
         gameLoop();
+    }
+
+    function gameLoop() {
+        drawScore();
+        updateBall();
+        if (gameRunning) requestAnimationFrame(gameLoop);
     }
 </script>
 
