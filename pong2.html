@@ -3,12 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-| Sherk Pong |-|</title>
-  ___   _                  _       ___                     
- / __| | |_    ___   _ _  | |__   | _ \  ___   _ _    __ _ 
- \__ \ | ' \  / -_) | '_| | / /   |  _/ / _ \ | ' \  / _` |
- |___/ |_||_| \___| |_|   |_\_\   |_|   \___/ |_||_| \__, |
-                                                     |___/ 
+    <title>|- Sherk Pong -|</title>
+
  By: @Marcelo_VP
  https://token4fun.github.io/crypto/
  
@@ -193,13 +189,17 @@
     canvas.height = window.innerHeight;
 
     const ball = document.getElementById("ball");
+
+    // Velocidade inicial mais lenta
+    const initialSpeedX = 2; 
+    const initialSpeedY = 1.5; 
     let ballX = canvas.width / 2;
     let ballY = canvas.height / 2;
-    let ballSpeedX = 5;
-    let ballSpeedY = 3;
+    let ballSpeedX = initialSpeedX;
+    let ballSpeedY = initialSpeedY;
+    let ballAngle = 0;
 
     const playerHeight = 150;
-    const playerWidth = 20;
     let sherkY = canvas.height / 2 - playerHeight / 2;
     let bonkY = canvas.height / 2 - playerHeight / 2;
 
@@ -221,6 +221,8 @@
     function updateBall() {
         ballX += ballSpeedX;
         ballY += ballSpeedY;
+        ballAngle += 5;  // Incrementa o ângulo da bola para rotação
+        ball.style.transform = `rotate(${ballAngle}deg)`;
 
         // Rebater na parede superior e inferior
         if (ballY <= 0 || ballY + ball.height >= canvas.height) {
@@ -285,8 +287,9 @@
     function resetBall() {
         ballX = canvas.width / 2;
         ballY = canvas.height / 2;
-        ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * 5;
-        ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * 3;
+        ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * initialSpeedX;
+        ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * initialSpeedY;
+        ballAngle = 0;  // Resetando o ângulo da bola
     }
 
     function showWinner(winnerMessage) {
@@ -314,6 +317,7 @@
         gameLoop();
     }
 </script>
+
 
 </body>
 </html>
