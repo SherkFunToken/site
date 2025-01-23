@@ -190,13 +190,17 @@
     let ballSpeedX = 2;
     let ballSpeedY = 1.5;
 
+    const playerHeight = 150;
+    let sherkY = canvas.height / 2 - playerHeight / 2;
+    let bonkY = canvas.height / 2 - playerHeight / 2;
+
     let leftScore = 0;
     let rightScore = 0;
     let gameRunning = false;
 
     document.addEventListener("mousemove", (e) => {
         if (gameRunning) {
-            sherkY = Math.max(0, Math.min(canvas.height - 150, e.clientY - 75));
+            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight / 2));
         }
     });
 
@@ -233,7 +237,21 @@
             resetBall();
         }
 
+        moveBonk();
         movePlayers();
+    }
+
+    function moveBonk() {
+        let targetY = ballY - playerHeight / 2;
+        bonkY += (targetY - bonkY) * 0.05;
+        bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
+    }
+
+    function movePlayers() {
+        document.getElementById("sherk").style.top = `${sherkY}px`;
+        document.getElementById("bonk").style.top = `${bonkY}px`;
+        ball.style.left = `${ballX}px`;
+        ball.style.top = `${ballY}px`;
     }
 
     function resetBall() {
@@ -254,11 +272,6 @@
         drawScore();
         document.getElementById("winner-message").style.display = "none";
         document.getElementById("instructions-container").style.display = "block";
-    }
-
-    function movePlayers() {
-        ball.style.left = `${ballX}px`;
-        ball.style.top = `${ballY}px`;
     }
 
     function gameLoop() {
