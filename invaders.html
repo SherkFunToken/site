@@ -5,17 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sherk Invaders</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: black;
+            overflow: hidden;
+            font-family: monospace;
+            text-align: center;
+        }
+
+        .glow-text {
+            font-size: 4vw;
+            color: #00ff00;
+            text-shadow: 0 0 20px #00ff00, 0 0 40px #0077ff;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .instructions-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+            font-size: 2vw;
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 2vw;
+            color: #fff;
+            background: linear-gradient(90deg, #00f0ff, #ff0000);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 20px #00f0ff;
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border: 2px solid #00ff00;
+        }
+    </style>
 </head>
 <body>
     <div class="glow-text">Sherk Invaders</div>
     <canvas id="gameCanvas"></canvas>
     <div id="instructions-container" class="instructions-container">
-        <div class="instructions">
-            Defenda o ecossistema do Sherk!<br>
-            Use as setas ← → para mover e Espaço para atirar.<br>
-            Destrua os haters e outras criptomoedas antes que cheguem ao fundo!<br>
-        </div>
-        <button class="button" onclick="startGame()">Play</button>
+        <p>Use as setas ← → para mover e Espaço para atirar.</p>
+        <p>Defenda o ecossistema Sherk contra os haters e outras criptomoedas!</p>
+        <button class="button" onclick="startGame()">Iniciar</button>
     </div>
 
     <script>
@@ -24,6 +68,17 @@
 
         canvas.width = 800;
         canvas.height = 600;
+
+        const sherkImage = new Image();
+        sherkImage.src = 'Sherk.png';
+
+        const enemyImages = [
+            'btc.png', 'ada.png', 'haters.png', 'eth.png'
+        ].map(src => {
+            let img = new Image();
+            img.src = src;
+            return img;
+        });
 
         const sherk = {
             x: canvas.width / 2 - 25,
@@ -43,14 +98,13 @@
         const enemySpeed = 1;
 
         function drawSherk() {
-            ctx.fillStyle = "#00ff00";
-            ctx.fillRect(sherk.x, sherk.y, sherk.width, sherk.height);
+            ctx.drawImage(sherkImage, sherk.x, sherk.y, sherk.width, sherk.height);
         }
 
         function drawEnemies() {
-            ctx.fillStyle = "#ff0000";
             for (let i = 0; i < enemies.length; i++) {
-                ctx.fillRect(enemies[i].x, enemies[i].y, enemyWidth, enemyHeight);
+                let img = enemyImages[i % enemyImages.length];
+                ctx.drawImage(img, enemies[i].x, enemies[i].y, enemyWidth, enemyHeight);
             }
         }
 
