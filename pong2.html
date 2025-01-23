@@ -61,6 +61,18 @@
             text-shadow: 0 0 10px #00ff00;
         }
 
+
+.score-label {
+    position: absolute;
+    font-size: 3vw;
+    color: #00ff00;
+    text-shadow: 0 0 10px #00ff00;
+    font-weight: bold;
+    top: 50px; /* Posiciona o placar abaixo do nome */
+}
+
+
+        
         .player-left {
             top: 10px;
             left: 20px;
@@ -134,7 +146,10 @@
 <div class="glow-text">Sherk Pong</div>
 
 <div class="player-label player-left">Player: Sherk</div>
+<div class="score-label player-left" id="sherkScore">0</div>
+    
 <div class="player-label player-right">Player: Pepe</div>
+<div class="score-label player-right" id="bonkScore">0</div>
 
 <div id="instructions-container" class="instructions-container">
     <div class="instructions">
@@ -207,7 +222,13 @@
         }
     });
 
-    function drawScore() {
+function drawScore() {
+    document.getElementById("sherkScore").innerText = leftScore;
+    document.getElementById("bonkScore").innerText = rightScore;
+}
+
+    
+/*   function drawScore() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.font = "5vw Arial";
         ctx.fillStyle = leftScore > rightScore ? "#0077ff" : "#ff0000";
@@ -216,7 +237,7 @@
         ctx.fillStyle = rightScore > leftScore ? "#0077ff" : "#ff0000";
         ctx.fillText(rightScore, (canvas.width / 3) * 2, 50);
     }
-
+*/
     function updateBall() {
         ballX += ballSpeedX;
         ballY += ballSpeedY;
