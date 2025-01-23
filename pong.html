@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sherk Pong</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: black;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        /* Animação de brilho neon azul e vermelho */
+        @keyframes neon-glow-blue-red {
+            0% {
+                filter: drop-shadow(0 0 5px #0077ff) drop-shadow(0 0 10px #00f0ff) drop-shadow(0 0 20px #0077ff);
+            }
+            50% {
+                filter: drop-shadow(0 0 5px #ff0000) drop-shadow(0 0 10px #ff4500) drop-shadow(0 0 20px #ff0000);
+            }
+            100% {
+                filter: drop-shadow(0 0 5px #0077ff) drop-shadow(0 0 10px #00f0ff) drop-shadow(0 0 20px #0077ff);
+            }
+        }
+
+        #sherk {
+            position: absolute;
+            width: 80px;
+            height: auto;
+            left: 20px;
+            animation: neon-glow-blue-red 1.5s infinite alternate;
+        }
+
+        #bonk {
+            position: absolute;
+            width: 80px;
+            height: auto;
+            right: 20px;
+            animation: neon-glow-blue-red 1.5s infinite alternate;
+        }
+
+        #winner-message {
+            position: absolute;
+            font-family: 'Poppins', sans-serif;
+            font-size: 50px;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000, 0 0 30px #0077ff;
+            text-align: center;
+            width: 100%;
+            top: 40%;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="pongCanvas"></canvas>
+<img src="Sherk.png" id="sherk">
+<img src="Bonk.png" id="bonk">
+<div id="winner-message">SHERK always wins,<br>Listens to the Sherk</div>
+
+<script>
+    const canvas = document.getElementById("pongCanvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let ballX = canvas.width / 2;
+    let ballY = canvas.height / 2;
+    let ballSpeedX = 5;
+    let ballSpeedY = 5;
+    const ballSize = 15;
+
+    const paddleWidth = 15;
+    const paddleHeight = 100;
+
+    let leftPaddleY = canvas.height / 2 - paddleHeight / 2;
+    let rightPaddleY = canvas.height / 2 - paddleHeight / 2;
+
+    let leftScore = 0;
+    let rightScore = 0;
+
+    document.addEventListener("mousemove", (e) => {
+        leftPaddleY = e.clientY - paddleHeight / 2;
+    });
+
+    function drawRect(x, y, width, height, color) {
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, width, height);
+    }
+
+    function drawBall(x, y, size, color) {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    function drawScore() {
+        ctx.font = "40px Arial";
+        ctx.fillStyle = leftScore > rightScore ? "#0077ff" : "#ff0000";
+        ctx.fillText(leftScore, canvas.width / 4, 50);
+
+        ctx.fillStyle = rightScore > leftScore ? "#0077ff" : "#ff0000";
+        ctx.fillText(rightScore, (canvas.width / 4) * 3, 50);
+    }
+
+    function updateBall() {
+        ballX += ballSpeedX;
+        ballY += ballSpeedY;
+
+        if (ballY <= 0 || ballY >= canvas.height) {
+            ballSpeedY = -ballSpeedY;
+        }
+
+        if (ballX <= paddleWidth && ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
+            ballSpeedX = -ballSpeedX;
+        }
+
+        if (ballX >= canvas.width - paddleWidth - ballSize && ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
+            ballSpeedX = -ballSpeedX;
+        }
+
+        if (ballX < 0) {
+            rightScore++;
+            resetBall();
+        }
+
+        if (ballX > canvas.width) {
+            leftScore++;
+            resetBall();
+        }
+
+        if (leftScore === 10) {
+            document.getElementById("winner-message").style.display = "block";
+            resetGame();
+        }
+    }
+
+    function resetBall() {
+        ballX = canvas.width / 2;
+        ballY = canvas.height / 2;
+        ballSpeedX = -ballSpeedX;
+    }
+
+    function resetGame() {
+        leftScore = 0;
+        rightScore = 0;
+    }
+
+    function drawPaddles() {
+        drawRect(0, leftPaddleY, paddleWidth, paddleHeight, "#00ff00");
+        drawRect(canvas.width - paddleWidth, rightPaddleY, paddleWidth, paddleHeight, "#ff0000");
+    }
+
+    function moveRightPaddle() {
+        if (ballY > rightPaddleY + paddleHeight / 2) {
+            rightPaddleY += 6;
+        } else {
+            rightPaddleY -= 6;
+        }
+    }
+
+    function gameLoop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawPaddles();
+        drawBall(ballX, ballY, ballSize, "#fff");
+        drawScore();
+        moveRightPaddle();
+        updateBall();
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    gameLoop();
+</script>
+
+</body>
+</html>
