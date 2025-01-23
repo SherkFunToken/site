@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sherk Pong Game</title>
+    <title>Sherk Pong</title>
     <style>
         body {
             margin: 0;
@@ -24,7 +24,7 @@
             height: 150px;
             width: auto;
             animation: glow-animation 1.5s infinite alternate;
-            transition: all 1s ease-in-out;
+            transition: all 1.5s ease-in-out;
         }
 
         #sherk {
@@ -102,6 +102,12 @@
             text-align: center;
         }
 
+        #ball {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+        }
+
         .footer {
             position: absolute;
             bottom: 10px;
@@ -144,6 +150,7 @@
     let ballSpeedX = 2;
     let ballSpeedY = 1.5;
     let gameRunning = false;
+    let leftScore = 0;
 
     document.addEventListener("mousemove", (e) => {
         if (gameRunning) {
@@ -166,14 +173,21 @@
         }
 
         if (ballX >= window.innerWidth - 100 - ball.offsetWidth) {
-            ballSpeedX = -ballSpeedX;
+            leftScore++;
+            resetBall();
         }
 
-        if (ballX < 0) {
+        if (leftScore >= 5) {
             showWinner();
         }
 
         if (gameRunning) requestAnimationFrame(updateBall);
+    }
+
+    function resetBall() {
+        ballX = window.innerWidth / 2;
+        ballY = window.innerHeight / 2;
+        ballSpeedX = -ballSpeedX;
     }
 
     function showWinner() {
@@ -183,15 +197,10 @@
     }
 
     function animateWinner() {
-        sherk.style.transition = "all 2s ease-in-out";
-        bonk.style.transition = "all 1.5s ease-in-out";
-
-        // Sherk se move para Bonk
         sherk.style.left = `${window.innerWidth - 200}px`;
-        bonk.style.right = `-200px`; // Bonk sai da tela
+        bonk.style.right = `-200px`;
 
         setTimeout(() => {
-            // Sherk volta para o centro abaixo do botão
             sherk.style.left = "50%";
             sherk.style.top = "65%";
             sherk.style.transform = "translateX(-50%)";
@@ -209,6 +218,7 @@
         bonk.style.top = "50%";
         sherk.style.transform = "none";
         sherk.style.animation = "glow-animation 1.5s infinite alternate";
+        leftScore = 0;
         gameRunning = false;
     }
 
