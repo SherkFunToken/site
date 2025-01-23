@@ -328,18 +328,22 @@ function updateBall() {
         bonkMissNext = false;  // Resetando a variável para próximo round
     }
 
-    function showWinner(winnerMessage) {
-        gameRunning = false;
-        document.getElementById("winner-message").innerText = winnerMessage;
-        document.getElementById("winner-message").style.display = "block";
-    }
+function showWinner(winnerMessage) {
+    gameRunning = false;
+    document.getElementById("winner-text").innerText = winnerMessage;
+    document.getElementById("winner-message").style.display = "block";
+}
 
-    function restartGame() {
-        leftScore = 0;
-        rightScore = 0;
-        document.getElementById("winner-message").style.display = "none";
-        document.getElementById("instructions-container").style.display = "block";
-    }
+
+function restartGame() {
+    leftScore = 0;
+    rightScore = 0;
+    drawScore();
+    document.getElementById("winner-message").style.display = "none";
+    document.getElementById("instructions-container").style.display = "block";
+    gameRunning = false;
+}
+
 
     function moveBonk() {
         let targetY;
