@@ -30,7 +30,7 @@
             top: 0;
             left: 50%;
             width: 5px;
-            height: 100%;
+            height: 90%;
             background: white;
             transform: translateX(-50%);
         }
@@ -116,9 +116,11 @@
             text-align: center;
             color: #0f0;
             font-size: 2vw;
-            white-space: pre;
-            font-family: monospace;
-            animation: typing 3s steps(50) forwards;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: .15em solid #0f0;
+            width: 0;
+            animation: typing 3s steps(40, end) forwards;
         }
 
         @keyframes typing {
@@ -136,6 +138,7 @@
             cursor: pointer;
             box-shadow: 0 0 20px #00f0ff;
             display: none;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -146,12 +149,12 @@
 <div class="player-label player-right">Player: Bonk 0</div>
 
 <div id="instructions-container" class="instructions-container">
-    Use the mouse to control Sherk.<br>
+    Use the mouse or touch to control Sherk.<br>
     Click "Play" to start the game.<br>
     First to 5 points wins!
 </div>
 
-<button id="play-button" class="button" onclick="startGame()">Play</button>
+<button id="play-button" class="button" onclick="startCountdown()">Play</button>
 
 <button class="pause-button" onclick="togglePause()">Pause Game</button>
 
@@ -165,32 +168,34 @@
         document.getElementById('play-button').style.display = 'block';
     }, 3500);
 
-    const canvas = document.getElementById("pongCanvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth * 0.9;
-    canvas.height = window.innerHeight * 0.8;
+    function startCountdown() {
+        let countdown = ["3", "2", "Play now!"];
+        let index = 0;
+        let countdownElement = document.createElement("div");
+        countdownElement.style.position = "absolute";
+        countdownElement.style.top = "50%";
+        countdownElement.style.left = "50%";
+        countdownElement.style.transform = "translate(-50%, -50%)";
+        countdownElement.style.fontSize = "4vw";
+        countdownElement.style.color = "#0f0";
+        document.body.appendChild(countdownElement);
 
-    let gameRunning = false;
-    let paused = false;
-
-    function togglePause() {
-        paused = !paused;
-        document.querySelector(".pause-button").textContent = paused ? "Resume Game" : "Pause Game";
-        if (!paused) gameLoop();
+        function showCountdown() {
+            if (index < countdown.length) {
+                countdownElement.textContent = countdown[index];
+                index++;
+                setTimeout(showCountdown, 1000);
+            } else {
+                countdownElement.remove();
+                startGame();
+            }
+        }
+        showCountdown();
     }
 
     function startGame() {
         document.getElementById("instructions-container").style.display = "none";
         document.getElementById("play-button").style.display = "none";
-        gameRunning = true;
-        gameLoop();
-    }
-
-    function gameLoop() {
-        if (!paused) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            requestAnimationFrame(gameLoop);
-        }
     }
 </script>
 
