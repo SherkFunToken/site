@@ -266,12 +266,28 @@
         movePlayers();
     }
 
-    function moveBonk() {
+ /*   function moveBonk() {
         let targetY = ballY - playerHeight / 2;
         bonkY += (targetY - bonkY) * 0.05;
         bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
+*/
 
+function moveBonk() {
+    let targetY = ballY - playerHeight / 2;
+    
+    // Adiciona erro aleatório para simular falhas humanas
+    let errorChance = Math.random();
+    if (errorChance < 0.1) {  // 10% de chance de errar
+        targetY += (Math.random() > 0.5 ? 100 : -100); // Move para cima ou para baixo inesperadamente
+    }
+
+    bonkY += (targetY - bonkY) * 0.05;
+    bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
+}
+
+
+    
     function movePlayers() {
         document.getElementById("sherk").style.top = `${sherkY}px`;
         document.getElementById("bonk").style.top = `${bonkY}px`;
