@@ -76,13 +76,15 @@
             box-shadow: 0 0 40px #ff0000;
         }
 
-        #winner-message {
+        #winner-message, #instructions-container {
             font-size: 3vw;
             color: #00ff00;
             text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000, 0 0 30px #0077ff;
             white-space: pre-wrap;
             display: none;
             position: absolute;
+            text-align: center;
+            width: 100%;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -107,12 +109,22 @@
 
 <div class="glow-text">Sherk Pong</div>
 
+<div id="instructions-container">
+    <div class="instructions">
+        Use the mouse to control Sherk.<br>
+        Click "Play" to start the game.<br>
+        First to 5 points wins!
+    </div>
+    <button class="button" onclick="startGame()">Play</button>
+</div>
+
 <canvas id="pongCanvas"></canvas>
 <img src="Sherk.png" id="sherk" class="player">
 <img src="Bonk.png" id="bonk" class="player">
 <img src="ball.png" id="ball">
 
-<div id="winner-message">SHERK always wins,<br>Listens to the Sherk<br>
+<div id="winner-message">
+    SHERK always wins,<br>Listens to the Sherk<br>
     <button class="button" onclick="restartGame()">Play Again</button>
 </div>
 
@@ -128,7 +140,7 @@
     const ball = document.getElementById("ball");
     let ballX = canvas.width / 2;
     let ballY = canvas.height / 2;
-    let ballSpeedX = 2;  // Velocidade reduzida
+    let ballSpeedX = 2;
     let ballSpeedY = 1.5;
     let ballAngle = 0;
 
@@ -139,7 +151,7 @@
     let leftScore = 0;
     let rightScore = 0;
     let hitCount = 0;
-    let gameRunning = true;
+    let gameRunning = false;
     let bonkMissCounter = 0;
 
     document.addEventListener("mousemove", (e) => {
@@ -152,10 +164,10 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.font = "5vw Arial";
         ctx.fillStyle = leftScore > rightScore ? "#0077ff" : "#ff0000";
-        ctx.fillText(leftScore, canvas.width / 4, 50);
+        ctx.fillText(leftScore, canvas.width / 3, 50);
 
         ctx.fillStyle = rightScore > leftScore ? "#0077ff" : "#ff0000";
-        ctx.fillText(rightScore, (canvas.width / 4) * 3, 50);
+        ctx.fillText(rightScore, (canvas.width / 3) * 2, 50);
     }
 
     function updateBall() {
@@ -209,39 +221,13 @@
         leftScore = 0;
         rightScore = 0;
         document.getElementById("winner-message").style.display = "none";
-        gameRunning = true;
-        gameLoop();
+        startGame();
     }
 
-let missCounter = 0;  // Contador para controlar os erros do Bonk
-
-function moveBonk() {
-    const topBoundary = 0;
-    const bottomBoundary = canvas.height - playerHeight;
-    
-    // A cada 3 interações o Bonk erra a bola propositalmente
-    if (missCounter >= 3) {
-        if (Math.random() > 0.5) {
-            bonkY += 50; // Move para baixo para errar
-        } else {
-            bonkY -= 50; // Move para cima para errar
-        }
-        missCounter = 0;  // Reinicia o contador após errar
-    } else {
-        // Movimentação normal para tentar acertar a bola suavemente
-        const bonkSpeed = 3; // Velocidade reduzida para suavizar
-        if (ballY > bonkY + playerHeight / 2) {
-            bonkY += bonkSpeed; // Move para baixo
-        } else if (ballY < bonkY + playerHeight / 2) {
-            bonkY -= bonkSpeed; // Move para cima
-        }
-        missCounter++;
+    function moveBonk() {
+        bonkY += (ballY > bonkY + playerHeight / 2) ? 1 : -1;
+        bonkY = Math.max(0, Math.min(bonkY, canvas.height - playerHeight));
     }
-
-    // Garante que o Bonk não saia dos limites da tela
-    bonkY = Math.max(topBoundary, Math.min(bonkY, bottomBoundary));
-}
-
 
     function movePlayers() {
         document.getElementById("sherk").style.top = `${sherkY}px`;
@@ -255,12 +241,14 @@ function moveBonk() {
         moveBonk();
         updateBall();
         movePlayers();
-        if (gameRunning) {
-            requestAnimationFrame(gameLoop);
-        }
+        if (gameRunning) requestAnimationFrame(gameLoop);
     }
 
-    gameLoop();
+    function startGame() {
+        document.getElementById("instructions-container").style.display = "none";
+        gameRunning = true;
+        gameLoop();
+    }
 </script>
 
 </body>
