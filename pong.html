@@ -175,10 +175,12 @@
     }
 
     const ball = document.getElementById("ball");
-    let ballX = canvas.width / 2;
-    let ballY = canvas.height / 2;
-    let ballSpeedX = 2;
-    let ballSpeedY = 1.5;
+    const sherk = document.getElementById("sherk");
+    const bonk = document.getElementById("bonk");
+
+    let ballX, ballY;
+    let ballSpeedX = 5;
+    let ballSpeedY = 3;
     let ballAngle = 0;
 
     const playerHeight = 150;
@@ -190,9 +192,29 @@
     let gameRunning = false;
     let bonkMissNext = false;
 
+    function resetGameElements() {
+        ballX = canvas.width / 2;
+        ballY = canvas.height / 2;
+        ballSpeedX = 5;
+        ballSpeedY = 3;
+        sherkY = canvas.height / 2 - playerHeight / 2;
+        bonkY = canvas.height / 2 - playerHeight / 2;
+        updatePositions();
+    }
+
+    function updatePositions() {
+        sherk.style.top = `${sherkY}px`;
+        bonk.style.top = `${bonkY}px`;
+        ball.style.left = `${ballX}px`;
+        ball.style.top = `${ballY}px`;
+    }
+
     document.addEventListener("mousemove", (e) => {
         if (gameRunning) {
             sherkY = e.clientY - playerHeight / 2;
+            if (sherkY < 0) sherkY = 0;
+            if (sherkY + playerHeight > canvas.height) sherkY = canvas.height - playerHeight;
+            updatePositions();
         }
     });
 
@@ -239,9 +261,12 @@
             resetBall();
         }
 
-        if (leftScore === 5) {
+        if (leftScore === 5 || rightScore === 5) {
             showWinner();
         }
+
+        bonkY += (ballY - bonkY - playerHeight / 2) * 0.1;
+        updatePositions();
     }
 
     function resetBall() {
@@ -258,6 +283,7 @@
     function restartGame() {
         leftScore = 0;
         rightScore = 0;
+        resetGameElements();
         document.getElementById("winner-message").style.display = "none";
         document.getElementById("instructions-container").style.display = "block";
     }
@@ -265,15 +291,20 @@
     function startGame() {
         document.getElementById("instructions-container").style.display = "none";
         gameRunning = true;
+        resetGameElements();
         gameLoop();
     }
 
     function gameLoop() {
         drawScore();
         updateBall();
-        if (gameRunning) requestAnimationFrame(gameLoop);
+        if (gameRunning) {
+            requestAnimationFrame(gameLoop);
+        }
     }
+
 </script>
+
 
 </body>
 </html>
