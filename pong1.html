@@ -54,17 +54,12 @@
             font-size: 2vw;
             color: #00ff00;
             text-shadow: 0 0 20px #00ff00;
-            animation: typing 3s steps(40, end);
             white-space: pre-wrap;
             position: absolute;
             top: 40%;
             left: 50%;
             transform: translate(-50%, -50%);
-        }
-
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
+            display: none;
         }
 
         .button {
@@ -76,11 +71,11 @@
             border-radius: 10px;
             cursor: pointer;
             box-shadow: 0 0 20px #00f0ff;
-            display: none;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, 50%);
+            display: none;
         }
 
         .pause-button {
@@ -98,7 +93,7 @@
 
         #sherk, #bonk, #ball {
             position: absolute;
-            width: 100px;
+            width: 50px;
             height: auto;
             z-index: 2;
         }
@@ -145,6 +140,7 @@
     let leftScore = 0;
     let rightScore = 0;
     let gameRunning = false;
+    let ballAngle = 0;
 
     document.addEventListener("mousemove", (e) => {
         if (gameRunning) {
@@ -160,11 +156,16 @@
         }
     });
 
+    function moveBonk() {
+        bonkY += (ballY - bonkY - 75) * 0.05;
+        document.getElementById("bonk").style.top = `${bonkY}px`;
+    }
+
     function updateBall() {
         ballX += ballSpeedX;
         ballY += ballSpeedY;
-        document.getElementById("ball").style.left = `${ballX}px`;
-        document.getElementById("ball").style.top = `${ballY}px`;
+        ballAngle += 5;
+        document.getElementById("ball").style.transform = `translate(-50%, -50%) rotate(${ballAngle}deg)`;
 
         if (ballY <= 0 || ballY >= canvas.height) ballSpeedY *= -1;
 
@@ -208,22 +209,18 @@
 
     function gameLoop() {
         updateBall();
+        moveBonk();
         if (gameRunning) requestAnimationFrame(gameLoop);
     }
 
     function startCountdown() {
         document.getElementById("instructions-container").style.display = "none";
         document.getElementById("play-button").style.display = "none";
-        gameRunning = true;
-        gameLoop();
-    }
-
-    function togglePause() {
-        gameRunning = !gameRunning;
-        if (gameRunning) gameLoop();
+        setTimeout(() => { gameRunning = true; gameLoop(); }, 3000);
     }
 
     setTimeout(() => {
+        document.getElementById("instructions-container").style.display = "block";
         document.getElementById("play-button").style.display = "block";
     }, 3000);
 </script>
