@@ -39,7 +39,7 @@
 
         .contentgame {
     position: relative;
-    background: url('pongbanner.gif') no-repeat center center;
+    background: url('game.gif') no-repeat center center;
     background-size: cover; /* Ajusta a imagem para cobrir todo o fundo */
     padding: 20px;
     border-radius: 10px;
