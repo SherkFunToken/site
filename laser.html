@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Laser Duel --|</title>
+    <title>|-- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
     
@@ -30,7 +30,6 @@
             position: absolute;
             height: 150px;
             width: auto;
-            animation: glow-animation 1.5s infinite alternate;
         }
 
         #sherk {
@@ -39,12 +38,6 @@
 
         #bonk {
             right: 20px;
-        }
-
-        @keyframes glow-animation {
-            0% { filter: drop-shadow(0 0 10px #00f0ff); }
-            50% { filter: drop-shadow(0 0 20px #ff0000); }
-            100% { filter: drop-shadow(0 0 10px #00f0ff); }
         }
 
         .glow-text {
@@ -81,28 +74,17 @@
             right: 60px;
         }
 
-        .player-left {
-            top: 10px;
-            left: 20px;
+        .heart {
+            font-size: 3vw;
+            color: red;
         }
 
-        .player-right {
-            top: 10px;
-            right: 20px;
-        }
-
-        .instructions-container {
+        .footer {
             position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: #fff;
-        }
-
-        .instructions {
+            bottom: 10px;
+            color: #00ff00;
             font-size: 2vw;
-            margin-bottom: 20px;
+            text-shadow: 0 0 10px #00ff00;
         }
 
         .button {
@@ -119,27 +101,6 @@
         .button:hover {
             box-shadow: 0 0 40px #ff0000;
         }
-
-        #winner-message {
-            font-size: 3vw;
-            color: #00ff00;
-            text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000;
-            white-space: pre-wrap;
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-        }
-
-        .footer {
-            position: absolute;
-            bottom: 10px;
-            color: #00ff00;
-            font-size: 2vw;
-            text-shadow: 0 0 10px #00ff00;
-        }
     </style>
 </head>
 <body>
@@ -147,15 +108,17 @@
 <div class="glow-text">Sherk Laser Duel</div>
 
 <div class="player-label player-left">Player: Sherk</div>
-<div class="score-label" id="sherkScore">0</div>
-    
+<div class="score-label" id="sherkScore">5</div>
+<div class="heart" id="sherkHeart">❤️</div>
+
 <div class="player-label player-right">Player: Pepe</div>
-<div class="score-label" id="bonkScore">0</div>
+<div class="score-label" id="bonkScore">5</div>
+<div class="heart" id="bonkHeart">❤️</div>
 
 <div id="instructions-container" class="instructions-container">
     <div class="instructions">
         Use the touch to control Sherk on mobile or mouse on PC.<br>
-        First to 5 points wins!<br><br>
+        First to 0 points loses!<br><br>
     </div><br><br>
     <button class="button" onclick="startGame()">Play</button>
 </div>
@@ -184,21 +147,26 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Players and score
     const playerHeight = 150;
     let sherkY = canvas.height / 2 - playerHeight / 2;
     let bonkY = canvas.height / 2 - playerHeight / 2;
 
-    let leftScore = 0;
-    let rightScore = 0;
+    let leftScore = 5;
+    let rightScore = 5;
     let gameRunning = false;
 
-    // Laser/Projectile Variables
+    // Laser Variables
     let laserX = -1;
     let laserY = -1;
     let laserActive = false;
     const laserWidth = 10;
     const laserHeight = 5;
+    let laserCooldown = 0;
+
+    // Opponent Shooting
+    let bonkLaserX = -1;
+    let bonkLaserY = -1;
+    let bonkLaserActive = false;
 
     // Barrier Variables
     const barriers = [];
@@ -232,15 +200,22 @@
             const barrier = {
                 x: Math.random() * (canvas.width - barrierWidth),
                 y: Math.random() * (canvas.height - barrierHeight),
+                color: getRandomColor()
             };
             barriers.push(barrier);
         }
     }
 
+    // Get a random color for the barriers
+    function getRandomColor() {
+        const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+
     // Draw Barriers
     function drawBarriers() {
         barriers.forEach((barrier) => {
-            ctx.fillStyle = "#ff0000"; // Barrier color
+            ctx.fillStyle = barrier.color; // Barrier color
             ctx.fillRect(barrier.x, barrier.y, barrierWidth, barrierHeight);
         });
     }
@@ -261,17 +236,8 @@
     function drawScore() {
         document.getElementById("sherkScore").innerText = leftScore;
         document.getElementById("bonkScore").innerText = rightScore;
-
-        if (leftScore > rightScore) {
-            document.getElementById("sherkScore").style.color = "blue";
-            document.getElementById("bonkScore").style.color = "red";
-        } else if (rightScore > leftScore) {
-            document.getElementById("bonkScore").style.color = "blue";
-            document.getElementById("sherkScore").style.color = "red";
-        } else {
-            document.getElementById("sherkScore").style.color = "#00ff00";
-            document.getElementById("bonkScore").style.color = "#00ff00";
-        }
+        document.getElementById("sherkHeart").innerText = "❤️".repeat(leftScore);
+        document.getElementById("bonkHeart").innerText = "❤️".repeat(rightScore);
     }
 
     // Handle Laser Shooting
@@ -289,6 +255,13 @@
             laserX += 10; // Laser Speed
             ctx.fillStyle = "#00f0ff"; // Laser Color
             ctx.fillRect(laserX, laserY, laserWidth, laserHeight);
+
+            // Check laser collision with barriers
+            barriers.forEach(barrier => {
+                if (laserX + laserWidth >= barrier.x && laserX <= barrier.x + barrierWidth && laserY + laserHeight >= barrier.y && laserY <= barrier.y + barrierHeight) {
+                    laserActive = false; // Laser disappears
+                }
+            });
 
             if (laserX > canvas.width) {
                 laserActive = false;
