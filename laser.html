@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Laser Duel --|</title>
+    <title>|-- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
     
@@ -30,7 +30,6 @@
             position: absolute;
             height: 150px;
             width: auto;
-            animation: glow-animation 1.5s infinite alternate;
         }
 
         #sherk {
@@ -39,6 +38,10 @@
 
         #bonk {
             right: 20px;
+        }
+
+        .glow-animation {
+            animation: glow-animation 1s infinite alternate;
         }
 
         @keyframes glow-animation {
@@ -81,28 +84,17 @@
             right: 60px;
         }
 
-        .player-left {
-            top: 10px;
-            left: 20px;
+        .heart {
+            font-size: 3vw;
+            color: red;
         }
 
-        .player-right {
-            top: 10px;
-            right: 20px;
-        }
-
-        .instructions-container {
+        .footer {
             position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: #fff;
-        }
-
-        .instructions {
+            bottom: 10px;
+            color: #00ff00;
             font-size: 2vw;
-            margin-bottom: 20px;
+            text-shadow: 0 0 10px #00ff00;
         }
 
         .button {
@@ -119,32 +111,6 @@
         .button:hover {
             box-shadow: 0 0 40px #ff0000;
         }
-
-        #winner-message {
-            font-size: 3vw;
-            color: #00ff00;
-            text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000;
-            white-space: pre-wrap;
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-        }
-
-        .footer {
-            position: absolute;
-            bottom: 10px;
-            color: #00ff00;
-            font-size: 2vw;
-            text-shadow: 0 0 10px #00ff00;
-        }
-
-        .heart {
-            font-size: 3vw;
-            color: red;
-        }
     </style>
 </head>
 <body>
@@ -154,7 +120,7 @@
 <div class="player-label player-left">Player: Sherk</div>
 <div class="score-label" id="sherkScore">5</div>
 <div class="heart" id="sherkHeart">❤️</div>
-    
+
 <div class="player-label player-right">Player: Pepe</div>
 <div class="score-label" id="bonkScore">5</div>
 <div class="heart" id="bonkHeart">❤️</div>
@@ -205,9 +171,9 @@
     let laserActive = false;
     const laserWidth = 10;
     const laserHeight = 5;
+    let laserCooldown = 0;
 
-    // Opponent Movement and Shooting
-    let bonkShooting = false;
+    // Opponent Shooting
     let bonkLaserX = -1;
     let bonkLaserY = -1;
     let bonkLaserActive = false;
@@ -321,21 +287,9 @@
         updateLaser();
         checkLaserCollision();
 
-        if (gameRunning) requestAnimationFrame(gameLoop);
-    }
-
-    // Show Winner
-    function showWinner(winnerMessage) {
-        gameRunning = false;
-        document.getElementById("winner-text").innerText = winnerMessage;
-        document.getElementById("winner-message").style.display = "block";
-    }
-
-    // Restart Game
-    function restartGame() {
-        location.reload();
-    }
-</script>
-
-</body>
-</html>
+        // Player Shooting
+        if (gameRunning && laserCooldown === 0) {
+            laserX = 100;
+            laserY = sherkY + playerHeight / 2 - laserHeight / 2;
+            laserActive = true;
+            laserCooldown = 20; //
