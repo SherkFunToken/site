@@ -162,7 +162,7 @@
 
 /* Efeito de hover que faz o botão aumentar */
 .button-highlightgame:hover {
-    transform: scale(1.1); /* aumenta o tamanho do botão em 10% */
+    transform: scale(1.50); /* aumenta o tamanho do botão em 50% */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.9); /* aumenta a sombra no hover */
 }
 
