@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Laser Duel --|</title>
+    <title>|- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
-    
+
     <style>
         body {
             margin: 0;
@@ -57,6 +57,17 @@
             text-shadow: 0 0 10px #00ff00;
         }
 
+        /* Posiciona os nomes dos jogadores acima das barras de vida */
+        .player-left {
+            top: 5px;
+            left: 60px;
+        }
+
+        .player-right {
+            top: 5px;
+            right: 60px;
+        }
+
         .score-label {
             position: absolute;
             font-size: 5vw;
@@ -74,11 +85,6 @@
             right: 60px;
         }
 
-        .heart {
-            font-size: 3vw;
-            color: red;
-        }
-
         .footer {
             position: absolute;
             bottom: 10px;
@@ -87,7 +93,7 @@
             text-shadow: 0 0 10px #00ff00;
         }
 
-        /* Vida dos jogadores */
+        /* Barra de vida */
         .health-bar {
             position: absolute;
             height: 20px;
@@ -214,7 +220,6 @@
     let laserActive = false;
     const laserWidth = 10;
     const laserHeight = 5;
-    let laserCooldown = 0;
 
     // Opponent Shooting
     let bonkLaserX = -1;
@@ -353,14 +358,20 @@
         document.getElementById("bonk").style.top = `${bonkY}px`;
     }
 
-    // Move Opponent AI (Fugindo do Laser)
+    // Move Opponent AI (Fugindo do Laser e atirando)
     function moveBonk() {
-        // Probability of Pepe being hit by the laser
+        // Fuga do laser (Pepe tenta fugir, mas tem chance de ser atingido)
         if (Math.random() < 0.30) {
-            bonkY += Math.random() * 20 - 10; // Move slightly up or down
+            bonkY += Math.random() * 20 - 10; // Move levemente para cima ou para baixo
         }
 
-        // Check that Pepe stays within bounds
+        // Tentar atirar
+        if (Math.random() < 0.02) {
+            bonkLaserX = canvas.width - 100;  // Lança o laser em direção ao Sherk
+            bonkLaserY = bonkY + playerHeight / 2 - laserHeight / 2;
+        }
+
+        // Evitar que Pepe saia dos limites
         bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
 
