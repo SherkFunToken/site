@@ -48,9 +48,6 @@
 }
 
 
-
-
-
         .contentmar {
     position: relative;
     background: url('mar1.gif') no-repeat center center;
@@ -146,18 +143,48 @@
             box-shadow: 0 4px 10px rgba(135, 206, 250, 0.3);
         }
 
+
+
+/* Teste da animação shake */
+.button-highlight {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    color: black;
+    background-color: #FFA500; /* cor laranja */
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9); /* sombra */
+    transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s ease; /* transições suaves */
+    animation: shake 0.5s infinite; /* animação de balanço */
+}
+
+/* Definindo a animação shake */
+@keyframes shake {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(5deg); }
+    50% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+    100% { transform: rotate(0deg); }
+}
+
+
+
+/* Teste da animação shake
+
         .button-highlight {
             display: inline-block;
             padding: 10px 20px;
             margin: 10px;
             color: black;
             background-color: #FFA500; /* cor laranja */
-            text-decoration: none;
+       /*     text-decoration: none;
             border-radius: 5px;
             font-size: 16px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9); /* sombra */
-            transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s ease; /* transições suaves */
-        }
+   /*         transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s ease; /* transições suaves */
+    /*    } */
 
         .button-highlight:hover {
             transform: scale(1.1);
