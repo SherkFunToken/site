@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Laser Duel --|</title>
+    <title>|- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
 
@@ -180,8 +180,8 @@
 
     function generateBarriers() {
         barriers = [
-            { x: canvas.width / 2 - 100, y: Math.random() * 100, color: '#ff0000', speed: 2 + Math.random() * 2 },
-            { x: canvas.width / 2 - 50, y: Math.random() * 200, color: '#00ff00', speed: 3 + Math.random() * 2 },
+            { x: canvas.width / 2 - 100, y: Math.random() * (canvas.height - 160), color: '#ff0000', speed: 2 + Math.random() * 2 },
+            { x: canvas.width / 2 - 50, y: Math.random() * (canvas.height - 140), color: '#00ff00', speed: 3 + Math.random() * 2 },
         ];
     }
 
@@ -197,72 +197,17 @@
     function drawBarriers() {
         barriers.forEach((barrier) => {
             ctx.fillStyle = barrier.color;
-            ctx.fillRect(barrier.x, barrier.y, 30, 200);
-        });
-    }
-
-    function drawLasers() {
-        lasers.forEach((laser, index) => {
-            laser.x += laser.speed;
-
-            // Verifica colisão com barreiras
-            if (checkCollisionWithBarriers(laser)) {
-                lasers.splice(index, 1);
-                hitSound.play();
-            }
-
-            // Verifica colisão com os jogadores
-            if (checkCollisionWithPlayers(laser)) {
-                lasers.splice(index, 1);
-                hitSound.play();
-                if (laser.shooter === "sherk") {
-                    bonkHealth--;
-                    sherkHealth++;
-                } else {
-                    sherkHealth--;
-                    bonkHealth++;
-                }
-                updateHealthBars();
-                checkWinCondition();
-            }
-
-            ctx.fillStyle = laser.color;
-            ctx.fillRect(laser.x, laser.y, 10, 5);
+            let height = barrier.color === '#ff0000' ? 160 : 140;
+            ctx.fillRect(barrier.x, barrier.y, 30, height);
         });
     }
 
     function checkCollisionWithBarriers(laser) {
-        return barriers.some(barrier => 
-            laser.x >= barrier.x && laser.x <= barrier.x + 30 &&
-            laser.y >= barrier.y && laser.y <= barrier.y + 200
-        );
-    }
-
-    function checkCollisionWithPlayers(laser) {
-        const sherkHit = laser.x > 20 && laser.x < 100 && laser.y > sherkY && laser.y < sherkY + 150;
-        const bonkHit = laser.x < canvas.width - 20 && laser.x > canvas.width - 100 && laser.y > bonkY && laser.y < bonkY + 150;
-        return sherkHit || bonkHit;
-    }
-
-    function updateHealthBars() {
-        document.getElementById("sherkHealth").style.width = (sherkHealth / 5) * 200 + "px";
-        document.getElementById("bonkHealth").style.width = (bonkHealth / 5) * 200 + "px";
-
-        if (sherkHealth <= 2) document.getElementById("sherkHealth").classList.add("red");
-        if (bonkHealth <= 2) document.getElementById("bonkHealth").classList.add("red");
-    }
-
-    function checkWinCondition() {
-        if (sherkHealth <= 0) {
-            gameRunning = false;
-            victorySound.play();
-            alert("Pepe Wins!");
-        }
-        if (bonkHealth <= 0) {
-            gameRunning = false;
-            victorySound.play();
-            alert("Sherk Wins!");
-        }
+        return barriers.some(barrier => {
+            let height = barrier.color === '#ff0000' ? 160 : 140;
+            return laser.x >= barrier.x && laser.x <= barrier.x + 30 &&
+                   laser.y >= barrier.y && laser.y <= barrier.y + height;
+        });
     }
 
     function gameLoop() {
@@ -270,7 +215,6 @@
         moveBonk();
         moveBarriers();
         drawBarriers();
-        drawLasers();
         if (gameRunning) requestAnimationFrame(gameLoop);
     }
 
