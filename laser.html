@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>|-- Sherk Laser Duel --|</title>
+    By: @Marcelo_VP
+    https://token4fun.github.io/crypto/
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: black;
+            overflow: hidden;
+            font-family: monospace;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .player {
+            position: absolute;
+            height: 150px;
+            width: auto;
+            animation: glow-animation 1.5s infinite alternate;
+        }
+
+        #sherk {
+            left: 20px;
+        }
+
+        #bonk {
+            right: 20px;
+        }
+
+        @keyframes glow-animation {
+            0% { filter: drop-shadow(0 0 10px #00f0ff); }
+            50% { filter: drop-shadow(0 0 20px #ff0000); }
+            100% { filter: drop-shadow(0 0 10px #00f0ff); }
+        }
+
+        .glow-text {
+            font-size: 4vw;
+            color: #00ff00;
+            text-shadow: 0 0 20px #00ff00, 0 0 40px #0077ff;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .player-label {
+            position: absolute;
+            font-size: 2vw;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .score-label {
+            position: absolute;
+            font-size: 5vw;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+            font-weight: bold;
+            top: 30px;
+        }
+
+        #sherkScore {
+            left: 60px;
+        }
+
+        #bonkScore {
+            right: 60px;
+        }
+
+        .player-left {
+            top: 10px;
+            left: 20px;
+        }
+
+        .player-right {
+            top: 10px;
+            right: 20px;
+        }
+
+        .instructions-container {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+        }
+
+        .instructions {
+            font-size: 2vw;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 2vw;
+            color: #fff;
+            background: linear-gradient(90deg, #00f0ff, #ff0000);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 20px #00f0ff;
+        }
+
+        .button:hover {
+            box-shadow: 0 0 40px #ff0000;
+        }
+
+        #winner-message {
+            font-size: 3vw;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000;
+            white-space: pre-wrap;
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            color: #00ff00;
+            font-size: 2vw;
+            text-shadow: 0 0 10px #00ff00;
+        }
+    </style>
+</head>
+<body>
+
+<div class="glow-text">Sherk Laser Duel</div>
+
+<div class="player-label player-left">Player: Sherk</div>
+<div class="score-label" id="sherkScore">0</div>
+    
+<div class="player-label player-right">Player: Pepe</div>
+<div class="score-label" id="bonkScore">0</div>
+
+<div id="instructions-container" class="instructions-container">
+    <div class="instructions">
+        Use the touch to control Sherk on mobile or mouse on PC.<br>
+        First to 5 points wins!<br><br>
+    </div><br><br>
+    <button class="button" onclick="startGame()">Play</button>
+</div>
+
+<canvas id="gameCanvas"></canvas>
+<img src="Sherk.png" id="sherk" class="player">
+<img src="Bonk.png" id="bonk" class="player">
+
+<div id="winner-message">
+    <p id="winner-text"></p>
+    <button onclick="restartGame()" class="button">Restart</button>
+</div>
+
+<div class="footer">Sherk Games - Sherkfun.io</div>
+
+<!-- Sons -->
+<audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
+<audio id="bgMusic" src="bg_music.MP3" loop="true" preload="auto"></audio>
+<audio id="victorySound" src="victory_sound.MP3" preload="auto"></audio>
+<audio id="pointSound" src="point.MP3" preload="auto"></audio>
+
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Players and score
+    const playerHeight = 150;
+    let sherkY = canvas.height / 2 - playerHeight / 2;
+    let bonkY = canvas.height / 2 - playerHeight / 2;
+
+    let leftScore = 0;
+    let rightScore = 0;
+    let gameRunning = false;
+
+    // Laser/Projectile Variables
+    let laserX = -1;
+    let laserY = -1;
+    let laserActive = false;
+    const laserWidth = 10;
+    const laserHeight = 5;
+
+    // Sounds
+    const hitSound = document.getElementById("hitSound");
+    const bgMusic = document.getElementById("bgMusic");
+    const victorySound = document.getElementById("victorySound");
+    const pointSound = document.getElementById("pointSound");
+
+    bgMusic.volume = 0.3;
+
+    // Start Game
+    function startGame() {
+        document.getElementById("instructions-container").style.display = "none";
+        gameRunning = true;
+        bgMusic.play();
+        gameLoop();
+    }
+
+    // Draw Score
+    function drawScore() {
+        document.getElementById("sherkScore").innerText = leftScore;
+        document.getElementById("bonkScore").innerText = rightScore;
+
+        if (leftScore > rightScore) {
+            document.getElementById("sherkScore").style.color = "blue";
+            document.getElementById("bonkScore").style.color = "red";
+        } else if (rightScore > leftScore) {
+            document.getElementById("bonkScore").style.color = "blue";
+            document.getElementById("sherkScore").style.color = "red";
+        } else {
+            document.getElementById("sherkScore").style.color = "#00ff00";
+            document.getElementById("bonkScore").style.color = "#00ff00";
+        }
+    }
+
+    // Control Movement
+    document.addEventListener("mousemove", (e) => {
+        if (gameRunning) {
+            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight / 2));
+        }
+    });
+
+    // Handle Laser Shooting
+    document.addEventListener("click", () => {
+        if (gameRunning && !laserActive) {
+            laserX = 100;
+            laserY = sherkY + playerHeight / 2 - laserHeight / 2;
+            laserActive = true;
+        }
+    });
+
+    // Update Laser Position
+    function updateLaser() {
+        if (laserActive) {
+            laserX += 10; // Laser Speed
+            ctx.fillStyle = "#00f0ff"; // Laser Color
+            ctx.fillRect(laserX, laserY, laserWidth, laserHeight);
+
+            if (laserX > canvas.width) {
+                laserActive = false;
+            }
+        }
+    }
+
+    // Detect Laser Collision with Opponent
+    function checkLaserCollision() {
+        if (laserActive && laserX > canvas.width - 120 && laserX < canvas.width - 100) {
+            if (laserY > bonkY && laserY < bonkY + playerHeight) {
+                rightScore--;
+                leftScore++;
+                hitSound.play();
+                drawScore();
+                laserActive = false;
+
+                if (rightScore === 0) {
+                    showWinner("Sherk Wins!");
+                    victorySound.play();
+                    return;
+                }
+            }
+        }
+    }
+
+    // Move Players
+    function movePlayers() {
+        document.getElementById("sherk").style.top = `${sherkY}px`;
+        document.getElementById("bonk").style.top = `${bonkY}px`;
+    }
+
+    // Move Opponent AI (Simple AI)
+    function moveBonk() {
+        let targetY = laserY - playerHeight / 2;
+        bonkY += (targetY - bonkY) * 0.05;
+        bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
+    }
+
+    // Game Loop
+    function gameLoop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        movePlayers();
+        updateLaser();
+        moveBonk();
+        checkLaserCollision();
+
+        if (gameRunning) requestAnimationFrame(gameLoop);
+    }
+
+    // Show Winner
+    function showWinner(winnerMessage) {
+        gameRunning = false;
+        document.getElementById("winner-text").innerText = winnerMessage;
+        document.getElementById("winner-message").style.display = "block";
+    }
+
+    // Restart Game
+    function restartGame() {
+        location.reload();
+    }
+</script>
+
+</body>
+</html>
