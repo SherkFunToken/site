@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Laser Duel --|</title>
+    <title>|-- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
 
@@ -352,7 +352,7 @@
 
     function moveBarriers() {
         barriers.forEach((barrier, index) => {
-            barrier.y += 2;  // Velocidade das barreiras
+            barrier.y += index % 2 === 0 ? 2 : 4;  // Velocidades alternadas
             if (barrier.y > canvas.height) barrier.y = 0;  // Se sair da tela, volta para o topo
         });
     }
