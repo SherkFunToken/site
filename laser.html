@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Laser Duel --|</title>
+    <title>|-- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
     
@@ -57,7 +57,6 @@
             text-shadow: 0 0 10px #00ff00;
         }
 
-        /* Posiciona os nomes dos jogadores acima das barras de vida */
         .player-left {
             top: 5px;
             left: 60px;
@@ -68,12 +67,11 @@
             right: 60px;
         }
 
-        /* Barra de vida dos jogadores */
         .health-bar {
             position: absolute;
             height: 20px;
             width: 200px;
-            top: 40px; /* Ajustado 1cm abaixo */
+            top: 40px;
             background: blue;
             border-radius: 5px;
             transition: width 0.5s;
@@ -84,12 +82,10 @@
             box-shadow: 0 0 15px 5px red;
         }
 
-        /* Barra de vida do Sherk */
         #sherkHealth {
             left: 60px;
         }
 
-        /* Barra de vida do Bonk */
         #bonkHealth {
             right: 60px;
         }
@@ -201,9 +197,9 @@
 
     // Barrier Variables
     const barriers = [];
-    const barrierHeight = 200; // Ajustado para ser mais alto
+    const barrierHeight = 200;
     const barrierWidth = 30;
-    const barrierSpeed = [2, 1.5, 1]; // Velocidades variadas para as 3 barreiras
+    const barrierSpeed = [2, 1.5, 1];
     let barrierPositions = [
         { y: 0, speed: barrierSpeed[0] },
         { y: 0, speed: barrierSpeed[1] },
@@ -229,7 +225,6 @@
 
     // Generate Barriers
     function generateBarriers() {
-        // Barreiras mais afastadas dos jogadores e na vertical
         barriers.push({ x: canvas.width / 4, y: 0, color: '#ff0000' });
         barriers.push({ x: canvas.width / 2, y: 0, color: '#00ff00' });
         barriers.push({ x: (canvas.width * 3) / 4, y: 0, color: '#0000ff' });
@@ -249,12 +244,12 @@
             barrier.y += barrier.speed;
 
             if (barrier.y <= 0 || barrier.y + barrierHeight >= canvas.height) {
-                barrier.speed = -barrier.speed; // Inverte a direção da barreira
+                barrier.speed = -barrier.speed; // Reverse direction of barrier
             }
         });
     }
 
-    // Draw Score and Health Bars
+    // Update Health Bars
     function drawScore() {
         updateHealthBar("sherkHealth", leftScore);
         updateHealthBar("bonkHealth", rightScore);
@@ -267,7 +262,6 @@
 
         healthBar.style.width = healthWidth + 'px';
 
-        // Change color to red if health is below half
         if (score <= maxHealth / 2) {
             healthBar.classList.add('red');
         } else {
@@ -279,8 +273,15 @@
     document.addEventListener("mousemove", (event) => {
         if (gameRunning) {
             sherkY = event.clientY - playerHeight / 2;
-            // Limita o movimento do Sherk para dentro da tela
             sherkY = Math.max(0, Math.min(canvas.height - playerHeight, sherkY));
+        }
+    });
+
+    document.addEventListener("click", () => {
+        if (gameRunning && !laserActive) {
+            laserX = 100;
+            laserY = sherkY + playerHeight / 2 - laserHeight / 2;
+            laserActive = true;
         }
     });
 
@@ -291,7 +292,6 @@
             ctx.fillStyle = "#00f0ff"; // Laser Color
             ctx.fillRect(laserX, laserY, laserWidth, laserHeight);
 
-            // Check laser collision with barriers
             barriers.forEach(barrier => {
                 if (laserX + laserWidth >= barrier.x && laserX <= barrier.x + barrierWidth && laserY + laserHeight >= barrier.y && laserY <= barrier.y + barrierHeight) {
                     laserActive = false; // Laser disappears if hitting barrier
@@ -304,7 +304,7 @@
         }
     }
 
-    // Detect Laser Collision with Opponent
+    // Check Laser Collision with Opponent
     function checkLaserCollision() {
         if (laserActive && laserX > canvas.width - 120 && laserX < canvas.width - 100) {
             if (laserY > bonkY && laserY < bonkY + playerHeight) {
@@ -329,20 +329,17 @@
         document.getElementById("bonk").style.top = `${bonkY}px`;
     }
 
-    // Move Opponent AI (Fugindo do Laser)
+    // Move Opponent AI (Fugindo do Laser e atirando)
     function moveBonk() {
-        // Fuga do laser
         if (Math.random() < 0.30) {
-            bonkY += Math.random() * 20 - 10; // Move ligeiramente para cima ou para baixo
+            bonkY += Math.random() * 20 - 10;
         }
 
-        // Tentar atirar de forma alternada
         if (Math.random() < 0.05) {
-            bonkLaserX = canvas.width - 100;  // Lança o laser em direção ao Sherk
+            bonkLaserX = canvas.width - 100;
             bonkLaserY = bonkY + playerHeight / 2 - laserHeight / 2;
         }
 
-        // Impedir que Pepe saia dos limites da tela
         bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
 
