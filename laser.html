@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>| Sherk Laser Duel --|</title>
+    <title>|-- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
 
@@ -120,27 +120,24 @@
     let sherkY = canvas.height / 2 - 75;
     let bonkY = canvas.height / 2 - 75;
     let gameRunning = false;
-    let laserActive = false;
+    let lasers = [];
     let bonkLaserActive = false;
+    let barriers = [];
 
     const hitSound = document.getElementById("hitSound");
     const bgMusic = document.getElementById("bgMusic");
     const victorySound = document.getElementById("victorySound");
 
-    let barriers = [];
-    let lasers = [];
-
     bgMusic.volume = 0.3;
 
     document.addEventListener("mousemove", (event) => {
         sherkY = Math.max(0, Math.min(canvas.height - 150, event.clientY - 75));
+        document.getElementById("sherk").style.top = `${sherkY}px`;
     });
 
     document.addEventListener("click", () => {
-        if (gameRunning && !laserActive) {
+        if (gameRunning) {
             lasers.push({ x: 100, y: sherkY + 75, speed: 10, color: '#00ff00' });
-            laserActive = true;
-            setTimeout(() => (laserActive = false), 500);
         }
     });
 
@@ -182,8 +179,6 @@
         barriers = [
             { x: canvas.width / 2 - 100, y: Math.random() * 100, color: '#ff0000', speed: 2 + Math.random() * 2 },
             { x: canvas.width / 2 - 50, y: Math.random() * 200, color: '#00ff00', speed: 3 + Math.random() * 2 },
-            { x: canvas.width / 2, y: Math.random() * 300, color: '#0000ff', speed: 1 + Math.random() * 3 },
-            { x: canvas.width / 2 + 50, y: Math.random() * 400, color: '#ff00ff', speed: 2 + Math.random() * 2 },
         ];
     }
 
@@ -206,10 +201,23 @@
     function drawLasers() {
         lasers.forEach((laser, index) => {
             laser.x += laser.speed;
+
+            // Verifica colisão com barreiras
+            if (checkCollisionWithBarriers(laser)) {
+                lasers.splice(index, 1);
+                hitSound.play();
+            }
+
             ctx.fillStyle = laser.color;
             ctx.fillRect(laser.x, laser.y, 10, 5);
-            if (laser.x < 0 || laser.x > canvas.width) lasers.splice(index, 1);
         });
+    }
+
+    function checkCollisionWithBarriers(laser) {
+        return barriers.some(barrier => 
+            laser.x >= barrier.x && laser.x <= barrier.x + 30 &&
+            laser.y >= barrier.y && laser.y <= barrier.y + 200
+        );
     }
 
     function gameLoop() {
