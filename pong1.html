@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Pong --|</title>
+    <title>|-- Sherk Pong --|</title>
 
  By: @Marcelo_VP
  https://token4fun.github.io/crypto/
@@ -161,9 +161,7 @@
 
 <div id="instructions-container" class="instructions-container">
     <div class="instructions">
-        Use the mouse to control Sherk.<br>
-        Click the button to start the game.<br>
-        (F5) to Restart the game.<br>
+        Use the touch to control Sherk.<br>
         First to 5 points wins!<br><br>
     </div><br><br>
     <button class="button" onclick="startGame()">Play</button>
@@ -230,9 +228,19 @@
     let rightScore = 0;
     let gameRunning = false;
 
-    document.addEventListener("mousemove", (e) => {
+    // Função para capturar o toque e mover o Sherk
+    let touchStartY = 0;
+    document.addEventListener("touchstart", (e) => {
+        touchStartY = e.touches[0].clientY; // Pega a posição inicial do toque
+    });
+
+    document.addEventListener("touchmove", (e) => {
         if (gameRunning) {
-            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight / 2));
+            const touchEndY = e.touches[0].clientY;
+            const deltaY = touchEndY - touchStartY; // Movimento do toque
+
+            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, sherkY + deltaY)); // Atualiza a posição do Sherk
+            touchStartY = touchEndY; // Atualiza o valor de referência do toque
         }
     });
 
