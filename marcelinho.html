@@ -79,16 +79,6 @@
             right: 60px;
         }
 
-        .player-left {
-            top: 10px;
-            left: 20px;
-        }
-
-        .player-right {
-            top: 10px;
-            right: 20px;
-        }
-
         .instructions-container {
             position: absolute;
             top: 40%;
@@ -144,10 +134,10 @@
 
 <div class="glow-text">Marcelinho Pong Play</div>
 
-<div class="player-label player-left">Jogador: Marcelinho</div>
+<div class="player-label">Jogador: Marcelinho</div>
 <div class="score-label" id="player1Score">0</div>
     
-<div class="player-label player-right">Jogador: Visitante</div>
+<div class="player-label">Jogador: Visitante</div>
 <div class="score-label" id="player2Score">0</div>
 
 <div id="instructions-container" class="instructions-container">
@@ -169,13 +159,5 @@
 </div>
 
 <div class="footer">Marcelinho Games - PongPlay.io</div>
-
-<script>
-    function startGame() {
-        document.getElementById('instructions-container').style.display = 'none';
-        alert('Jogo iniciado!');
-    }
-</script>
-
 </body>
 </html>
