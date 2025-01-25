@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sherk Pong --|</title>
+    <title>|-- Sherk Pong --|</title>
 
  By: @Marcelo_VP
  https://token4fun.github.io/crypto/
@@ -181,8 +181,11 @@
 
 <div class="footer">Sherk Games - Sherkfun.io</div>
 
-<audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
+<!-- Sons -->
+<audio id="hitSound" src="hit_sound.mp3" preload="auto"></audio>
 <audio id="bgMusic" src="bg_music.mp3" loop="true" preload="auto"></audio>
+<audio id="victorySound" src="victory_sound.mp3" preload="auto"></audio>
+<audio id="pointSound" src="point.mp3" preload="auto"></audio>
 
 <script>
     const canvas = document.getElementById("pongCanvas");
@@ -196,6 +199,8 @@
     // Sons
     const hitSound = document.getElementById("hitSound");
     const bgMusic = document.getElementById("bgMusic");
+    const victorySound = document.getElementById("victorySound");
+    const pointSound = document.getElementById("pointSound");
 
     // Começar a música de fundo quando a página carrega
     bgMusic.play();
@@ -257,8 +262,10 @@
         if (ballX < 0) {
             rightScore++;
             drawScore();
+            pointSound.play(); // Som de ponto
             if (rightScore === 5) {
                 showWinner("Pepe Wins!");
+                victorySound.play(); // Som de vitória
                 return;
             }
             resetBall();
@@ -267,8 +274,10 @@
         if (ballX > canvas.width) {
             leftScore++;
             drawScore();
+            pointSound.play(); // Som de ponto
             if (leftScore === 5) {
                 showWinner("Sherk Wins!");
+                victorySound.play(); // Som de vitória
                 return;
             }
             resetBall();
