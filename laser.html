@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Laser Duel --|</title>
+    <title>|- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
 
@@ -200,16 +200,6 @@
     let bonkLaserY = -1;
     let bonkLaserActive = false;
 
-    const barriers = [];
-    const barrierHeight = 200;
-    const barrierWidth = 30;
-    const barrierSpeed = [2, 1.5, 1];
-    let barrierPositions = [
-        { y: 0, speed: barrierSpeed[0] },
-        { y: 0, speed: barrierSpeed[1] },
-        { y: 0, speed: barrierSpeed[2] }
-    ];
-
     const hitSound = document.getElementById("hitSound");
     const bgMusic = document.getElementById("bgMusic");
     const victorySound = document.getElementById("victorySound");
@@ -221,31 +211,8 @@
         document.getElementById("instructions-container").style.display = "none";
         gameRunning = true;
         bgMusic.play();
-        generateBarriers();
         gameLoop();
         shootBonkLaserInterval();  // Começar a atirar lasers a intervalos
-    }
-
-    function generateBarriers() {
-        barriers.push({ x: canvas.width / 4, y: 0, color: '#ff0000' });
-        barriers.push({ x: canvas.width / 2, y: 0, color: '#00ff00' });
-        barriers.push({ x: (canvas.width * 3) / 4, y: 0, color: '#0000ff' });
-    }
-
-    function drawBarriers() {
-        barriers.forEach((barrier, index) => {
-            ctx.fillStyle = barrier.color;
-            ctx.fillRect(barrier.x, barrierPositions[index].y, barrierWidth, barrierHeight);
-        });
-    }
-
-    function moveBarriers() {
-        barrierPositions.forEach((barrier, index) => {
-            barrier.y += barrier.speed;
-            if (barrier.y <= 0 || barrier.y + barrierHeight >= canvas.height) {
-                barrier.speed = -barrier.speed;
-            }
-        });
     }
 
     function drawScore() {
@@ -286,12 +253,6 @@
             laserX += 10;
             ctx.fillStyle = "#00f0ff";
             ctx.fillRect(laserX, laserY, laserWidth, laserHeight);
-
-            barriers.forEach(barrier => {
-                if (laserX + laserWidth >= barrier.x && laserX <= barrier.x + barrierWidth && laserY + laserHeight >= barrier.y && laserY <= barrier.y + barrierHeight) {
-                    laserActive = false;
-                }
-            });
 
             if (laserX > canvas.width) {
                 laserActive = false;
@@ -353,7 +314,7 @@
     }
 
     function shootBonkLaserInterval() {
-        setInterval(shootBonkLaser, Math.random() * 2000 + 500);
+        setInterval(shootBonkLaser, 800); // Dispara lasers de Pepe com intervalos fixos
     }
 
     function movePlayers() {
@@ -362,19 +323,16 @@
     }
 
     function moveBonk() {
-        // Movimento aleatório da IA de Pepe
-        const moveSpeed = 5;
-        const randomMove = (Math.random() - 0.5) * moveSpeed; // Movimento aleatório leve
+        // Movimento constante de Pepe
+        const speed = 5;
+        bonkY += Math.random() * speed - (speed / 2); // Aleatório com velocidade constante para simular movimento humano
 
-        bonkY += randomMove; // Movimento suave para cima/baixo
         bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
 
     function gameLoop() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         movePlayers();
-        moveBarriers();
-        drawBarriers();
         updateLaser();
         moveBonk();
         checkLaserCollision();
