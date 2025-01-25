@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Pong --|</title>
+    <title>|-- Marcelinho Pong Play --|</title>
 
- By: @Marcelo_VP
- https://token4fun.github.io/crypto/
- 
-    <style>
+     <style>
         body {
             margin: 0;
             padding: 0;
@@ -151,33 +148,33 @@
 </head>
 <body>
 
-<div class="glow-text">Sherk Pong</div>
+<div class="glow-text">Marcelinho Pong Play</div>
 
-<div class="player-label player-left">Player: Sherk</div>
+<div class="player-label player-left">Player: Marcelinho</div>
 <div class="score-label" id="sherkScore">0</div>
     
-<div class="player-label player-right">Player: Pepe</div>
+<div class="player-label player-right">Player: Minion</div>
 <div class="score-label" id="bonkScore">0</div>
 
 <div id="instructions-container" class="instructions-container">
     <div class="instructions">
-        Use the touch to control Sherk on mobile or mouse on PC.<br>
-        First to 5 points wins!<br><br>
+        Use o mouse ou arraste o dedo na tela para controlar voce.<br>
+        Ganha quem faz 5 pontos primeiro!<br><br>
     </div><br><br>
-    <button class="button" onclick="startGame()">Play</button>
+    <button class="button" onclick="startGame()">Jogar</button>
 </div>
 
 <canvas id="pongCanvas"></canvas>
-<img src="Sherk.png" id="sherk" class="player">
-<img src="Bonk.png" id="bonk" class="player">
+<img src="paly1.png" id="sherk" class="player">
+<img src="player2.png" id="bonk" class="player">
 <img src="ball.png" id="ball">
 
 <div id="winner-message">
     <p id="winner-text"></p>
-    <button onclick="restartGame()" class="button">Restart</button>
+    <button onclick="restartGame()" class="button">Reiniciar</button>
 </div>
 
-<div class="footer">Sherk Games - Sherkfun.io</div>
+<div class="footer">Marcelinho Games</div>
 
 <!-- Sons -->
 <audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
@@ -299,7 +296,7 @@
             drawScore();
             pointSound.play(); // Som de ponto
             if (rightScore === 5) {
-                showWinner("Pepe Wins!");
+                showWinner("Minion Ganhou!");
                 bgMusic.pause(); // Para a música de fundo quando alguém vence
                 victorySound.play(); // Som de vitória
                 return;
@@ -312,7 +309,7 @@
             drawScore();
             pointSound.play(); // Som de ponto
             if (leftScore === 5) {
-                showWinner("Sherk Wins!");
+                showWinner("Marcelinho Ganhou!");
                 bgMusic.pause(); // Para a música de fundo quando alguém vence
                 victorySound.play(); // Som de vitória
                 return;
