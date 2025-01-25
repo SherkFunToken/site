@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Laser Duel --|</title>
+    <title>|- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
 
@@ -169,10 +169,8 @@
 <audio id="pointSound" src="point.MP3" preload="auto"></audio>
 
 <script>
-    // Definir tudo após o carregamento da página
     document.addEventListener("DOMContentLoaded", function() {
         const playButton = document.getElementById("playButton");
-
         playButton.addEventListener("click", startGame);
     });
 
@@ -335,9 +333,34 @@
         bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
 
+    function generateBarriers() {
+        // Definir posições mais próximas das barreiras
+        barriers.push({ x: canvas.width / 3, y: 0, color: '#ff0000' });
+        barriers.push({ x: canvas.width / 3 + 50, y: 0, color: '#00ff00' });
+        barriers.push({ x: canvas.width / 3 + 100, y: 0, color: '#0000ff' });
+    }
+
+    let barriers = [];
+
+    function drawBarriers() {
+        barriers.forEach((barrier, index) => {
+            ctx.fillStyle = barrier.color;
+            ctx.fillRect(barrier.x, barrier.y, 30, 200);
+        });
+    }
+
+    function moveBarriers() {
+        barriers.forEach((barrier, index) => {
+            barrier.y += 2;
+            if (barrier.y > canvas.height) barrier.y = 0;
+        });
+    }
+
     function gameLoop() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         movePlayers();
+        moveBarriers();
+        drawBarriers();
         updateLaser();
         moveBonk();
         checkLaserCollision();
