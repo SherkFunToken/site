@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Pong --|</title>
+    <title>|-- Sherk Pong --|</title>
 
  By: @Marcelo_VP
  https://token4fun.github.io/crypto/
@@ -278,7 +278,7 @@
         ballX += ballSpeedX;
         ballY += ballSpeedY;
         ballAngle += 5;  // Incrementa o ângulo da bola para rotação
-        ball.style.transform = rotate(${ballAngle}deg);
+        ball.style.transform = `rotate(${ballAngle}deg)`;
 
         // Rebater na parede superior e inferior
         if (ballY <= 0 || ballY + ball.height >= canvas.height) {
@@ -335,10 +335,10 @@
     }
 
     function movePlayers() {
-        document.getElementById("sherk").style.top = ${sherkY}px;
-        document.getElementById("bonk").style.top = ${bonkY}px;
-        ball.style.left = ${ballX}px;
-        ball.style.top = ${ballY}px;
+        document.getElementById("sherk").style.top = `${sherkY}px`;
+        document.getElementById("bonk").style.top = `${bonkY}px`;
+        ball.style.left = `${ballX}px`;
+        ball.style.top = `${ballY}px`;
     }
 
     function increaseBallSpeed() {
