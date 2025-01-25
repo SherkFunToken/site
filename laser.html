@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Laser Duel --|</title>
+    <title>|- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
     
@@ -87,6 +87,32 @@
             text-shadow: 0 0 10px #00ff00;
         }
 
+        /* Vida dos jogadores */
+        .health-bar {
+            position: absolute;
+            height: 20px;
+            width: 200px;
+            top: 10px;
+            background: blue;
+            border-radius: 5px;
+            transition: width 0.5s;
+        }
+
+        .health-bar.red {
+            background: red;
+            box-shadow: 0 0 15px 5px red;
+        }
+
+        /* Barra de vida do Sherk */
+        #sherkHealth {
+            left: 60px;
+        }
+
+        /* Barra de vida do Bonk */
+        #bonkHealth {
+            right: 60px;
+        }
+
         .button {
             padding: 15px 30px;
             font-size: 2vw;
@@ -101,6 +127,33 @@
         .button:hover {
             box-shadow: 0 0 40px #ff0000;
         }
+
+        .instructions-container {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+        }
+
+        .instructions {
+            font-size: 2vw;
+            margin-bottom: 20px;
+        }
+
+        #winner-message {
+            font-size: 3vw;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000;
+            white-space: pre-wrap;
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -109,11 +162,11 @@
 
 <div class="player-label player-left">Player: Sherk</div>
 <div class="score-label" id="sherkScore">5</div>
-<div class="heart" id="sherkHeart">❤️</div>
+<div id="sherkHealth" class="health-bar"></div>
 
 <div class="player-label player-right">Player: Pepe</div>
 <div class="score-label" id="bonkScore">5</div>
-<div class="heart" id="bonkHeart">❤️</div>
+<div id="bonkHealth" class="health-bar"></div>
 
 <div id="instructions-container" class="instructions-container">
     <div class="instructions">
@@ -170,10 +223,9 @@
 
     // Barrier Variables
     const barriers = [];
-    const barrierHeight = 30;
-    const barrierWidth = 200;
+    const barrierHeight = 200;
+    const barrierWidth = 30;
     const barrierSpeed = 1.5; // Speed of barrier movement
-    const barrierInterval = 100; // Interval for adding new barriers
     let moveDirection = 1; // 1 for down, -1 for up
 
     // Sounds
@@ -198,7 +250,7 @@
         const barrierCount = 5; // Number of barriers
         for (let i = 0; i < barrierCount; i++) {
             const barrier = {
-                x: Math.random() * (canvas.width - barrierWidth),
+                x: Math.random() * (canvas.width - barrierWidth - 100) + 100, // margin from players
                 y: Math.random() * (canvas.height - barrierHeight),
                 color: getRandomColor()
             };
@@ -236,8 +288,25 @@
     function drawScore() {
         document.getElementById("sherkScore").innerText = leftScore;
         document.getElementById("bonkScore").innerText = rightScore;
-        document.getElementById("sherkHeart").innerText = "❤️".repeat(leftScore);
-        document.getElementById("bonkHeart").innerText = "❤️".repeat(rightScore);
+
+        // Update health bar color based on life
+        updateHealthBar("sherkHealth", leftScore);
+        updateHealthBar("bonkHealth", rightScore);
+    }
+
+    function updateHealthBar(healthBarId, score) {
+        const healthBar = document.getElementById(healthBarId);
+        const maxHealth = 5;
+        const healthWidth = (score / maxHealth) * 200;
+
+        healthBar.style.width = healthWidth + 'px';
+
+        // Change color to red if health is below half
+        if (score <= maxHealth / 2) {
+            healthBar.classList.add('red');
+        } else {
+            healthBar.classList.remove('red');
+        }
     }
 
     // Handle Laser Shooting
@@ -294,10 +363,14 @@
         document.getElementById("bonk").style.top = `${bonkY}px`;
     }
 
-    // Move Opponent AI (Simple AI)
+    // Move Opponent AI (Fugindo do Laser)
     function moveBonk() {
-        let targetY = laserY - playerHeight / 2;
-        bonkY += (targetY - bonkY) * 0.05;
+        // Probability of Pepe being hit by the laser
+        if (Math.random() < 0.30) {
+            bonkY += Math.random() * 20 - 10; // Move slightly up or down
+        }
+
+        // Check that Pepe stays within bounds
         bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
 
