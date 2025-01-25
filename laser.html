@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Laser Duel --|</title>
+    <title>|- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
     
@@ -330,60 +330,58 @@
         }
     }
 
-// Laser Variables for Pepe
-let bonkLaserX = -1;
-let bonkLaserY = -1;
-let bonkLaserActive = false;
+    // Laser Variables for Pepe
+    let bonkLaserX = -1;
+    let bonkLaserY = -1;
+    let bonkLaserActive = false;
 
-// Função para disparar o laser de Pepe
-function shootBonkLaser() {
-    if (gameRunning && !bonkLaserActive) {
-        // Define the laser's starting position (on the right side of the canvas, near Pepe)
-        bonkLaserX = canvas.width - 120; // A posição inicial do laser (um pouco à esquerda de Pepe)
-        bonkLaserY = bonkY + playerHeight / 2 - laserHeight / 2; // Define a altura para que o laser saia do centro do corpo de Pepe
-        bonkLaserActive = true; // O laser é ativado
+    // Função para disparar o laser de Pepe
+    function shootBonkLaser() {
+        if (gameRunning && !bonkLaserActive) {
+            // Define the laser's starting position (on the right side of the canvas, near Pepe)
+            bonkLaserX = canvas.width - 120; // A posição inicial do laser (um pouco à esquerda de Pepe)
+            bonkLaserY = bonkY + playerHeight / 2 - laserHeight / 2; // Define a altura para que o laser saia do centro do corpo de Pepe
+            bonkLaserActive = true; // O laser é ativado
+        }
     }
-}
 
-// Atualizar posição do laser de Pepe
-function updateBonkLaser() {
-    if (bonkLaserActive) {
-        bonkLaserX -= 10; // Velocidade do laser (move para a esquerda)
+    // Atualizar posição do laser de Pepe
+    function updateBonkLaser() {
+        if (bonkLaserActive) {
+            bonkLaserX -= 10; // Velocidade do laser (move para a esquerda)
 
-        // Desenha o laser de Pepe
-        ctx.fillStyle = "#ff0000"; // Cor do laser de Pepe (vermelho)
-        ctx.fillRect(bonkLaserX, bonkLaserY, laserWidth, laserHeight);
+            // Desenha o laser de Pepe
+            ctx.fillStyle = "#ff0000"; // Cor do laser de Pepe (vermelho)
+            ctx.fillRect(bonkLaserX, bonkLaserY, laserWidth, laserHeight);
 
-        // Verifica se o laser de Pepe atingiu Sherk
-        if (bonkLaserX <= 120 && bonkLaserX >= 100) {
-            if (bonkLaserY >= sherkY && bonkLaserY <= sherkY + playerHeight) {
-                leftScore--; // Sherk perdeu vida
-                rightScore++; // Pepe marcou um ponto
-                hitSound.play();
-                drawScore(); // Atualiza a pontuação
-                bonkLaserActive = false; // Desativa o laser
-                if (leftScore === 0) {
-                    showWinner("Pepe Wins!");
-                    victorySound.play();
-                    return;
+            // Verifica se o laser de Pepe atingiu Sherk
+            if (bonkLaserX <= 120 && bonkLaserX >= 100) {
+                if (bonkLaserY >= sherkY && bonkLaserY <= sherkY + playerHeight) {
+                    leftScore--; // Sherk perdeu vida
+                    rightScore++; // Pepe marcou um ponto
+                    hitSound.play();
+                    drawScore(); // Atualiza a pontuação
+                    bonkLaserActive = false; // Desativa o laser
+                    if (leftScore === 0) {
+                        showWinner("Pepe Wins!");
+                        victorySound.play();
+                        return;
+                    }
                 }
             }
-        }
 
-        // Se o laser sair da tela, desativa
-        if (bonkLaserX < 0) {
-            bonkLaserActive = false;
+            // Se o laser sair da tela, desativa
+            if (bonkLaserX < 0) {
+                bonkLaserActive = false;
+            }
         }
     }
-}
 
-// Disparar laser de Pepe em intervalos aleatórios
-function shootBonkLaserInterval() {
-    setInterval(shootBonkLaser, Math.random() * 2000 + 500); // Dispara aleatoriamente a cada 500ms até 2 segundos
-}
+    // Disparar laser de Pepe em intervalos aleatórios
+    function shootBonkLaserInterval() {
+        setInterval(shootBonkLaser, Math.random() * 2000 + 500); // Dispara aleatoriamente a cada 500ms até 2 segundos
+    }
 
-
-    
     // Move Players
     function movePlayers() {
         document.getElementById("sherk").style.top = `${sherkY}px`;
