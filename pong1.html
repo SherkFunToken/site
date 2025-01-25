@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Pong --|</title>
+    <title>|-- Sherk Pong --|</title>
 
  By: @Marcelo_VP
  https://token4fun.github.io/crypto/
@@ -202,8 +202,10 @@
     const victorySound = document.getElementById("victorySound");
     const pointSound = document.getElementById("pointSound");
 
+    // Ajuste do volume da música de fundo para 3 em uma escala de 0 a 10 (volume 0.3)
+    bgMusic.volume = 0.3;
+
     // Começar a música de fundo quando a página carrega
-    // Agora a música vai tocar quando o botão "Play" for pressionado
     function startGame() {
         document.getElementById("instructions-container").style.display = "none";
         gameRunning = true;
