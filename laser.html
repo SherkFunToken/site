@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Laser Duel --|</title>
+    <title>|- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
 
@@ -119,20 +119,29 @@
 
     let sherkY = canvas.height / 2 - 75;
     let bonkY = canvas.height / 2 - 75;
-    let bonkDirection = 1;
     let gameRunning = false;
-
-    let barriers = [];
-    const playerHeight = 150;
+    let laserActive = false;
+    let bonkLaserActive = false;
 
     const hitSound = document.getElementById("hitSound");
     const bgMusic = document.getElementById("bgMusic");
     const victorySound = document.getElementById("victorySound");
 
+    let barriers = [];
+    let lasers = [];
+
     bgMusic.volume = 0.3;
 
     document.addEventListener("mousemove", (event) => {
-        sherkY = Math.max(0, Math.min(canvas.height - playerHeight, event.clientY - playerHeight / 2));
+        sherkY = Math.max(0, Math.min(canvas.height - 150, event.clientY - 75));
+    });
+
+    document.addEventListener("click", () => {
+        if (gameRunning && !laserActive) {
+            lasers.push({ x: 100, y: sherkY + 75, speed: 10, color: '#00ff00' });
+            laserActive = true;
+            setTimeout(() => (laserActive = false), 500);
+        }
     });
 
     function startGame() {
@@ -145,25 +154,25 @@
 
     function moveBonk() {
         if (Math.random() < 0.7) {
-            bonkY += sherkY > bonkY ? 3 : -3;
+            bonkY += bonkY < sherkY ? 3 : -3;
         } else {
             bonkY += (Math.random() - 0.5) * 10;
         }
-        bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
+        bonkY = Math.max(0, Math.min(canvas.height - 150, bonkY));
         document.getElementById("bonk").style.top = `${bonkY}px`;
     }
 
     function shootBonkLaser() {
         if (!bonkLaserActive) {
-            bonkLaserX = canvas.width - 120;
-            bonkLaserY = bonkY + playerHeight / 2 - 2;
+            lasers.push({ x: canvas.width - 120, y: bonkY + 75, speed: -10, color: '#ff0000' });
             bonkLaserActive = true;
+            setTimeout(() => (bonkLaserActive = false), 700);
         }
     }
 
     function shootBonkLaserInterval() {
         setInterval(() => {
-            if (gameRunning && !bonkLaserActive) {
+            if (gameRunning) {
                 shootBonkLaser();
             }
         }, Math.random() * 400 + 300);
@@ -194,11 +203,21 @@
         });
     }
 
+    function drawLasers() {
+        lasers.forEach((laser, index) => {
+            laser.x += laser.speed;
+            ctx.fillStyle = laser.color;
+            ctx.fillRect(laser.x, laser.y, 10, 5);
+            if (laser.x < 0 || laser.x > canvas.width) lasers.splice(index, 1);
+        });
+    }
+
     function gameLoop() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         moveBonk();
         moveBarriers();
         drawBarriers();
+        drawLasers();
         if (gameRunning) requestAnimationFrame(gameLoop);
     }
 
