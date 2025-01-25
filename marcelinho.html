@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Marcelinho Pong Play --|</title>
+    <title>|-- Sherk Pong --|</title>
 
+ By: @Marcelo_VP
+ https://token4fun.github.io/crypto/
+ 
     <style>
         body {
             margin: 0;
@@ -31,11 +34,11 @@
             animation: glow-animation 1.5s infinite alternate;
         }
 
-        #player1 {
+        #sherk {
             left: 20px;
         }
 
-        #player2 {
+        #bonk {
             right: 20px;
         }
 
@@ -71,12 +74,22 @@
             top: 30px;
         }
 
-        #player1Score {
+        #sherkScore {
             left: 60px;
         }
 
-        #player2Score {
+        #bonkScore {
             right: 60px;
+        }
+
+        .player-left {
+            top: 10px;
+            left: 20px;
+        }
+
+        .player-right {
+            top: 10px;
+            right: 20px;
         }
 
         .instructions-container {
@@ -121,6 +134,12 @@
             text-align: center;
         }
 
+        #ball {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+        }
+
         .footer {
             position: absolute;
             bottom: 10px;
@@ -132,35 +151,35 @@
 </head>
 <body>
 
-<div class="glow-text">Marcelinho Pong Play</div>
+<div class="glow-text">Sherk Pong</div>
 
-<div class="player-label">Jogador: Marcelinho</div>
-<div class="score-label" id="player1Score">0</div>
+<div class="player-label player-left">Player: Sherk</div>
+<div class="score-label" id="sherkScore">0</div>
     
-<div class="player-label">Jogador: Visitante</div>
-<div class="score-label" id="player2Score">0</div>
+<div class="player-label player-right">Player: Pepe</div>
+<div class="score-label" id="bonkScore">0</div>
 
 <div id="instructions-container" class="instructions-container">
     <div class="instructions">
-        Use o toque para controlar Marcelinho no celular ou o mouse no PC.<br>
-        O primeiro a marcar 5 pontos vence!<br><br>
+        Use the touch to control Sherk on mobile or mouse on PC.<br>
+        First to 5 points wins!<br><br>
     </div><br><br>
-    <button class="button" onclick="startGame()">Jogar</button>
+    <button class="button" onclick="startGame()">Play</button>
 </div>
 
 <canvas id="pongCanvas"></canvas>
-<img src="play1.png" id="player1" class="player">
-<img src="player2.png" id="player2" class="player">
+<img src="Sherk.png" id="sherk" class="player">
+<img src="Bonk.png" id="bonk" class="player">
 <img src="ball.png" id="ball">
 
 <div id="winner-message">
     <p id="winner-text"></p>
-    <button onclick="restartGame()" class="button">Reiniciar</button>
+    <button onclick="restartGame()" class="button">Restart</button>
 </div>
 
-<div class="footer">Marcelinho Games - PongPlay.io</div>
+<div class="footer">Sherk Games - Sherkfun.io</div>
 
-    <!-- Sons -->
+<!-- Sons -->
 <audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
 <audio id="bgMusic" src="bg_music.MP3" loop="true" preload="auto"></audio>
 <audio id="victorySound" src="victory_sound.MP3" preload="auto"></audio>
