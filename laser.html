@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Laser Duel --|</title>
+    <title>|- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
 
@@ -327,18 +327,21 @@
     }
 
     function moveBonk() {
-        // Movimento constante de Pepe para cima/baixo
+        // Movimento de Pepe tentando escapar
         const moveSpeed = 10;
-        bonkY += (Math.random() - 0.5) * moveSpeed;  // Movimento mais rápido e aleatório para simular o comportamento humano
-
+        const escapeChance = Math.random();
+        if (escapeChance < 0.3) {
+            // 30% de chance de escapar (se mover aleatoriamente)
+            bonkY += (Math.random() - 0.5) * moveSpeed;
+        }
         bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
 
     function generateBarriers() {
-        // Gerar barreiras mais próximas entre si
-        barriers.push({ x: canvas.width / 3, y: 0, color: '#ff0000' });
-        barriers.push({ x: canvas.width / 3 + 35, y: 0, color: '#00ff00' });
-        barriers.push({ x: canvas.width / 3 + 70, y: 0, color: '#0000ff' });
+        // Gerar barreiras centralizadas
+        barriers.push({ x: canvas.width / 2 - 80, y: 0, color: '#ff0000' });
+        barriers.push({ x: canvas.width / 2 - 40, y: 0, color: '#00ff00' });
+        barriers.push({ x: canvas.width / 2, y: 0, color: '#0000ff' });
     }
 
     let barriers = [];
@@ -352,8 +355,10 @@
 
     function moveBarriers() {
         barriers.forEach((barrier, index) => {
-            barrier.y += index % 2 === 0 ? 2 : 4;  // Velocidades alternadas
-            if (barrier.y > canvas.height) barrier.y = 0;  // Se sair da tela, volta para o topo
+            barrier.y += (index % 2 === 0 ? 2 : 4);  // Movimentos alternados para barreiras
+            if (barrier.y > canvas.height) {
+                barrier.y = -200; // Reinicia a posição das barreiras quando chega no fundo
+            }
         });
     }
 
