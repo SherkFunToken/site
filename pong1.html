@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Pong --|</title>
+    <title>|- Sherk Pong --|</title>
 
  By: @Marcelo_VP
  https://token4fun.github.io/crypto/
@@ -201,8 +201,8 @@
 <audio id="pointSound" src="point.MP3" preload="auto"></audio>
 
 <!-- Volume Control -->
-<div id="volumeLabel">Volume:</div>
-<input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1" onchange="adjustVolume()">
+<div id="volumeLabel">Volume (0-10):</div>
+<input type="range" id="volumeControl" min="0" max="10" step="1" value="10" onchange="adjustVolume()">
 
 <script>
     const canvas = document.getElementById("pongCanvas");
@@ -230,7 +230,7 @@
 
     // Ajustar o volume da música de fundo
     function adjustVolume() {
-        const volume = document.getElementById("volumeControl").value;
+        const volume = document.getElementById("volumeControl").value / 10;  // Convertendo para um valor entre 0 e 1
         bgMusic.volume = volume;
     }
 
