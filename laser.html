@@ -229,6 +229,7 @@
 
     // Generate Barriers
     function generateBarriers() {
+        // Barreiras mais afastadas dos jogadores e na vertical
         barriers.push({ x: canvas.width / 4, y: 0, color: '#ff0000' });
         barriers.push({ x: canvas.width / 2, y: 0, color: '#00ff00' });
         barriers.push({ x: (canvas.width * 3) / 4, y: 0, color: '#0000ff' });
@@ -274,16 +275,16 @@
         }
     }
 
-    // Handle Laser Shooting for Sherk
-    document.addEventListener("click", () => {
-        if (gameRunning && !laserActive) {
-            laserX = 100;
-            laserY = sherkY + playerHeight / 2 - laserHeight / 2;
-            laserActive = true;
+    // Handle Laser Shooting
+    document.addEventListener("mousemove", (event) => {
+        if (gameRunning) {
+            sherkY = event.clientY - playerHeight / 2;
+            // Limita o movimento do Sherk para dentro da tela
+            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, sherkY));
         }
     });
 
-    // Update Laser Position for Sherk
+    // Update Laser Position
     function updateLaser() {
         if (laserActive) {
             laserX += 10; // Laser Speed
