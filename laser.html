@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Laser Duel --|</title>
+    <title>|- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
 
@@ -188,7 +188,7 @@
     function moveBarriers() {
         barriers.forEach((barrier) => {
             barrier.y += barrier.speed;
-            if (barrier.y + 160 >= canvas.height || barrier.y <= 0) {
+            if (barrier.y + (barrier.color === '#ff0000' ? 160 : 140) >= canvas.height || barrier.y <= 0) {
                 barrier.speed *= -1;
             }
         });
@@ -197,14 +197,28 @@
     function drawBarriers() {
         barriers.forEach((barrier) => {
             ctx.fillStyle = barrier.color;
-            let height = barrier.color === '#ff0000' ? 160 : 140; // Redução de altura
+            let height = barrier.color === '#ff0000' ? 160 : 140;
             ctx.fillRect(barrier.x, barrier.y, 30, height);
+        });
+    }
+
+    function drawLasers() {
+        lasers.forEach((laser, index) => {
+            laser.x += laser.speed;
+
+            if (checkCollisionWithBarriers(laser)) {
+                lasers.splice(index, 1);
+                hitSound.play();
+            }
+
+            ctx.fillStyle = laser.color;
+            ctx.fillRect(laser.x, laser.y, 10, 5);
         });
     }
 
     function checkCollisionWithBarriers(laser) {
         return barriers.some(barrier => {
-            let height = barrier.color === '#ff0000' ? 160 : 140; 
+            let height = barrier.color === '#ff0000' ? 160 : 140;
             return laser.x >= barrier.x && laser.x <= barrier.x + 30 &&
                    laser.y >= barrier.y && laser.y <= barrier.y + height;
         });
@@ -215,6 +229,7 @@
         moveBonk();
         moveBarriers();
         drawBarriers();
+        drawLasers();
         if (gameRunning) requestAnimationFrame(gameLoop);
     }
 
