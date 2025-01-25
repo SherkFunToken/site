@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Pong --|</title>
+    <title>|-- Sherk Pong --|</title>
 
  By: @Marcelo_VP
  https://token4fun.github.io/crypto/
@@ -341,12 +341,9 @@
         document.getElementById("winner-message").style.display = "block";
     }
 
+    // Função para reiniciar o jogo ao clicar no botão "Restart"
     function restartGame() {
-        leftScore = 0;
-        rightScore = 0;
-        drawScore();
-        document.getElementById("winner-message").style.display = "none";
-        document.getElementById("instructions-container").style.display = "block";
+        location.reload();  // Isso simula a tecla F5 e recarrega a página
     }
 
     function gameLoop() {
