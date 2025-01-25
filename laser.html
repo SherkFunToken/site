@@ -155,14 +155,7 @@
         lasers.forEach((laser, index) => {
             laser.x += laser.speed;
 
-            // Verifica se atingiu uma barreira
-            if (checkCollisionWithBarriers(laser)) {
-                lasers.splice(index, 1);
-                hitSound.play();
-            }
-
-            // Verifica se atingiu um jogador
-            if (checkCollisionWithPlayers(laser)) {
+            if (checkCollisionWithBarriers(laser) || checkCollisionWithPlayers(laser)) {
                 lasers.splice(index, 1);
                 hitSound.play();
             }
@@ -172,26 +165,24 @@
         });
     }
 
+    function checkCollisionWithBarriers(laser) {
+        return barriers.some(barrier => {
+            let height = barrier.color === '#ff0000' ? 128 : 112;
+            return laser.x >= barrier.x && laser.x <= barrier.x + 30 &&
+                   laser.y >= barrier.y && laser.y <= barrier.y + height;
+        });
+    }
+
     function checkCollisionWithPlayers(laser) {
-        if (
-            laser.shooter === "sherk" && 
-            laser.x >= canvas.width - 120 && 
-            laser.y > bonkY && 
-            laser.y < bonkY + 150
-        ) {
-            bonkHealth--; // Bonk perde vida
+        if (laser.shooter === "sherk" && laser.x >= canvas.width - 120 && laser.y >= bonkY && laser.y <= bonkY + 150) {
+            bonkHealth--;
             updateHealthBars();
             checkWinCondition();
             return true;
         }
 
-        if (
-            laser.shooter === "bonk" && 
-            laser.x <= 120 && 
-            laser.y > sherkY && 
-            laser.y < sherkY + 150
-        ) {
-            sherkHealth--; // Sherk perde vida
+        if (laser.shooter === "bonk" && laser.x <= 120 && laser.y >= sherkY && laser.y <= sherkY + 150) {
+            sherkHealth--;
             updateHealthBars();
             checkWinCondition();
             return true;
@@ -200,23 +191,6 @@
         return false;
     }
 
-    function updateHealthBars() {
-        document.getElementById("sherkHealth").style.width = (sherkHealth / 5) * 200 + "px";
-        document.getElementById("bonkHealth").style.width = (bonkHealth / 5) * 200 + "px";
-    }
-
-    function checkWinCondition() {
-        if (sherkHealth <= 0) {
-            gameRunning = false;
-            victorySound.play();
-            alert("Pepe Wins!");
-        }
-        if (bonkHealth <= 0) {
-            gameRunning = false;
-            victorySound.play();
-            alert("Sherk Wins!");
-        }
-    }
     function updateHealthBars() {
         document.getElementById("sherkHealth").style.width = (sherkHealth / 5) * 200 + "px";
         document.getElementById("bonkHealth").style.width = (bonkHealth / 5) * 200 + "px";
