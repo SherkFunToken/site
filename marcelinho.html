@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>|-- Marcelinho Pong Play --|</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: black;
+            overflow: hidden;
+            font-family: monospace;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .player {
+            position: absolute;
+            height: 150px;
+            width: auto;
+            animation: glow-animation 1.5s infinite alternate;
+        }
+
+        #player1 {
+            left: 20px;
+        }
+
+        #player2 {
+            right: 20px;
+        }
+
+        @keyframes glow-animation {
+            0% { filter: drop-shadow(0 0 10px #00f0ff); }
+            50% { filter: drop-shadow(0 0 20px #ff0000); }
+            100% { filter: drop-shadow(0 0 10px #00f0ff); }
+        }
+
+        .glow-text {
+            font-size: 4vw;
+            color: #00ff00;
+            text-shadow: 0 0 20px #00ff00, 0 0 40px #0077ff;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .player-label {
+            position: absolute;
+            font-size: 2vw;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .score-label {
+            position: absolute;
+            font-size: 5vw;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+            font-weight: bold;
+            top: 30px;
+        }
+
+        #player1Score {
+            left: 60px;
+        }
+
+        #player2Score {
+            right: 60px;
+        }
+
+        .player-left {
+            top: 10px;
+            left: 20px;
+        }
+
+        .player-right {
+            top: 10px;
+            right: 20px;
+        }
+
+        .instructions-container {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+        }
+
+        .instructions {
+            font-size: 2vw;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 2vw;
+            color: #fff;
+            background: linear-gradient(90deg, #00f0ff, #ff0000);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 20px #00f0ff;
+        }
+
+        .button:hover {
+            box-shadow: 0 0 40px #ff0000;
+        }
+
+        #winner-message {
+            font-size: 3vw;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000;
+            white-space: pre-wrap;
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            color: #00ff00;
+            font-size: 2vw;
+            text-shadow: 0 0 10px #00ff00;
+        }
+    </style>
+</head>
+<body>
+
+<div class="glow-text">Marcelinho Pong Play</div>
+
+<div class="player-label player-left">Jogador: Marcelinho</div>
+<div class="score-label" id="player1Score">0</div>
+    
+<div class="player-label player-right">Jogador: Visitante</div>
+<div class="score-label" id="player2Score">0</div>
+
+<div id="instructions-container" class="instructions-container">
+    <div class="instructions">
+        Use o toque para controlar Marcelinho no celular ou o mouse no PC.<br>
+        O primeiro a marcar 5 pontos vence!<br><br>
+    </div><br><br>
+    <button class="button" onclick="startGame()">Jogar</button>
+</div>
+
+<canvas id="pongCanvas"></canvas>
+<img src="play1.png" id="player1" class="player">
+<img src="player2.png" id="player2" class="player">
+<img src="ball.png" id="ball">
+
+<div id="winner-message">
+    <p id="winner-text"></p>
+    <button onclick="restartGame()" class="button">Reiniciar</button>
+</div>
+
+<div class="footer">Marcelinho Games - PongPlay.io</div>
+
+<script>
+    function startGame() {
+        document.getElementById('instructions-container').style.display = 'none';
+        alert('Jogo iniciado!');
+    }
+</script>
+
+</body>
+</html>
