@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Laser Duel --|</title>
+    <title>|-- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
     
@@ -146,9 +146,9 @@
 <div id="instructions-container" class="instructions-container">
     <div class="instructions">
         Use the touch to control Sherk on mobile or mouse on PC.<br>
-        First to 0 points loses!<br><br>
+        First to Die loses!<br><br>
     </div><br><br>
-    <button class="button">Play</button>
+    <button class="button" id="playButton">Play</button>
 </div>
 
 <canvas id="gameCanvas"></canvas>
@@ -169,8 +169,9 @@
 <audio id="pointSound" src="point.MP3" preload="auto"></audio>
 
 <script>
+    // Define tudo após o carregamento da página
     document.addEventListener("DOMContentLoaded", function() {
-        const playButton = document.querySelector(".button");
+        const playButton = document.getElementById("playButton");
 
         // Adiciona o evento de clique ao botão "Play"
         playButton.addEventListener("click", startGame);
