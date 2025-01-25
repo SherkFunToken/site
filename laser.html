@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Laser Duel --|</title>
+    <title>|-- Sherk Laser Duel --|</title>
 
     <style>
         body {
@@ -12,7 +12,6 @@
             background: black;
             overflow: hidden;
             font-family: monospace;
-            text-align: center;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -27,7 +26,6 @@
         .player {
             position: absolute;
             height: 150px;
-            width: auto;
         }
 
         #sherk {
@@ -38,29 +36,19 @@
             right: 20px;
         }
 
-        .glow-text {
-            font-size: 4vw;
-            color: #00ff00;
-            text-shadow: 0 0 20px #00ff00, 0 0 40px #0077ff;
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
         .health-bar {
             position: absolute;
             height: 20px;
             width: 200px;
-            top: 40px;
             background: blue;
+            top: 40px;
             border-radius: 5px;
             transition: width 0.5s;
         }
 
         .health-bar.red {
             background: red;
-            box-shadow: 0 0 15px 5px red;
+            box-shadow: 0 0 15px red;
         }
 
         #sherkHealth {
@@ -70,145 +58,49 @@
         #bonkHealth {
             right: 60px;
         }
-
-        .button {
-            padding: 15px 30px;
-            font-size: 2vw;
-            color: #fff;
-            background: linear-gradient(90deg, #00f0ff, #ff0000);
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 0 20px #00f0ff;
-        }
-
-        #winner-message {
-            font-size: 3vw;
-            color: #00ff00;
-            text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000;
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
     </style>
 </head>
 <body>
 
-<div class="glow-text">Sherk Laser Duel</div>
-
 <div id="sherkHealth" class="health-bar"></div>
 <div id="bonkHealth" class="health-bar"></div>
-
-<button class="button" id="playButton">Play</button>
 
 <canvas id="gameCanvas"></canvas>
 <img src="Sherk.png" id="sherk" class="player">
 <img src="Bonk.png" id="bonk" class="player">
 
-<div id="winner-message">
-    <p id="winner-text"></p>
-    <button onclick="restartGame()" class="button">Restart</button>
-</div>
+<audio id="hitSound" src="hit_sound.mp3" preload="auto"></audio>
 
 <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
-
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
     const playerHeight = 150;
     let sherkY = canvas.height / 2 - playerHeight / 2;
     let bonkY = canvas.height / 2 - playerHeight / 2;
-    let bonkDirection = 1;
-    let gameRunning = false;
+    let bonkSpeed = 4;
+    let gameRunning = true;
 
-    let laserX = -1;
-    let laserY = -1;
-    let laserActive = false;
+    let laserX = -1, laserY = -1, laserActive = false;
+    let bonkLaserX = -1, bonkLaserY = -1, bonkLaserActive = false;
 
-    let bonkLaserX = -1;
-    let bonkLaserY = -1;
-    let bonkLaserActive = false;
+    let sherkScore = 5, bonkScore = 5;
+    const hitSound = document.getElementById("hitSound");
 
     const barriers = [];
 
-    function startGame() {
-        document.getElementById("playButton").style.display = "none";
-        gameRunning = true;
-        shootBonkLaserInterval();
-        generateBarriers();
-        gameLoop();
-    }
-
-    document.getElementById("playButton").addEventListener("click", startGame);
-
-    document.addEventListener("mousemove", (event) => {
-        if (gameRunning) {
-            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, event.clientY - playerHeight / 2));
-        }
-    });
-
-    document.addEventListener("click", () => {
-        if (gameRunning && !laserActive) {
-            laserX = 100;
-            laserY = sherkY + playerHeight / 2 - 2;
-            laserActive = true;
-        }
-    });
-
-    function updateLaser() {
-        if (laserActive) {
-            laserX += 10;
-            ctx.fillStyle = "#00f0ff";
-            ctx.fillRect(laserX, laserY, 10, 5);
-            if (laserX > canvas.width) laserActive = false;
-        }
-    }
-
-    function shootBonkLaser() {
-        if (!bonkLaserActive) {
-            bonkLaserX = canvas.width - 120;
-            bonkLaserY = bonkY + playerHeight / 2 - 2;
-            bonkLaserActive = true;
-        }
-    }
-
-    function updateBonkLaser() {
-        if (bonkLaserActive) {
-            bonkLaserX -= 10;
-            ctx.fillStyle = "#ff0000";
-            ctx.fillRect(bonkLaserX, bonkLaserY, 10, 5);
-            if (bonkLaserX < 0) bonkLaserActive = false;
-        }
-    }
-
-    function shootBonkLaserInterval() {
-        setInterval(() => {
-            if (gameRunning) shootBonkLaser();
-        }, 500);
-    }
-
-    function moveBonk() {
-        bonkY += bonkDirection * 5;
-        if (bonkY <= 0 || bonkY >= canvas.height - playerHeight) {
-            bonkDirection *= -1;
-        }
-    }
-
+    // Gerar barreiras
     function generateBarriers() {
-        barriers.push({ x: canvas.width / 2 - 100, y: 0, speed: 3 });
-        barriers.push({ x: canvas.width / 2 - 50, y: 0, speed: 2 });
-        barriers.push({ x: canvas.width / 2, y: 0, speed: 4 });
-        barriers.push({ x: canvas.width / 2 + 50, y: 0, speed: 3 });
+        barriers.push({ x: canvas.width / 2 - 100, y: 200, width: 30, height: 200, speed: 3 });
+        barriers.push({ x: canvas.width / 2, y: 100, width: 30, height: 200, speed: 2 });
     }
 
     function drawBarriers() {
+        ctx.fillStyle = "red";
         barriers.forEach(barrier => {
-            ctx.fillStyle = '#ff0000';
-            ctx.fillRect(barrier.x, barrier.y, 30, 200);
+            ctx.fillRect(barrier.x, barrier.y, barrier.width, barrier.height);
         });
     }
 
@@ -221,6 +113,105 @@
         });
     }
 
+    document.addEventListener("mousemove", (event) => {
+        sherkY = Math.max(0, Math.min(canvas.height - playerHeight, event.clientY - playerHeight / 2));
+    });
+
+    document.addEventListener("click", () => {
+        if (!laserActive) {
+            laserX = 100;
+            laserY = sherkY + playerHeight / 2 - 2;
+            laserActive = true;
+        }
+    });
+
+    function updateLaser() {
+        if (laserActive) {
+            laserX += 10;
+            ctx.fillStyle = "#00f0ff";
+            ctx.fillRect(laserX, laserY, 10, 5);
+            
+            if (checkLaserBarrierCollision(laserX, laserY)) {
+                laserActive = false;
+            }
+            
+            if (laserX > canvas.width) laserActive = false;
+
+            if (laserX >= canvas.width - 120 && laserY > bonkY && laserY < bonkY + playerHeight) {
+                bonkScore--;
+                sherkScore++;
+                hitSound.play();
+                updateHealthBars();
+                laserActive = false;
+            }
+        }
+    }
+
+    function updateBonkLaser() {
+        if (bonkLaserActive) {
+            bonkLaserX -= 10;
+            ctx.fillStyle = "#ff0000";
+            ctx.fillRect(bonkLaserX, bonkLaserY, 10, 5);
+            
+            if (checkLaserBarrierCollision(bonkLaserX, bonkLaserY)) {
+                bonkLaserActive = false;
+            }
+            
+            if (bonkLaserX < 0) bonkLaserActive = false;
+
+            if (bonkLaserX <= 120 && bonkLaserY > sherkY && bonkLaserY < sherkY + playerHeight) {
+                sherkScore--;
+                bonkScore++;
+                hitSound.play();
+                updateHealthBars();
+                bonkLaserActive = false;
+            }
+        }
+    }
+
+    function checkLaserBarrierCollision(x, y) {
+        return barriers.some(barrier => 
+            x >= barrier.x && x <= barrier.x + barrier.width && 
+            y >= barrier.y && y <= barrier.y + barrier.height
+        );
+    }
+
+    function shootBonkLaser() {
+        if (!bonkLaserActive) {
+            bonkLaserX = canvas.width - 120;
+            bonkLaserY = bonkY + playerHeight / 2 - 2;
+            bonkLaserActive = true;
+        }
+    }
+
+    function shootBonkLaserInterval() {
+        setInterval(() => {
+            if (gameRunning) shootBonkLaser();
+        }, 700);
+    }
+
+    function moveBonk() {
+        if (Math.random() < 0.05) {
+            bonkSpeed = Math.random() * 4 + 2;  // Aleatoriza velocidade entre 2 e 6
+        }
+        
+        if (sherkY > bonkY + 20) {
+            bonkY += bonkSpeed;
+        } else if (sherkY < bonkY - 20) {
+            bonkY -= bonkSpeed;
+        }
+        
+        bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
+    }
+
+    function updateHealthBars() {
+        document.getElementById("sherkHealth").style.width = (sherkScore / 5) * 200 + "px";
+        document.getElementById("bonkHealth").style.width = (bonkScore / 5) * 200 + "px";
+
+        if (sherkScore <= 2) document.getElementById("sherkHealth").classList.add("red");
+        if (bonkScore <= 2) document.getElementById("bonkHealth").classList.add("red");
+    }
+
     function gameLoop() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         document.getElementById("sherk").style.top = `${sherkY}px`;
@@ -230,12 +221,13 @@
         moveBonk();
         drawBarriers();
         moveBarriers();
+
         if (gameRunning) requestAnimationFrame(gameLoop);
     }
 
-    function restartGame() {
-        location.reload();
-    }
+    generateBarriers();
+    shootBonkLaserInterval();
+    gameLoop();
 </script>
 
 </body>
