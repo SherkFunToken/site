@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Laser Duel --|</title>
+    <title>|-- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
 
@@ -211,6 +211,7 @@
         bgMusic.play();
         gameLoop();
         shootBonkLaserInterval();  // Começar a atirar lasers a intervalos
+        generateBarriers();  // Gerar as barreiras
     }
 
     function drawScore() {
@@ -312,12 +313,11 @@
     }
 
     function shootBonkLaserInterval() {
-        // Atraso aleatório entre 0.1 e 0.3 segundos para o disparo de Pepe
         setInterval(() => {
             if (gameRunning) {
                 shootBonkLaser();
             }
-        }, Math.random() * 200 + 100); // Aleatório entre 100ms e 300ms
+        }, Math.random() * 200 + 100);  // Aleatório entre 100ms e 300ms
     }
 
     function movePlayers() {
@@ -327,17 +327,17 @@
 
     function moveBonk() {
         // Movimento constante de Pepe para cima/baixo
-        const moveSpeed = 5;
-        bonkY += (Math.random() - 0.5) * moveSpeed;  // Movimento aleatório para simular o comportamento humano
+        const moveSpeed = 10;
+        bonkY += (Math.random() - 0.5) * moveSpeed;  // Movimento mais rápido e aleatório para simular o comportamento humano
 
         bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
 
     function generateBarriers() {
-        // Definir posições mais próximas das barreiras
+        // Gerar barreiras mais próximas entre si
         barriers.push({ x: canvas.width / 3, y: 0, color: '#ff0000' });
-        barriers.push({ x: canvas.width / 3 + 50, y: 0, color: '#00ff00' });
-        barriers.push({ x: canvas.width / 3 + 100, y: 0, color: '#0000ff' });
+        barriers.push({ x: canvas.width / 3 + 35, y: 0, color: '#00ff00' });
+        barriers.push({ x: canvas.width / 3 + 70, y: 0, color: '#0000ff' });
     }
 
     let barriers = [];
@@ -351,18 +351,18 @@
 
     function moveBarriers() {
         barriers.forEach((barrier, index) => {
-            barrier.y += 2;
-            if (barrier.y > canvas.height) barrier.y = 0;
+            barrier.y += 2;  // Velocidade das barreiras
+            if (barrier.y > canvas.height) barrier.y = 0;  // Se sair da tela, volta para o topo
         });
     }
 
     function gameLoop() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         movePlayers();
-        moveBarriers();
-        drawBarriers();
         updateLaser();
         moveBonk();
+        drawBarriers();
+        moveBarriers();
         checkLaserCollision();
 
         if (gameRunning) requestAnimationFrame(gameLoop);
