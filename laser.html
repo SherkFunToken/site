@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Laser Duel --|</title>
-    By: @Marcelo_VP
-    https://token4fun.github.io/crypto/
-
+    <title>|-- Sherk Laser Duel --|</title>
     <style>
         body {
             margin: 0;
@@ -21,25 +18,16 @@
             height: 100vh;
             flex-direction: column;
         }
-
         canvas {
             display: block;
         }
-
         .player {
             position: absolute;
             height: 150px;
             width: auto;
         }
-
-        #sherk {
-            left: 20px;
-        }
-
-        #bonk {
-            right: 20px;
-        }
-
+        #sherk { left: 20px; }
+        #bonk { right: 20px; }
         .glow-text {
             font-size: 4vw;
             color: #00ff00;
@@ -49,24 +37,6 @@
             left: 50%;
             transform: translateX(-50%);
         }
-
-        .player-label {
-            position: absolute;
-            font-size: 2vw;
-            color: #00ff00;
-            text-shadow: 0 0 10px #00ff00;
-        }
-
-        .player-left {
-            top: 5px;
-            left: 60px;
-        }
-
-        .player-right {
-            top: 5px;
-            right: 60px;
-        }
-
         .health-bar {
             position: absolute;
             height: 20px;
@@ -76,36 +46,21 @@
             border-radius: 5px;
             transition: width 0.5s;
         }
-
-        .health-bar.red {
-            background: red;
-            box-shadow: 0 0 15px 5px red;
-        }
-
-        #sherkHealth {
-            left: 60px;
-        }
-
-        #bonkHealth {
-            right: 60px;
-        }
+        .health-bar.red { background: red; box-shadow: 0 0 15px 5px red; }
+        #sherkHealth { left: 60px; }
+        #bonkHealth { right: 60px; }
     </style>
 </head>
 <body>
 
 <div class="glow-text">Sherk Laser Duel</div>
-
-<div class="player-label player-left">Player: Sherk</div>
 <div id="sherkHealth" class="health-bar"></div>
-
-<div class="player-label player-right">Player: Pepe</div>
 <div id="bonkHealth" class="health-bar"></div>
 
 <canvas id="gameCanvas"></canvas>
 <img src="Sherk.png" id="sherk" class="player">
 <img src="Bonk.png" id="bonk" class="player">
 
-<!-- Sons -->
 <audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
 <audio id="bgMusic" src="bg_music.MP3" loop="true" preload="auto"></audio>
 <audio id="victorySound" src="victory_sound.MP3" preload="auto"></audio>
@@ -121,9 +76,7 @@
     let bonkY = canvas.height / 2 - 75;
     let gameRunning = false;
     let lasers = [];
-    let bonkLaserActive = false;
     let barriers = [];
-
     let sherkHealth = 5;
     let bonkHealth = 5;
 
@@ -163,11 +116,7 @@
     }
 
     function shootBonkLaser() {
-        if (!bonkLaserActive) {
-            lasers.push({ x: canvas.width - 120, y: bonkY + 75, speed: -10, color: '#ff0000', shooter: 'bonk' });
-            bonkLaserActive = true;
-            setTimeout(() => (bonkLaserActive = false), 700);
-        }
+        lasers.push({ x: canvas.width - 120, y: bonkY + 75, speed: -10, color: '#ff0000', shooter: 'bonk' });
     }
 
     function shootBonkLaserInterval() {
@@ -180,8 +129,8 @@
 
     function generateBarriers() {
         barriers = [
-            { x: canvas.width / 2 - 100, y: Math.random() * (canvas.height - 160), color: '#ff0000', speed: 2 + Math.random() * 2 },
-            { x: canvas.width / 2 - 50, y: Math.random() * (canvas.height - 140), color: '#00ff00', speed: 3 + Math.random() * 2 },
+            { x: canvas.width / 2 - 100, y: Math.random() * (canvas.height - 160), color: '#ff0000', speed: 2 },
+            { x: canvas.width / 2 - 50, y: Math.random() * (canvas.height - 140), color: '#00ff00', speed: 3 },
         ];
     }
 
@@ -205,12 +154,10 @@
     function drawLasers() {
         lasers.forEach((laser, index) => {
             laser.x += laser.speed;
-
-            if (checkCollisionWithBarriers(laser)) {
+            if (checkCollisionWithBarriers(laser) || checkCollisionWithPlayers(laser)) {
                 lasers.splice(index, 1);
                 hitSound.play();
             }
-
             ctx.fillStyle = laser.color;
             ctx.fillRect(laser.x, laser.y, 10, 5);
         });
@@ -222,6 +169,40 @@
             return laser.x >= barrier.x && laser.x <= barrier.x + 30 &&
                    laser.y >= barrier.y && laser.y <= barrier.y + height;
         });
+    }
+
+    function checkCollisionWithPlayers(laser) {
+        if (laser.shooter === "sherk" && laser.x >= canvas.width - 120 && laser.y > bonkY && laser.y < bonkY + 150) {
+            bonkHealth--;
+            updateHealthBars();
+            checkWinCondition();
+            return true;
+        }
+        if (laser.shooter === "bonk" && laser.x <= 120 && laser.y > sherkY && laser.y < sherkY + 150) {
+            sherkHealth--;
+            updateHealthBars();
+            checkWinCondition();
+            return true;
+        }
+        return false;
+    }
+
+    function updateHealthBars() {
+        document.getElementById("sherkHealth").style.width = (sherkHealth / 5) * 200 + "px";
+        document.getElementById("bonkHealth").style.width = (bonkHealth / 5) * 200 + "px";
+    }
+
+    function checkWinCondition() {
+        if (sherkHealth <= 0) {
+            gameRunning = false;
+            victorySound.play();
+            alert("Pepe Wins!");
+        }
+        if (bonkHealth <= 0) {
+            gameRunning = false;
+            victorySound.play();
+            alert("Sherk Wins!");
+        }
     }
 
     function gameLoop() {
