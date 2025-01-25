@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Laser Duel --|</title>
+    <title>|- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
-    
+
     <style>
         body {
             margin: 0;
@@ -169,11 +169,9 @@
 <audio id="pointSound" src="point.MP3" preload="auto"></audio>
 
 <script>
-    // Define tudo após o carregamento da página
     document.addEventListener("DOMContentLoaded", function() {
         const playButton = document.getElementById("playButton");
 
-        // Adiciona o evento de clique ao botão "Play"
         playButton.addEventListener("click", startGame);
     });
 
@@ -191,19 +189,16 @@
     let rightScore = 5;
     let gameRunning = false;
 
-    // Laser Variables
     let laserX = -1;
     let laserY = -1;
     let laserActive = false;
     const laserWidth = 10;
     const laserHeight = 5;
 
-    // Opponent Shooting
     let bonkLaserX = -1;
     let bonkLaserY = -1;
     let bonkLaserActive = false;
 
-    // Barrier Variables
     const barriers = [];
     const barrierHeight = 200;
     const barrierWidth = 30;
@@ -214,7 +209,6 @@
         { y: 0, speed: barrierSpeed[2] }
     ];
 
-    // Sounds
     const hitSound = document.getElementById("hitSound");
     const bgMusic = document.getElementById("bgMusic");
     const victorySound = document.getElementById("victorySound");
@@ -222,23 +216,20 @@
 
     bgMusic.volume = 0.3;
 
-    // Start Game
     function startGame() {
         document.getElementById("instructions-container").style.display = "none";
         gameRunning = true;
         bgMusic.play();
-        generateBarriers(); // Generate initial barriers
+        generateBarriers();
         gameLoop();
     }
 
-    // Generate Barriers
     function generateBarriers() {
         barriers.push({ x: canvas.width / 4, y: 0, color: '#ff0000' });
         barriers.push({ x: canvas.width / 2, y: 0, color: '#00ff00' });
         barriers.push({ x: (canvas.width * 3) / 4, y: 0, color: '#0000ff' });
     }
 
-    // Draw Barriers
     function drawBarriers() {
         barriers.forEach((barrier, index) => {
             ctx.fillStyle = barrier.color;
@@ -246,18 +237,15 @@
         });
     }
 
-    // Move Barriers
     function moveBarriers() {
         barrierPositions.forEach((barrier, index) => {
             barrier.y += barrier.speed;
-
             if (barrier.y <= 0 || barrier.y + barrierHeight >= canvas.height) {
-                barrier.speed = -barrier.speed; // Reverse direction of barrier
+                barrier.speed = -barrier.speed;
             }
         });
     }
 
-    // Update Health Bars
     function drawScore() {
         updateHealthBar("sherkHealth", leftScore);
         updateHealthBar("bonkHealth", rightScore);
@@ -267,7 +255,6 @@
         const healthBar = document.getElementById(healthBarId);
         const maxHealth = 5;
         const healthWidth = (score / maxHealth) * 200;
-
         healthBar.style.width = healthWidth + 'px';
 
         if (score <= maxHealth / 2) {
@@ -277,7 +264,6 @@
         }
     }
 
-    // Handle Laser Shooting
     document.addEventListener("mousemove", (event) => {
         if (gameRunning) {
             sherkY = event.clientY - playerHeight / 2;
@@ -293,16 +279,15 @@
         }
     });
 
-    // Update Laser Position
     function updateLaser() {
         if (laserActive) {
-            laserX += 10; // Laser Speed
-            ctx.fillStyle = "#00f0ff"; // Laser Color
+            laserX += 10;
+            ctx.fillStyle = "#00f0ff";
             ctx.fillRect(laserX, laserY, laserWidth, laserHeight);
 
             barriers.forEach(barrier => {
                 if (laserX + laserWidth >= barrier.x && laserX <= barrier.x + barrierWidth && laserY + laserHeight >= barrier.y && laserY <= barrier.y + barrierHeight) {
-                    laserActive = false; // Laser disappears if hitting barrier
+                    laserActive = false;
                 }
             });
 
@@ -312,7 +297,6 @@
         }
     }
 
-    // Check Laser Collision with Opponent
     function checkLaserCollision() {
         if (laserActive && laserX > canvas.width - 120 && laserX < canvas.width - 100) {
             if (laserY > bonkY && laserY < bonkY + playerHeight) {
@@ -331,38 +315,27 @@
         }
     }
 
-    // Laser Variables for Pepe
-    let bonkLaserX = -1;
-    let bonkLaserY = -1;
-    let bonkLaserActive = false;
-
-    // Função para disparar o laser de Pepe
     function shootBonkLaser() {
         if (gameRunning && !bonkLaserActive) {
-            // Define the laser's starting position (on the right side of the canvas, near Pepe)
-            bonkLaserX = canvas.width - 120; // A posição inicial do laser (um pouco à esquerda de Pepe)
-            bonkLaserY = bonkY + playerHeight / 2 - laserHeight / 2; // Define a altura para que o laser saia do centro do corpo de Pepe
-            bonkLaserActive = true; // O laser é ativado
+            bonkLaserX = canvas.width - 120;
+            bonkLaserY = bonkY + playerHeight / 2 - laserHeight / 2;
+            bonkLaserActive = true;
         }
     }
 
-    // Atualizar posição do laser de Pepe
     function updateBonkLaser() {
         if (bonkLaserActive) {
-            bonkLaserX -= 10; // Velocidade do laser (move para a esquerda)
-
-            // Desenha o laser de Pepe
-            ctx.fillStyle = "#ff0000"; // Cor do laser de Pepe (vermelho)
+            bonkLaserX -= 10;
+            ctx.fillStyle = "#ff0000";
             ctx.fillRect(bonkLaserX, bonkLaserY, laserWidth, laserHeight);
 
-            // Verifica se o laser de Pepe atingiu Sherk
             if (bonkLaserX <= 120 && bonkLaserX >= 100) {
                 if (bonkLaserY >= sherkY && bonkLaserY <= sherkY + playerHeight) {
-                    leftScore--; // Sherk perdeu vida
-                    rightScore++; // Pepe marcou um ponto
+                    leftScore--;
+                    rightScore++;
                     hitSound.play();
-                    drawScore(); // Atualiza a pontuação
-                    bonkLaserActive = false; // Desativa o laser
+                    drawScore();
+                    bonkLaserActive = false;
                     if (leftScore === 0) {
                         showWinner("Pepe Wins!");
                         victorySound.play();
@@ -371,25 +344,21 @@
                 }
             }
 
-            // Se o laser sair da tela, desativa
             if (bonkLaserX < 0) {
                 bonkLaserActive = false;
             }
         }
     }
 
-    // Disparar laser de Pepe em intervalos aleatórios
     function shootBonkLaserInterval() {
-        setInterval(shootBonkLaser, Math.random() * 2000 + 500); // Dispara aleatoriamente a cada 500ms até 2 segundos
+        setInterval(shootBonkLaser, Math.random() * 2000 + 500);
     }
 
-    // Move Players
     function movePlayers() {
         document.getElementById("sherk").style.top = `${sherkY}px`;
         document.getElementById("bonk").style.top = `${bonkY}px`;
     }
 
-    // Move Opponent AI (Fugindo do Laser e atirando)
     function moveBonk() {
         if (Math.random() < 0.30) {
             bonkY += Math.random() * 20 - 10;
@@ -403,7 +372,6 @@
         bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
 
-    // Game Loop
     function gameLoop() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         movePlayers();
@@ -416,14 +384,12 @@
         if (gameRunning) requestAnimationFrame(gameLoop);
     }
 
-    // Show Winner
     function showWinner(winnerMessage) {
         gameRunning = false;
         document.getElementById("winner-text").innerText = winnerMessage;
         document.getElementById("winner-message").style.display = "block";
     }
 
-    // Restart Game
     function restartGame() {
         location.reload();
     }
