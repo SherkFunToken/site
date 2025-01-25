@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Laser Duel --|</title>
+    <title>|-- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
 
@@ -314,7 +314,12 @@
     }
 
     function shootBonkLaserInterval() {
-        setInterval(shootBonkLaser, 800); // Dispara lasers de Pepe com intervalos fixos
+        // Atraso aleatório entre 0.1 e 0.3 segundos para o disparo de Pepe
+        setInterval(() => {
+            if (gameRunning) {
+                shootBonkLaser();
+            }
+        }, Math.random() * 200 + 100); // Aleatório entre 100ms e 300ms
     }
 
     function movePlayers() {
@@ -323,9 +328,9 @@
     }
 
     function moveBonk() {
-        // Movimento constante de Pepe
-        const speed = 5;
-        bonkY += Math.random() * speed - (speed / 2); // Aleatório com velocidade constante para simular movimento humano
+        // Movimento constante de Pepe para cima/baixo
+        const moveSpeed = 5;
+        bonkY += (Math.random() - 0.5) * moveSpeed;  // Movimento aleatório para simular o comportamento humano
 
         bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
