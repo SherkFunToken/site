@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Laser Duel --|</title>
+    <title>|-- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
     
@@ -63,7 +63,7 @@
             color: #00ff00;
             text-shadow: 0 0 10px #00ff00;
             font-weight: bold;
-            top: 30px;
+            top: 60px;  /* Ajustado para ficar acima da barra de vida */
         }
 
         #sherkScore {
@@ -223,10 +223,13 @@
 
     // Barrier Variables
     const barriers = [];
-    const barrierHeight = 200;
-    const barrierWidth = 30;
-    const barrierSpeed = 1.5; // Speed of barrier movement
-    let moveDirection = 1; // 1 for down, -1 for up
+    const barrierHeight = 30; // Ajuste para ser mais fino
+    const barrierWidth = 200; // Largura das barreiras
+    const barrierSpeed = [1.5, 2]; // Diferentes velocidades para as barreiras
+    let barrierPositions = [
+        { y: 0, speed: barrierSpeed[0] },
+        { y: 0, speed: barrierSpeed[1] }
+    ];
 
     // Sounds
     const hitSound = document.getElementById("hitSound");
@@ -247,39 +250,26 @@
 
     // Generate Barriers
     function generateBarriers() {
-        const barrierCount = 5; // Number of barriers
-        for (let i = 0; i < barrierCount; i++) {
-            const barrier = {
-                x: Math.random() * (canvas.width - barrierWidth - 100) + 100, // margin from players
-                y: Math.random() * (canvas.height - barrierHeight),
-                color: getRandomColor()
-            };
-            barriers.push(barrier);
-        }
-    }
-
-    // Get a random color for the barriers
-    function getRandomColor() {
-        const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
-        return colors[Math.floor(Math.random() * colors.length)];
+        // Barreiras mais centradas e afastadas dos jogadores
+        barriers.push({ x: canvas.width / 4, y: canvas.height / 3, color: '#ff0000' });
+        barriers.push({ x: (canvas.width * 3) / 4, y: canvas.height / 2, color: '#00ff00' });
     }
 
     // Draw Barriers
     function drawBarriers() {
-        barriers.forEach((barrier) => {
-            ctx.fillStyle = barrier.color; // Barrier color
-            ctx.fillRect(barrier.x, barrier.y, barrierWidth, barrierHeight);
+        barriers.forEach((barrier, index) => {
+            ctx.fillStyle = barrier.color;
+            ctx.fillRect(barrier.x, barrierPositions[index].y, barrierWidth, barrierHeight);
         });
     }
 
     // Move Barriers
     function moveBarriers() {
-        barriers.forEach((barrier) => {
-            barrier.y += barrierSpeed * moveDirection;
+        barrierPositions.forEach((barrier, index) => {
+            barrier.y += barrier.speed;
 
-            // Reverse direction when hitting top or bottom
             if (barrier.y <= 0 || barrier.y + barrierHeight >= canvas.height) {
-                moveDirection = -moveDirection;
+                barrier.speed = -barrier.speed; // Inverte a direção da barreira
             }
         });
     }
