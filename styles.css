@@ -160,6 +160,12 @@
     animation: shake 0.5s infinite; /* animação de balanço */
 }
 
+/* Efeito de hover que faz o botão aumentar */
+.button-highlightgame:hover {
+    transform: scale(1.1); /* aumenta o tamanho do botão em 10% */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.9); /* aumenta a sombra no hover */
+}
+
 /* Definindo a animação shake */
 @keyframes shake {
     0% { transform: rotate(0deg); }
@@ -169,7 +175,8 @@
     100% { transform: rotate(0deg); }
 }
 
-/* Teste da animação shake */
+
+/* Botão de compra */
 
         .button-highlight {
             display: inline-block;
