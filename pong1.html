@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Pong --|</title>
+    <title>|- Sherk Pong --|</title>
 
  By: @Marcelo_VP
  https://token4fun.github.io/crypto/
@@ -149,21 +149,16 @@
         }
 
         /* Volume control styles */
-        #volumeContainer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        #volumeControl {
             margin-top: 20px;
+            width: 300px;
+            height: 25px;
         }
 
         #volumeLabel {
             color: #fff;
             font-size: 1.5vw;
-            margin-right: 10px;
-        }
-
-        #volumeControl {
-            width: 200px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -206,10 +201,8 @@
 <audio id="pointSound" src="point.MP3" preload="auto"></audio>
 
 <!-- Volume Control -->
-<div id="volumeContainer">
-    <div id="volumeLabel">Volume (0-10):</div>
-    <input type="range" id="volumeControl" min="0" max="10" step="1" value="10" onchange="adjustVolume()">
-</div>
+<div id="volumeLabel">Volume (0-10):</div>
+<input type="range" id="volumeControl" min="0" max="10" step="1" value="10" onchange="adjustVolume()">
 
 <script>
     const canvas = document.getElementById("pongCanvas");
@@ -227,6 +220,7 @@
     const pointSound = document.getElementById("pointSound");
 
     // Começar a música de fundo quando a página carrega
+    // Agora a música vai tocar quando o botão "Play" for pressionado
     function startGame() {
         document.getElementById("instructions-container").style.display = "none";
         gameRunning = true;
@@ -237,7 +231,7 @@
     // Ajustar o volume da música de fundo
     function adjustVolume() {
         const volume = document.getElementById("volumeControl").value / 10;  // Convertendo para um valor entre 0 e 1
-        bgMusic.volume = volume;  // Ajustando o volume do áudio
+        bgMusic.volume = volume;
     }
 
     // Velocidade inicial mais lenta
@@ -284,7 +278,7 @@
         ballX += ballSpeedX;
         ballY += ballSpeedY;
         ballAngle += 5;  // Incrementa o ângulo da bola para rotação
-        ball.style.transform = `rotate(${ballAngle}deg)`;
+        ball.style.transform = rotate(${ballAngle}deg);
 
         // Rebater na parede superior e inferior
         if (ballY <= 0 || ballY + ball.height >= canvas.height) {
@@ -341,10 +335,10 @@
     }
 
     function movePlayers() {
-        document.getElementById("sherk").style.top = `${sherkY}px`;
-        document.getElementById("bonk").style.top = `${bonkY}px`;
-        ball.style.left = `${ballX}px`;
-        ball.style.top = `${ballY}px`;
+        document.getElementById("sherk").style.top = ${sherkY}px;
+        document.getElementById("bonk").style.top = ${bonkY}px;
+        ball.style.left = ${ballX}px;
+        ball.style.top = ${ballY}px;
     }
 
     function increaseBallSpeed() {
