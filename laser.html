@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Laser Duel --|</title>
+    <title>|-- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
 
@@ -362,8 +362,11 @@
     }
 
     function moveBonk() {
-        const targetY = sherkY - bonkY; // Move towards Sherk's Y position
-        bonkY += targetY * 0.1; // Add some "lag" to mimic human movement
+        // Movimento aleatório da IA de Pepe
+        const moveSpeed = 5;
+        const randomMove = (Math.random() - 0.5) * moveSpeed; // Movimento aleatório leve
+
+        bonkY += randomMove; // Movimento suave para cima/baixo
         bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
 
