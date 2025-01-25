@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Laser Duel --|</title>
+    <title>|-- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
 
@@ -89,44 +89,6 @@
         #bonkHealth {
             right: 60px;
         }
-
-        .button {
-            padding: 15px 30px;
-            font-size: 2vw;
-            color: #fff;
-            background: linear-gradient(90deg, #00f0ff, #ff0000);
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 0 20px #00f0ff;
-        }
-
-        .instructions-container {
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: #fff;
-        }
-
-        .instructions {
-            font-size: 2vw;
-            margin-bottom: 20px;
-        }
-
-        #winner-message {
-            font-size: 3vw;
-            color: #00ff00;
-            text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000;
-            white-space: pre-wrap;
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-        }
     </style>
 </head>
 <body>
@@ -139,24 +101,9 @@
 <div class="player-label player-right">Player: Pepe</div>
 <div id="bonkHealth" class="health-bar"></div>
 
-<div id="instructions-container" class="instructions-container">
-    <div class="instructions">
-        Use the touch to control Sherk on mobile or mouse on PC.<br>
-        First to Die loses!<br><br>
-    </div><br><br>
-    <button class="button" id="playButton">Play</button>
-</div>
-
 <canvas id="gameCanvas"></canvas>
 <img src="Sherk.png" id="sherk" class="player">
 <img src="Bonk.png" id="bonk" class="player">
-
-<div id="winner-message">
-    <p id="winner-text"></p>
-    <button onclick="restartGame()" class="button">Restart</button>
-</div>
-
-<div class="footer">Sherk Games - Sherkfun.io</div>
 
 <!-- Sons -->
 <audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
@@ -164,8 +111,6 @@
 <audio id="victorySound" src="victory_sound.MP3" preload="auto"></audio>
 
 <script>
-    document.getElementById("playButton").addEventListener("click", startGame);
-
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
 
@@ -174,45 +119,90 @@
 
     let sherkY = canvas.height / 2 - 75;
     let bonkY = canvas.height / 2 - 75;
+    let bonkDirection = 1;
     let gameRunning = false;
 
-    const bgMusic = document.getElementById("bgMusic");
+    let barriers = [];
+    const playerHeight = 150;
+
     const hitSound = document.getElementById("hitSound");
+    const bgMusic = document.getElementById("bgMusic");
     const victorySound = document.getElementById("victorySound");
 
+    bgMusic.volume = 0.3;
+
+    document.addEventListener("mousemove", (event) => {
+        sherkY = Math.max(0, Math.min(canvas.height - playerHeight, event.clientY - playerHeight / 2));
+    });
+
     function startGame() {
-        document.getElementById("instructions-container").style.display = "none";
-        bgMusic.play();
         gameRunning = true;
+        bgMusic.play();
+        generateBarriers();
+        shootBonkLaserInterval();
         gameLoop();
+    }
+
+    function moveBonk() {
+        if (Math.random() < 0.7) {
+            bonkY += sherkY > bonkY ? 3 : -3;
+        } else {
+            bonkY += (Math.random() - 0.5) * 10;
+        }
+        bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
+        document.getElementById("bonk").style.top = `${bonkY}px`;
+    }
+
+    function shootBonkLaser() {
+        if (!bonkLaserActive) {
+            bonkLaserX = canvas.width - 120;
+            bonkLaserY = bonkY + playerHeight / 2 - 2;
+            bonkLaserActive = true;
+        }
+    }
+
+    function shootBonkLaserInterval() {
+        setInterval(() => {
+            if (gameRunning && !bonkLaserActive) {
+                shootBonkLaser();
+            }
+        }, Math.random() * 400 + 300);
+    }
+
+    function generateBarriers() {
+        barriers = [
+            { x: canvas.width / 2 - 100, y: Math.random() * 100, color: '#ff0000', speed: 2 + Math.random() * 2 },
+            { x: canvas.width / 2 - 50, y: Math.random() * 200, color: '#00ff00', speed: 3 + Math.random() * 2 },
+            { x: canvas.width / 2, y: Math.random() * 300, color: '#0000ff', speed: 1 + Math.random() * 3 },
+            { x: canvas.width / 2 + 50, y: Math.random() * 400, color: '#ff00ff', speed: 2 + Math.random() * 2 },
+        ];
+    }
+
+    function moveBarriers() {
+        barriers.forEach((barrier) => {
+            barrier.y += barrier.speed;
+            if (barrier.y + 200 >= canvas.height || barrier.y <= 0) {
+                barrier.speed *= -1;
+            }
+        });
+    }
+
+    function drawBarriers() {
+        barriers.forEach((barrier) => {
+            ctx.fillStyle = barrier.color;
+            ctx.fillRect(barrier.x, barrier.y, 30, 200);
+        });
     }
 
     function gameLoop() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         moveBonk();
+        moveBarriers();
+        drawBarriers();
         if (gameRunning) requestAnimationFrame(gameLoop);
     }
 
-    function moveBonk() {
-        const chance = Math.random();
-        if (chance < 0.7) {
-            bonkY += sherkY > bonkY ? 3 : -3;
-        } else {
-            bonkY += (Math.random() - 0.5) * 10;
-        }
-        document.getElementById("bonk").style.top = `${bonkY}px`;
-    }
-
-    function showWinner(message) {
-        document.getElementById("winner-text").innerText = message;
-        document.getElementById("winner-message").style.display = "block";
-        gameRunning = false;
-        victorySound.play();
-    }
-
-    function restartGame() {
-        location.reload();
-    }
+    startGame();
 </script>
 
 </body>
