@@ -124,6 +124,9 @@
     let bonkLaserActive = false;
     let barriers = [];
 
+    let sherkHealth = 5;
+    let bonkHealth = 5;
+
     const hitSound = document.getElementById("hitSound");
     const bgMusic = document.getElementById("bgMusic");
     const victorySound = document.getElementById("victorySound");
@@ -137,7 +140,7 @@
 
     document.addEventListener("click", () => {
         if (gameRunning) {
-            lasers.push({ x: 100, y: sherkY + 75, speed: 10, color: '#00ff00' });
+            lasers.push({ x: 100, y: sherkY + 75, speed: 10, color: '#00ff00', shooter: 'sherk' });
         }
     });
 
@@ -161,7 +164,7 @@
 
     function shootBonkLaser() {
         if (!bonkLaserActive) {
-            lasers.push({ x: canvas.width - 120, y: bonkY + 75, speed: -10, color: '#ff0000' });
+            lasers.push({ x: canvas.width - 120, y: bonkY + 75, speed: -10, color: '#ff0000', shooter: 'bonk' });
             bonkLaserActive = true;
             setTimeout(() => (bonkLaserActive = false), 700);
         }
@@ -208,6 +211,21 @@
                 hitSound.play();
             }
 
+            // Verifica colisão com os jogadores
+            if (checkCollisionWithPlayers(laser)) {
+                lasers.splice(index, 1);
+                hitSound.play();
+                if (laser.shooter === "sherk") {
+                    bonkHealth--;
+                    sherkHealth++;
+                } else {
+                    sherkHealth--;
+                    bonkHealth++;
+                }
+                updateHealthBars();
+                checkWinCondition();
+            }
+
             ctx.fillStyle = laser.color;
             ctx.fillRect(laser.x, laser.y, 10, 5);
         });
@@ -218,6 +236,33 @@
             laser.x >= barrier.x && laser.x <= barrier.x + 30 &&
             laser.y >= barrier.y && laser.y <= barrier.y + 200
         );
+    }
+
+    function checkCollisionWithPlayers(laser) {
+        const sherkHit = laser.x > 20 && laser.x < 100 && laser.y > sherkY && laser.y < sherkY + 150;
+        const bonkHit = laser.x < canvas.width - 20 && laser.x > canvas.width - 100 && laser.y > bonkY && laser.y < bonkY + 150;
+        return sherkHit || bonkHit;
+    }
+
+    function updateHealthBars() {
+        document.getElementById("sherkHealth").style.width = (sherkHealth / 5) * 200 + "px";
+        document.getElementById("bonkHealth").style.width = (bonkHealth / 5) * 200 + "px";
+
+        if (sherkHealth <= 2) document.getElementById("sherkHealth").classList.add("red");
+        if (bonkHealth <= 2) document.getElementById("bonkHealth").classList.add("red");
+    }
+
+    function checkWinCondition() {
+        if (sherkHealth <= 0) {
+            gameRunning = false;
+            victorySound.play();
+            alert("Pepe Wins!");
+        }
+        if (bonkHealth <= 0) {
+            gameRunning = false;
+            victorySound.play();
+            alert("Sherk Wins!");
+        }
     }
 
     function gameLoop() {
