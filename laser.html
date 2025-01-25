@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Laser Duel --|</title>
+    <title>|- Sherk Laser Duel --|</title>
     By: @Marcelo_VP
     https://token4fun.github.io/crypto/
 
@@ -169,6 +169,7 @@
 <audio id="pointSound" src="point.MP3" preload="auto"></audio>
 
 <script>
+    // Definir tudo após o carregamento da página
     document.addEventListener("DOMContentLoaded", function() {
         const playButton = document.getElementById("playButton");
 
@@ -222,6 +223,7 @@
         bgMusic.play();
         generateBarriers();
         gameLoop();
+        shootBonkLaserInterval();  // Começar a atirar lasers a intervalos
     }
 
     function generateBarriers() {
@@ -360,15 +362,8 @@
     }
 
     function moveBonk() {
-        if (Math.random() < 0.30) {
-            bonkY += Math.random() * 20 - 10;
-        }
-
-        if (Math.random() < 0.05) {
-            bonkLaserX = canvas.width - 100;
-            bonkLaserY = bonkY + playerHeight / 2 - laserHeight / 2;
-        }
-
+        const targetY = sherkY - bonkY; // Move towards Sherk's Y position
+        bonkY += targetY * 0.1; // Add some "lag" to mimic human movement
         bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
 
