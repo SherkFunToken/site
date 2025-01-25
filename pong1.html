@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Pong --|</title>
+    <title>|-- Sherk Pong --|</title>
 
  By: @Marcelo_VP
  https://token4fun.github.io/crypto/
@@ -231,6 +231,18 @@
     function drawScore() {
         document.getElementById("sherkScore").innerText = leftScore;
         document.getElementById("bonkScore").innerText = rightScore;
+
+        // Alterar cor do placar
+        if (leftScore > rightScore) {
+            document.getElementById("sherkScore").style.color = "blue";
+            document.getElementById("bonkScore").style.color = "red";
+        } else if (rightScore > leftScore) {
+            document.getElementById("bonkScore").style.color = "blue";
+            document.getElementById("sherkScore").style.color = "red";
+        } else {
+            document.getElementById("sherkScore").style.color = "#00ff00";
+            document.getElementById("bonkScore").style.color = "#00ff00";
+        }
     }
 
     function updateBall() {
