@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Pong --|</title>
+    <title>|- Sherk Pong --|</title>
 
  By: @Marcelo_VP
  https://token4fun.github.io/crypto/
@@ -203,7 +203,13 @@
     const pointSound = document.getElementById("pointSound");
 
     // Começar a música de fundo quando a página carrega
-    bgMusic.play();
+    // Agora a música vai tocar quando o botão "Play" for pressionado
+    function startGame() {
+        document.getElementById("instructions-container").style.display = "none";
+        gameRunning = true;
+        bgMusic.play();  // Play music on game start
+        gameLoop();
+    }
 
     // Velocidade inicial mais lenta
     const initialSpeedX = 2; 
@@ -342,12 +348,6 @@
     function gameLoop() {
         updateBall();
         if (gameRunning) requestAnimationFrame(gameLoop);
-    }
-
-    function startGame() {
-        document.getElementById("instructions-container").style.display = "none";
-        gameRunning = true;
-        gameLoop();
     }
 </script>
 
