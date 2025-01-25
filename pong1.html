@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Pong --|</title>
+    <title>|- Sherk Pong --|</title>
 
  By: @Marcelo_VP
  https://token4fun.github.io/crypto/
@@ -285,6 +285,7 @@
             pointSound.play(); // Som de ponto
             if (rightScore === 5) {
                 showWinner("Pepe Wins!");
+                bgMusic.pause(); // Para a música de fundo quando alguém vence
                 victorySound.play(); // Som de vitória
                 return;
             }
@@ -297,6 +298,7 @@
             pointSound.play(); // Som de ponto
             if (leftScore === 5) {
                 showWinner("Sherk Wins!");
+                bgMusic.pause(); // Para a música de fundo quando alguém vence
                 victorySound.play(); // Som de vitória
                 return;
             }
