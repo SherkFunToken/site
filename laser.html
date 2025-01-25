@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Laser Duel --|</title>
+    <title>|- Sherk Laser Duel --|</title>
     <style>
         body {
             margin: 0;
@@ -129,15 +129,15 @@
 
     function generateBarriers() {
         barriers = [
-            { x: canvas.width / 2 - 100, y: Math.random() * (canvas.height - 160), color: '#ff0000', speed: 2 },
-            { x: canvas.width / 2 - 50, y: Math.random() * (canvas.height - 140), color: '#00ff00', speed: 3 },
+            { x: canvas.width / 2 - 100, y: Math.random() * (canvas.height - 128), color: '#ff0000', speed: 2 },
+            { x: canvas.width / 2 - 50, y: Math.random() * (canvas.height - 112), color: '#00ff00', speed: 3 },
         ];
     }
 
     function moveBarriers() {
         barriers.forEach((barrier) => {
             barrier.y += barrier.speed;
-            if (barrier.y + (barrier.color === '#ff0000' ? 160 : 140) >= canvas.height || barrier.y <= 0) {
+            if (barrier.y + (barrier.color === '#ff0000' ? 128 : 112) >= canvas.height || barrier.y <= 0) {
                 barrier.speed *= -1;
             }
         });
@@ -146,7 +146,7 @@
     function drawBarriers() {
         barriers.forEach((barrier) => {
             ctx.fillStyle = barrier.color;
-            let height = barrier.color === '#ff0000' ? 160 : 140;
+            let height = barrier.color === '#ff0000' ? 128 : 112;
             ctx.fillRect(barrier.x, barrier.y, 30, height);
         });
     }
@@ -165,7 +165,7 @@
 
     function checkCollisionWithBarriers(laser) {
         return barriers.some(barrier => {
-            let height = barrier.color === '#ff0000' ? 160 : 140;
+            let height = barrier.color === '#ff0000' ? 128 : 112;
             return laser.x >= barrier.x && laser.x <= barrier.x + 30 &&
                    laser.y >= barrier.y && laser.y <= barrier.y + height;
         });
