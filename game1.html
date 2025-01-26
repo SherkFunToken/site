@@ -93,44 +93,11 @@
     }
 
     /* Seções dos bots */
-.container {
-    max-width: 1200px;
-    margin: 30px auto;
-    padding: 10px;
-    position: relative; /* Adiciona posição relativa para conter os raios */
-    overflow: hidden;   /* Garante que os raios não saiam do contêiner */
-}
-
-.container::before, .container::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 150%;
-    height: 100%;
-    background: linear-gradient(45deg, rgba(255, 255, 255, 0) 10%, #00ff00 20%, rgba(255, 255, 255, 0) 50%);
-    animation: lightning 3s infinite ease-in-out;
-    pointer-events: none;
-}
-
-@keyframes lightning {
-    0% {
-        left: -100%;
-        opacity: 0.2;
+    .container {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 10px;
     }
-    25% {
-        left: 0;
-        opacity: 0.2;
-    }
-    50% {
-        left: 100%;
-        opacity: 0.2;
-    }
-    100% {
-        left: -100%;
-        opacity: 0;
-    }
-}
     
     .bot-section {
         display: flex;
@@ -156,10 +123,44 @@
         border: 3px solid #ff8e53;
     }
 
-    .bot-info {
-        flex: 1;
-        padding-left: 30px;
+.bot-info {
+    flex: 1;
+    padding-left: 30px;
+    position: relative;  /* Permite que os raios sejam posicionados em relação a .bot-info */
+    overflow: hidden;    /* Garante que os raios não ultrapassem os limites de .bot-info */
+}
+
+.bot-info::before, .bot-info::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 150%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0) 10%, #00ff00 20%, rgba(255, 255, 255, 0) 50%);
+    animation: lightning 3s infinite ease-in-out;
+    pointer-events: none;
+}
+
+@keyframes lightning {
+    0% {
+        left: -100%;
+        opacity: 0.3;
     }
+    25% {
+        left: 0;
+        opacity: 1;
+    }
+    50% {
+        left: 100%;
+        opacity: 0.3;
+    }
+    100% {
+        left: -100%;
+        opacity: 0;
+    }
+}
+
 
     .bot-info h2 {
         font-size: 28px;
