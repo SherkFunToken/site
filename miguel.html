@@ -6,11 +6,13 @@
     <title>|-- Miguel Pong Play --|</title>
 
      <style>
-        body {
+            * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+        body {
             background: black;
-            overflow: hidden;
             font-family: monospace;
             text-align: center;
             display: flex;
@@ -18,25 +20,27 @@
             align-items: center;
             height: 100vh;
             flex-direction: column;
+            overflow: hidden;
         }
 
         canvas {
             display: block;
-        }
-
+            max-width: 100%;
+            max-height: 100%;
+            
         .player {
             position: absolute;
-            height: 150px;
+            height: 20vh;
             width: auto;
             animation: glow-animation 1.5s infinite alternate;
         }
 
         #sherk {
-            left: 20px;
+            left: 2%;
         }
 
         #bonk {
-            right: 20px;
+            right: 2%;
         }
 
         @keyframes glow-animation {
@@ -46,66 +50,68 @@
         }
 
         .glow-text {
-            font-size: 4vw;
+            font-size: 8vw;
             color: #00ff00;
             text-shadow: 0 0 20px #00ff00, 0 0 40px #0077ff;
             position: absolute;
-            top: 20px;
+            top: 5%;
             left: 50%;
             transform: translateX(-50%);
+            white-space: nowrap;
         }
 
         .player-label {
             position: absolute;
-            font-size: 2vw;
+            font-size: 4vw;
             color: #00ff00;
             text-shadow: 0 0 10px #00ff00;
         }
 
         .score-label {
             position: absolute;
-            font-size: 5vw;
+            font-size: 6vw;
             color: #00ff00;
             text-shadow: 0 0 10px #00ff00;
             font-weight: bold;
-            top: 30px;
+            top: 10%;
         }
 
         #sherkScore {
-            left: 60px;
+            left: 10%;
         }
 
         #bonkScore {
-            right: 60px;
+            right: 10%;
         }
 
         .player-left {
-            top: 10px;
-            left: 20px;
+            top: 10%;
+            left: 5%;
         }
 
         .player-right {
-            top: 10px;
-            right: 20px;
+            top: 10%;
+            right: 5%;
         }
 
         .instructions-container {
             position: absolute;
-            top: 40%;
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
             color: #fff;
+            width: 80%;
         }
 
         .instructions {
-            font-size: 2vw;
+            font-size: 4vw;
             margin-bottom: 20px;
         }
 
         .button {
-            padding: 15px 30px;
-            font-size: 2vw;
+            padding: 3vw 6vw;
+            font-size: 4vw;
             color: #fff;
             background: linear-gradient(90deg, #00f0ff, #ff0000);
             border: none;
@@ -119,29 +125,29 @@
         }
 
         #winner-message {
-            font-size: 3vw;
+            font-size: 5vw;
             color: #00ff00;
             text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000;
-            white-space: pre-wrap;
             display: none;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
+            width: 80%;
         }
 
         #ball {
             position: absolute;
-            width: 40px;
-            height: 40px;
+            width: 5vw;
+            height: 5vw;
         }
 
         .footer {
             position: absolute;
-            bottom: 10px;
+            bottom: 5%;
             color: #00ff00;
-            font-size: 2vw;
+            font-size: 3vw;
             text-shadow: 0 0 10px #00ff00;
         }
     </style>
@@ -174,7 +180,7 @@
     <button onclick="restartGame()" class="button">Reiniciar</button>
 </div>
 
-<div class="footer">Miguel Games</div>
+<div class="footer">MVP Games</div>
 
 <!-- Sons -->
 <audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
@@ -186,9 +192,19 @@
     const canvas = document.getElementById("pongCanvas");
     const ctx = canvas.getContext("2d");
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
 
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    let ballX = canvas.width / 2;
+    let ballY = canvas.height / 2;
+    let ballSpeedX = 2;
+    let ballSpeedY = 2;
+    
     const ball = document.getElementById("ball");
 
     // Sons
@@ -203,9 +219,20 @@
     // Começar a música de fundo quando a página carrega
     function startGame() {
         document.getElementById("instructions-container").style.display = "none";
-        gameRunning = true;
-        bgMusic.play();  // Play music on game start
-        gameLoop();
+        requestAnimationFrame(gameLoop);
+    }
+
+    function gameLoop() {
+        ballX += ballSpeedX;
+        ballY += ballSpeedY;
+
+        if (ballY <= 0 || ballY + 40 >= canvas.height) ballSpeedY *= -1;
+        if (ballX <= 0 || ballX + 40 >= canvas.width) ballSpeedX *= -1;
+
+        ball.style.left = `${ballX}px`;
+        ball.style.top = `${ballY}px`;
+
+        requestAnimationFrame(gameLoop);
     }
 
     // Velocidade inicial mais lenta
