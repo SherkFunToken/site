@@ -168,16 +168,51 @@
             font-size: 2vw;
             text-shadow: 0 0 10px #00ff00;
         }
+
+
+
+.settings-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    color: #00ff00;
+    box-shadow: 0 0 20px #00ff00;
+}
+
+.settings-container h2 {
+    text-shadow: 0 0 10px #00ff00;
+}
+
+.settings-container select, .settings-container button {
+    margin: 10px;
+    padding: 10px;
+    font-size: 1.2em;
+    background: black;
+    color: #00ff00;
+    border: 1px solid #00ff00;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.settings-container button:hover {
+    box-shadow: 0 0 20px #ff0000;
+}
+         
     </style>
 </head>
 <body>
 
-<div class="glow-text">Marcelinho Pong Play</div>
+<div class="glow-text">Miguel Pong Play</div>
 
-<div class="player-label player-left">Player: Marcelinho</div>
+<div class="player-label player-left">Player: Miguel</div>
 <div class="score-label" id="sherkScore">0</div>
     
-<div class="player-label player-right">Player: Minion</div>
+<div class="player-label player-right">Player: Marcelinho</div>
 <div class="score-label" id="bonkScore">0</div>
 
 <div id="instructions-container" class="instructions-container">
@@ -187,10 +222,37 @@
     </div><br><br>
     <button class="button" onclick="startGame()">Jogar</button>
 </div>
+<!-- Adicionar um menu de configurações para permitir que os jogadores escolham skins e sons antes de iniciar o jogo -->
 
+<div id="settings-menu" class="settings-container">
+    <h2>Personalização</h2>
+    
+    <label for="playerSkin">Escolha sua skin:</label>
+    <select id="playerSkin">
+        <option value="skins/sherk_default.png">Padrão</option>
+        <option value="skins/sherk_ninja.png">Ninja</option>
+    </select>
+
+    <label for="ballSkin">Escolha a bola:</label>
+    <select id="ballSkin">
+        <option value="skins/ball_default.png">Padrão</option>
+        <option value="skins/ball_fire.png">Bola de Fogo</option>
+    </select>
+
+    <label for="hitSound">Escolha o som de batida:</label>
+    <select id="hitSound">
+        <option value="sounds/hit_sound1.MP3">Som 1</option>
+        <option value="sounds/hit_sound2.MP3">Som 2</option>
+    </select>
+
+    <button onclick="applyCustomization()">Aplicar</button>
+</div>
+
+<!-- Fim do Adicionar um menu de configurações para permitir que os jogadores escolham skins e sons antes de iniciar o jogo -->
+    
 <canvas id="pongCanvas"></canvas>
-<img src="play1.png" id="sherk" class="player">
-<img src="player2.png" id="bonk" class="player">
+<img src="miguel.png" id="sherk" class="player">
+<img src="marcelinho.png" id="bonk" class="player">
 <img src="ball.png" id="ball">
 
 <div id="winner-message">
@@ -225,6 +287,53 @@
     bgMusic.volume = 0.3;
 
 
+// Adapte o código do jogo para alterar dinamicamente as skins e os sons de acordo com as escolhas do jogador
+function applyCustomization() {
+    // Pega os valores selecionados
+    const playerSkin = document.getElementById("playerSkin").value;
+    const ballSkin = document.getElementById("ballSkin").value;
+    const hitSound = document.getElementById("hitSound").value;
+
+    // Aplica as skins dos personagens
+    document.getElementById("sherk").src = playerSkin;
+    document.getElementById("ball").src = ballSkin;
+
+    // Troca o som de batida da bola
+    document.getElementById("hitSound").src = hitSound;
+
+    // Fecha o menu após a escolha
+    document.getElementById("settings-menu").style.display = "none";
+}
+// FIM DO Adapte o código do jogo para alterar dinamicamente as skins e os sons de acordo com as escolhas do jogador
+
+// Salvando as Preferências do Jogador
+function saveCustomization() {
+    localStorage.setItem("playerSkin", document.getElementById("playerSkin").value);
+    localStorage.setItem("ballSkin", document.getElementById("ballSkin").value);
+    localStorage.setItem("hitSound", document.getElementById("hitSound").value);
+}
+
+function loadCustomization() {
+    if (localStorage.getItem("playerSkin")) {
+        document.getElementById("playerSkin").value = localStorage.getItem("playerSkin");
+        document.getElementById("sherk").src = localStorage.getItem("playerSkin");
+    }
+    if (localStorage.getItem("ballSkin")) {
+        document.getElementById("ballSkin").value = localStorage.getItem("ballSkin");
+        document.getElementById("ball").src = localStorage.getItem("ballSkin");
+    }
+    if (localStorage.getItem("hitSound")) {
+        document.getElementById("hitSound").value = localStorage.getItem("hitSound");
+        document.getElementById("hitSound").src = localStorage.getItem("hitSound");
+    }
+}
+
+// Chamar a função para carregar ao iniciar o jogo
+window.onload = loadCustomization;
+
+// Fim do Salvando as Preferências do Jogador
+
+    
 function resizeElements() {
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
