@@ -12,8 +12,57 @@
     <!-- Link para o arquivo CSS externo -->
     <link rel="stylesheet" href="styles.css">    
     <script src="script.js"></script>
+     <style>
+/* Ticker de Criptomoedas */
+.crypto-ticker {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    padding: 15px 0;
+    font-size: 20px;
+    color: #00ffcc; /* Cor vibrante e visível para o texto */
+    font-weight: bold;
+    text-align: center;
+    z-index: 1000;
+    border-bottom: 2px solid #ff8e53; /* Linha de destaque */
+    background: linear-gradient(90deg, #3a3a3a, #8c6e3d, #3a3a3a); /* Gradiente de fundo metálico */
+    background-size: 200% 200%; /* Aumenta o tamanho do gradiente para que ele se mova suavemente */
+    animation: metallic-glow 3s infinite linear; /* Animação para o efeito metálico */
+}
+
+/* Animação para o efeito metálico dourado */
+@keyframes metallic-glow {
+    0% {
+        background-position: 100% 0;
+    }
+    50% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 100% 0;
+    }
+}
+
+    /* Estiliza valores positivos em azul */
+    .positive {
+        color: #00ffcc;  /* Azul ciano */
+    }
+
+    /* Estiliza valores negativos em vermelho */
+    .negative {
+        color: #ff4c4c;  /* Vermelho vibrante */
+    }
+</style>
 </head>
 <body>
+   
+    <!-- Ticker de Criptomoedas  -->
+<div class="crypto-ticker">
+    <marquee behavior="scroll" direction="left" scrollamount="5" id="crypto-prices">
+        Loading cryptocurrency prices...
+    </marquee>
+</div>
     <!-- <header>
         <h1>Welcome to Sherk Fun Token ($SFT)!</h1>
             </header>-->
@@ -129,5 +178,33 @@
     </footer>
 
      <script src="script.js"></script>
+        <!-- Scripts -->
+<script>
+    async function fetchCryptoPrices() {
+        try {
+            const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=sherk,bitcoin,ethereum,binancecoin,solana,&vs_currencies=usd&include_24hr_change=true');
+            if (!response.ok) throw new Error('Failed to fetch prices.');
+            const data = await response.json();
+
+            let prices = Object.entries(data).map(([key, value]) => {
+                const price = value.usd.toFixed(2);
+                const change = value.usd_24h_change.toFixed(2);
+                
+                // Define a cor com base no valor da mudança percentual
+                const colorClass = change >= 0 ? 'positive' : 'negative';
+
+                return `${key.toUpperCase()}: $${price} (<span class="${colorClass}">${change}%</span>)`;
+            }).join(' | ');
+
+            document.getElementById('crypto-prices').innerHTML = prices;
+        } catch (error) {
+            document.getElementById('crypto-prices').textContent = 'Failed to load crypto prices. Please try again later.';
+            console.error('Error fetching crypto prices:', error);
+        }
+    }
+
+    fetchCryptoPrices();
+    setInterval(fetchCryptoPrices, 60000);
+</script>
 </body>
 </html>
