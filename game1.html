@@ -140,47 +140,10 @@
         border: 3px solid #ff8e53;
     }
 
-.bot-info {
-    flex: 1;
-    padding-left: 30px;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Raio neon para o primeiro .bot-info */
-.bot-info:nth-child(1)::before, .bot-info:nth-child(1)::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 150%;
-    height: 100%;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 10%, #a0ff00 20%, rgba(255, 255, 255, 0) 10%);
-    animation: lightning 3s infinite ease-in-out;
-    pointer-events: none;
-}
-
-/* Animação de movimento do raio */
-@keyframes lightning {
-    0% {
-        left: -100%;
-        opacity: 0.3;
+    .bot-info {
+        flex: 1;
+        padding-left: 30px;
     }
-    25% {
-        left: 0;
-        opacity: 1;
-    }
-    50% {
-        left: 100%;
-        opacity: 0.3;
-    }
-    100% {
-        left: -100%;
-        opacity: 0;
-    }
-}
-
-
 
     .bot-info h2 {
         font-size: 28px;
