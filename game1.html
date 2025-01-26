@@ -1,0 +1,45 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0f0f0f 0%, #1b1b1b 50%, #2b2b2b 100%);
+    color: #fff;
+    text-align: center;
+    overflow-x: hidden;  /* Mantém a página responsiva sem rolagem horizontal */
+    overflow-y: auto;
+    position: relative;
+}
+
+body::before, body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0) 30%, #ff00ff 50%, rgba(255, 255, 255, 0) 70%);
+    animation: lightning 3s infinite ease-in-out;
+    pointer-events: none;
+}
+
+body::after {
+    animation-delay: 1.5s;  /* Desloca a animação do segundo raio para criar uma sensação de alternância */
+}
+
+@keyframes lightning {
+    0% {
+        left: -100%;
+        opacity: 0.3;
+    }
+    25% {
+        left: 0;
+        opacity: 1;
+    }
+    50% {
+        left: 100%;
+        opacity: 0.3;
+    }
+    100% {
+        left: -100%;
+        opacity: 0;
+    }
+}
