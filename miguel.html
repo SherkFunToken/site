@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Marcelinho Pong Play --|</title>
+    <title>|-- Miguel Pong Play --|</title>
 
      <style>
         body {
@@ -150,10 +150,10 @@
 
 <div class="glow-text">Marcelinho Pong Play</div>
 
-<div class="player-label player-left">Player: Marcelinho</div>
+<div class="player-label player-left">Player: Miguel</div>
 <div class="score-label" id="sherkScore">0</div>
     
-<div class="player-label player-right">Player: Minion</div>
+<div class="player-label player-right">Player: Marcelinho</div>
 <div class="score-label" id="bonkScore">0</div>
 
 <div id="instructions-container" class="instructions-container">
@@ -165,8 +165,8 @@
 </div>
 
 <canvas id="pongCanvas"></canvas>
-<img src="play1.png" id="sherk" class="player">
-<img src="player2.png" id="bonk" class="player">
+<img src="miguel.png" id="sherk" class="player">
+<img src="marcelihno.png" id="bonk" class="player">
 <img src="ball.png" id="ball">
 
 <div id="winner-message">
@@ -174,7 +174,7 @@
     <button onclick="restartGame()" class="button">Reiniciar</button>
 </div>
 
-<div class="footer">Marcelinho Games</div>
+<div class="footer">Miguel Games</div>
 
 <!-- Sons -->
 <audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
@@ -296,7 +296,7 @@
             drawScore();
             pointSound.play(); // Som de ponto
             if (rightScore === 5) {
-                showWinner("Minion Ganhou!");
+                showWinner("Marcelinho Ganhou!");
                 bgMusic.pause(); // Para a música de fundo quando alguém vence
                 victorySound.play(); // Som de vitória
                 return;
@@ -309,7 +309,7 @@
             drawScore();
             pointSound.play(); // Som de ponto
             if (leftScore === 5) {
-                showWinner("Marcelinho Ganhou!");
+                showWinner("Miguel Ganhou!");
                 bgMusic.pause(); // Para a música de fundo quando alguém vence
                 victorySound.play(); // Som de vitória
                 return;
