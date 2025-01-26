@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Miguel Pong Play --|</title>
+    <title>|-- Marcelinho Pong Play --|</title>
 
-    <style>
+     <style>
         body {
             margin: 0;
             padding: 0;
@@ -24,29 +24,19 @@
             display: block;
         }
 
-        /* Ajustando o tamanho dos jogadores de forma responsiva */
         .player {
             position: absolute;
-            height: 20vh;
+            height: 150px;
             width: auto;
-            max-height: 150px;
             animation: glow-animation 1.5s infinite alternate;
         }
 
         #sherk {
-            left: 2vw;
+            left: 20px;
         }
 
         #bonk {
-            right: 2vw;
-        }
-
-        /* Responsividade para a bola */
-        #ball {
-            position: absolute;
-            width: 4vw;
-            height: auto;
-            max-width: 50px;
+            right: 20px;
         }
 
         @keyframes glow-animation {
@@ -56,7 +46,7 @@
         }
 
         .glow-text {
-            font-size: 5vw;
+            font-size: 4vw;
             color: #00ff00;
             text-shadow: 0 0 20px #00ff00, 0 0 40px #0077ff;
             position: absolute;
@@ -74,7 +64,7 @@
 
         .score-label {
             position: absolute;
-            font-size: 3vw;
+            font-size: 5vw;
             color: #00ff00;
             text-shadow: 0 0 10px #00ff00;
             font-weight: bold;
@@ -87,6 +77,16 @@
 
         #bonkScore {
             right: 60px;
+        }
+
+        .player-left {
+            top: 10px;
+            left: 20px;
+        }
+
+        .player-right {
+            top: 10px;
+            right: 20px;
         }
 
         .instructions-container {
@@ -131,18 +131,10 @@
             text-align: center;
         }
 
-        #settings-menu {
-            display: none;
+        #ball {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            color: #00ff00;
-            box-shadow: 0 0 20px #00ff00;
+            width: 40px;
+            height: 40px;
         }
 
         .footer {
@@ -156,74 +148,220 @@
 </head>
 <body>
 
-<div class="glow-text">Miguel Pong Play</div>
+<div class="glow-text">Marcelinho Pong Play</div>
 
-<div class="player-label" style="top: 10px; left: 20px;">Player: Miguel</div>
+<div class="player-label player-left">Player: Marcelinho</div>
 <div class="score-label" id="sherkScore">0</div>
-
-<div class="player-label" style="top: 10px; right: 20px;">Player: Marcelinho</div>
+    
+<div class="player-label player-right">Player: Minion</div>
 <div class="score-label" id="bonkScore">0</div>
 
 <div id="instructions-container" class="instructions-container">
     <div class="instructions">
-        Use o mouse ou arraste o dedo na tela para controlar você.<br>
-        Ganha quem faz 5 pontos primeiro!
-    </div>
+        Use o mouse ou arraste o dedo na tela para controlar voce.<br>
+        Ganha quem faz 5 pontos primeiro!<br><br>
+    </div><br><br>
     <button class="button" onclick="startGame()">Jogar</button>
-    <button class="button" onclick="showSettings()">Configurações</button>
-</div>
-
-<div id="settings-menu">
-    <h2>Personalização</h2>
-    <label for="playerSkin">Escolha sua skin:</label>
-    <select id="playerSkin">
-        <option value="skins/sherk_default.png">Padrão</option>
-        <option value="skins/sherk_ninja.png">Ninja</option>
-    </select>
-
-    <label for="ballSkin">Escolha a bola:</label>
-    <select id="ballSkin">
-        <option value="skins/ball_default.png">Padrão</option>
-        <option value="skins/ball_fire.png">Bola de Fogo</option>
-    </select>
-
-    <button onclick="applyCustomization()">Aplicar</button>
 </div>
 
 <canvas id="pongCanvas"></canvas>
-<img src="miguel.png" id="sherk" class="player">
-<img src="marcelinho.png" id="bonk" class="player">
+<img src="play1.png" id="sherk" class="player">
+<img src="player2.png" id="bonk" class="player">
 <img src="ball.png" id="ball">
 
+<div id="winner-message">
+    <p id="winner-text"></p>
+    <button onclick="restartGame()" class="button">Reiniciar</button>
+</div>
+
+<div class="footer">Marcelinho Games</div>
+
+<!-- Sons -->
+<audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
+<audio id="bgMusic" src="bg_music.MP3" loop="true" preload="auto"></audio>
+<audio id="victorySound" src="victory_sound.MP3" preload="auto"></audio>
+<audio id="pointSound" src="point.MP3" preload="auto"></audio>
+
 <script>
-    function applyCustomization() {
-        document.getElementById("sherk").src = document.getElementById("playerSkin").value;
-        document.getElementById("ball").src = document.getElementById("ballSkin").value;
-        localStorage.setItem("playerSkin", document.getElementById("playerSkin").value);
-        localStorage.setItem("ballSkin", document.getElementById("ballSkin").value);
-        document.getElementById("settings-menu").style.display = "none";
-    }
+    const canvas = document.getElementById("pongCanvas");
+    const ctx = canvas.getContext("2d");
 
-    function loadCustomization() {
-        if (localStorage.getItem("playerSkin")) {
-            document.getElementById("sherk").src = localStorage.getItem("playerSkin");
-        }
-        if (localStorage.getItem("ballSkin")) {
-            document.getElementById("ball").src = localStorage.getItem("ballSkin");
-        }
-    }
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    function showSettings() {
-        document.getElementById("settings-menu").style.display = "block";
-    }
+    const ball = document.getElementById("ball");
 
+    // Sons
+    const hitSound = document.getElementById("hitSound");
+    const bgMusic = document.getElementById("bgMusic");
+    const victorySound = document.getElementById("victorySound");
+    const pointSound = document.getElementById("pointSound");
+
+    // Ajuste do volume da música de fundo para 3 em uma escala de 0 a 10 (volume 0.3)
+    bgMusic.volume = 0.3;
+
+    // Começar a música de fundo quando a página carrega
     function startGame() {
         document.getElementById("instructions-container").style.display = "none";
+        gameRunning = true;
+        bgMusic.play();  // Play music on game start
+        gameLoop();
     }
 
-    window.onload = function() {
-        loadCustomization();
-    };
+    // Velocidade inicial mais lenta
+    const initialSpeedX = 2; 
+    const initialSpeedY = 1.5; 
+    let ballX = canvas.width / 2;
+    let ballY = canvas.height / 2;
+    let ballSpeedX = initialSpeedX;
+    let ballSpeedY = initialSpeedY;
+    let ballAngle = 0;
+
+    const playerHeight = 150;
+    let sherkY = canvas.height / 2 - playerHeight / 2;
+    let bonkY = canvas.height / 2 - playerHeight / 2;
+
+    let leftScore = 0;
+    let rightScore = 0;
+    let gameRunning = false;
+
+    // Função para capturar o movimento do mouse
+    document.addEventListener("mousemove", (e) => {
+        if (gameRunning) {
+            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight / 2));
+        }
+    });
+
+    // Função para capturar o movimento do toque (para dispositivos móveis)
+    let touchStartY = 0;
+    document.addEventListener("touchstart", (e) => {
+        touchStartY = e.touches[0].clientY; // Pega a posição inicial do toque
+    });
+
+    document.addEventListener("touchmove", (e) => {
+        if (gameRunning) {
+            const touchEndY = e.touches[0].clientY;
+            const deltaY = touchEndY - touchStartY; // Movimento do toque
+
+            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, sherkY + deltaY)); // Atualiza a posição do Sherk
+            touchStartY = touchEndY; // Atualiza o valor de referência do toque
+        }
+    });
+
+    function drawScore() {
+        document.getElementById("sherkScore").innerText = leftScore;
+        document.getElementById("bonkScore").innerText = rightScore;
+
+        // Alterar cor do placar
+        if (leftScore > rightScore) {
+            document.getElementById("sherkScore").style.color = "blue";
+            document.getElementById("bonkScore").style.color = "red";
+        } else if (rightScore > leftScore) {
+            document.getElementById("bonkScore").style.color = "blue";
+            document.getElementById("sherkScore").style.color = "red";
+        } else {
+            document.getElementById("sherkScore").style.color = "#00ff00";
+            document.getElementById("bonkScore").style.color = "#00ff00";
+        }
+    }
+
+    function updateBall() {
+        ballX += ballSpeedX;
+        ballY += ballSpeedY;
+        ballAngle += 5;  // Incrementa o ângulo da bola para rotação
+        ball.style.transform = `rotate(${ballAngle}deg)`;
+
+        // Rebater na parede superior e inferior
+        if (ballY <= 0 || ballY + ball.height >= canvas.height) {
+            ballSpeedY = -ballSpeedY;
+        }
+
+        // Rebater na raquete do Sherk (jogador)
+        if (ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
+            ballSpeedX = -ballSpeedX;
+            increaseBallSpeed();
+            hitSound.play(); // Som de rebote
+        }
+
+        // Rebater na raquete do Bonk (IA)
+        if (ballX >= canvas.width - 100 - ball.width && ballY > bonkY && ballY < bonkY + playerHeight) {
+            ballSpeedX = -ballSpeedX;
+            increaseBallSpeed();
+            hitSound.play(); // Som de rebote
+        }
+
+        // Verificar se a bola saiu pelos lados
+        if (ballX < 0) {
+            rightScore++;
+            drawScore();
+            pointSound.play(); // Som de ponto
+            if (rightScore === 5) {
+                showWinner("Minion Ganhou!");
+                bgMusic.pause(); // Para a música de fundo quando alguém vence
+                victorySound.play(); // Som de vitória
+                return;
+            }
+            resetBall();
+        }
+
+        if (ballX > canvas.width) {
+            leftScore++;
+            drawScore();
+            pointSound.play(); // Som de ponto
+            if (leftScore === 5) {
+                showWinner("Marcelinho Ganhou!");
+                bgMusic.pause(); // Para a música de fundo quando alguém vence
+                victorySound.play(); // Som de vitória
+                return;
+            }
+            resetBall();
+        }
+
+        moveBonk();
+        movePlayers();
+    }
+
+    function moveBonk() {
+        let targetY = ballY - playerHeight / 2;
+        bonkY += (targetY - bonkY) * 0.05;
+        bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
+    }
+
+    function movePlayers() {
+        document.getElementById("sherk").style.top = `${sherkY}px`;
+        document.getElementById("bonk").style.top = `${bonkY}px`;
+        ball.style.left = `${ballX}px`;
+        ball.style.top = `${ballY}px`;
+    }
+
+    function increaseBallSpeed() {
+        ballSpeedX *= 1.05;
+        ballSpeedY *= 1.05;
+    }
+
+    function resetBall() {
+        ballX = canvas.width / 2;
+        ballY = canvas.height / 2;
+        ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * initialSpeedX;
+        ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * initialSpeedY;
+        ballAngle = 0;  // Resetando o ângulo da bola
+    }
+
+    function showWinner(winnerMessage) {
+        gameRunning = false;
+        document.getElementById("winner-text").innerText = winnerMessage;
+        document.getElementById("winner-message").style.display = "block";
+    }
+
+    // Função para reiniciar o jogo ao clicar no botão "Restart"
+    function restartGame() {
+        location.reload();  // Isso simula a tecla F5 e recarrega a página
+    }
+
+    function gameLoop() {
+        updateBall();
+        if (gameRunning) requestAnimationFrame(gameLoop);
+    }
 </script>
 
 </body>
