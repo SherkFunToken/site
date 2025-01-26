@@ -27,13 +27,15 @@
             display: block;
             max-width: 100%;
             max-height: 100%;
+            }
             
-        .player {
-            position: absolute;
-            height: 20vh;
-            width: auto;
-            animation: glow-animation 1.5s infinite alternate;
-        }
+.player {
+    position: absolute;
+    height: min(20vh, 150px);
+    width: auto;
+    animation: glow-animation 1.5s infinite alternate;
+}
+
 
         #sherk {
             left: 2%;
@@ -184,7 +186,7 @@
 
 <!-- Sons -->
 <audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
-<audio id="bgMusic" src="bg_music.MP3" loop="true" preload="auto"></audio>
+<audio id="bgMusic" src="bg_music.MP3" loop preload="auto"></audio>
 <audio id="victorySound" src="victory_sound.MP3" preload="auto"></audio>
 <audio id="pointSound" src="point.MP3" preload="auto"></audio>
 
@@ -200,11 +202,7 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    let ballX = canvas.width / 2;
-    let ballY = canvas.height / 2;
-    let ballSpeedX = 2;
-    let ballSpeedY = 2;
-    
+   
     const ball = document.getElementById("ball");
 
     // Sons
@@ -381,14 +379,19 @@
     }
 
     // Função para reiniciar o jogo ao clicar no botão "Restart"
-    function restartGame() {
-        location.reload();  // Isso simula a tecla F5 e recarrega a página
-    }
+function restartGame() {
+    leftScore = 0;
+    rightScore = 0;
+    ballX = canvas.width / 2;
+    ballY = canvas.height / 2;
+    ballSpeedX = initialSpeedX;
+    ballSpeedY = initialSpeedY;
+    document.getElementById("winner-message").style.display = "none";
+    drawScore();
+    gameRunning = true;
+    gameLoop();
+}
 
-    function gameLoop() {
-        updateBall();
-        if (gameRunning) requestAnimationFrame(gameLoop);
-    }
 </script>
 
 </body>
