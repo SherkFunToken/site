@@ -163,7 +163,7 @@
         }
 
         #previewBall {
-            margin-top: 40px; /* Coloca o preview da bola logo abaixo do playerSelect */
+            margin-top: 30px; /* Coloca o preview da bola logo abaixo do playerSelect */
             display: block;
             margin-left: auto;
             margin-right: auto;
@@ -183,10 +183,10 @@
 
 <div id="instructions-container" class="instructions-container">
     <div class="instructions">
-Select the game players Avatar!<br>
 Use the touch to control Sherk on mobile or mouse on PC.<br>
 First to 5 points wins!<br><br>
-    </div><br>
+    </div><br><br>
+    <button class="button" onclick="startGame()">Play Now</button><br><br>
 
     <label for="playerSelect">Select your Avatar:</label>
     <select id="playerSelect">
@@ -210,8 +210,7 @@ First to 5 points wins!<br><br>
         <option value="ball1.png">Soccer ball</option>
         <option value="ball2.png">Basket ball</option>
         <option value="ball3.png">Football</option>
-    </select>
-       <p><br><br><br><br><br><br><br><button class="button" onclick="startGame()">Play Now</button></p>
+    </select><br><br>
 </div>
 
 <canvas id="pongCanvas"></canvas>
