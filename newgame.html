@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Pong Game --|</title>
+    <title>|-- Sherk Pong Game --|</title>
 
     <style>
         body {
@@ -302,21 +302,23 @@ First to 5 points wins!<br><br>
         }
     });
 
-    // Atualizar o nome do jogador automaticamente ao passar o mouse
-    document.getElementById("playerSelect").addEventListener("change", function() {
-        const playerOption = this.options[this.selectedIndex];
-        playerImage = playerOption.value;
-        playerName.textContent = `Player: ${playerOption.text}`;
-        previewPlayer.src = playerImage; // Atualiza o preview do jogador
-    });
+// Atualizar o nome do jogador automaticamente ao passar o mouse
+document.getElementById("playerSelect").addEventListener("mouseover", function(e) {
+    const playerOption = e.target;
+    const playerNameText = playerOption.textContent;
+    playerName.textContent = `Player: ${playerNameText}`;
+    previewPlayer.src = playerOption.value;  // Atualiza o preview do jogador
+    previewPlayer.style.display = 'block';
+});
 
-    // Atualizar o nome do adversário IA automaticamente ao passar o mouse
-    document.getElementById("aiSelect").addEventListener("change", function() {
-        const aiOption = this.options[this.selectedIndex];
-        aiImage = aiOption.value;
-        aiName.textContent = `Player: ${aiOption.text}`;
-        previewAI.src = aiImage; // Atualiza o preview do adversário
-    });
+// Atualizar o nome do adversário IA automaticamente ao passar o mouse
+document.getElementById("aiSelect").addEventListener("mouseover", function(e) {
+    const aiOption = e.target;
+    const aiNameText = aiOption.textContent;
+    aiName.textContent = `Player: ${aiNameText}`;
+    previewAI.src = aiOption.value;  // Atualiza o preview do adversário
+    previewAI.style.display = 'block';
+});
 
     // Atualizar a bola automaticamente ao selecionar
     document.getElementById("ballSelect").addEventListener("change", function() {
