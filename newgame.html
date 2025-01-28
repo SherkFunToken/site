@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Pong Game --|</title>
+    <title>|-- Sherk Pong Game --|</title>
 
     <style>
         body {
@@ -302,37 +302,24 @@ First to 5 points wins!<br><br>
         }
     });
 
-    // Atualizar o nome do jogador automaticamente ao passar o mouse
-    document.getElementById("playerSelect").addEventListener("mouseover", function(e) {
-        playerName.textContent = `Player: ${e.target.textContent}`;
-        previewPlayer.src = e.target.value;  // Atualiza o preview do jogador
-        previewPlayer.style.display = 'block';
+    // Atualizar os previews e os nomes dos jogadores conforme seleção
+    document.getElementById("playerSelect").addEventListener("change", function() {
+        const playerOption = this.options[this.selectedIndex];
+        playerImage = playerOption.value;
+        playerName.textContent = `Player: ${playerOption.text}`;
+        previewPlayer.src = playerImage; // Atualiza o preview do jogador
     });
 
-    // Atualizar o nome do adversário IA automaticamente ao passar o mouse
-    document.getElementById("aiSelect").addEventListener("mouseover", function(e) {
-        aiName.textContent = `Player: ${e.target.textContent}`;
-        previewAI.src = e.target.value;  // Atualiza o preview do adversário
-        previewAI.style.display = 'block';
+    document.getElementById("aiSelect").addEventListener("change", function() {
+        const aiOption = this.options[this.selectedIndex];
+        aiImage = aiOption.value;
+        aiName.textContent = `Player: ${aiOption.text}`;
+        previewAI.src = aiImage; // Atualiza o preview do adversário
     });
 
-    // Mostrar preview da bola quando passar o mouse sobre a opção de bola
-    document.getElementById("ballSelect").addEventListener("mouseover", function(e) {
-        previewBall.src = e.target.value;  // Atualiza o preview da bola
-        previewBall.style.display = 'block';
-    });
-
-    // Esconder os previews quando o mouse sair das opções
-    document.getElementById("playerSelect").addEventListener("mouseout", function() {
-        previewPlayer.style.display = 'none';
-    });
-
-    document.getElementById("aiSelect").addEventListener("mouseout", function() {
-        previewAI.style.display = 'none';
-    });
-
-    document.getElementById("ballSelect").addEventListener("mouseout", function() {
-        previewBall.style.display = 'none';
+    document.getElementById("ballSelect").addEventListener("change", function() {
+        currentBallImage = this.value;
+        previewBall.src = currentBallImage; // Atualiza o preview da bola
     });
 
     // Função para iniciar o jogo
@@ -341,16 +328,7 @@ First to 5 points wins!<br><br>
         gameRunning = true;
         bgMusic.play();  // Música de fundo
 
-        // Se o usuário não escolheu avatar ou bola, usa os valores padrão
-        currentBallImage = document.getElementById("ballSelect").value || 'ball.png';
-        aiImage = document.getElementById("aiSelect").value || 'playerAI1.png';
-        playerImage = document.getElementById("playerSelect").value || 'Sherk.png';
-
-        // Atualizando os nomes dos jogadores
-        playerName.textContent = `Player: ${document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].text}`;
-        aiName.textContent = `Player: ${document.getElementById("aiSelect").options[document.getElementById("aiSelect").selectedIndex].text}`;
-
-        // Atualizando as imagens
+        // Atualizando as imagens e os nomes com as seleções feitas
         document.getElementById("ball").src = currentBallImage;
         document.getElementById("bonk").src = aiImage;
         document.getElementById("sherk").src = playerImage;
