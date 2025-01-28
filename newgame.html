@@ -302,52 +302,39 @@ First to 5 points wins!<br><br>
         }
     });
 
-    // Atualizar o nome do jogador
-    document.getElementById("playerSelect").addEventListener("change", function() {
-        const selectedOption = this.options[this.selectedIndex];
-        const playerNameText = selectedOption.text;
-        playerName.textContent = `Player: ${playerNameText}`;
-    });
-
-    // Atualizar o nome do adversário IA
-    document.getElementById("aiSelect").addEventListener("change", function() {
-        const selectedOption = this.options[this.selectedIndex];
-        const aiNameText = selectedOption.text;
-        aiName.textContent = `Player: ${aiNameText}`;
-    });
-
-    // Mostrar preview do jogador quando passar o mouse sobre a opção de jogador
+    // Atualizar o nome do jogador automaticamente ao passar o mouse
     document.getElementById("playerSelect").addEventListener("mouseover", function(e) {
-        const playerPreviewImage = e.target.value;
-        previewPlayer.src = playerPreviewImage;
-        previewPlayer.style.display = 'block'; // Mostrar o preview
+        const playerNameText = e.target.textContent;
+        playerName.textContent = `Player: ${playerNameText}`;
+        previewPlayer.src = e.target.value;  // Atualiza o preview do jogador
+        previewPlayer.style.display = 'block';
     });
 
-    // Mostrar preview do adversário IA quando passar o mouse sobre a opção de IA
+    // Atualizar o nome do adversário IA automaticamente ao passar o mouse
     document.getElementById("aiSelect").addEventListener("mouseover", function(e) {
-        const aiPreviewImage = e.target.value;
-        previewAI.src = aiPreviewImage;
-        previewAI.style.display = 'block'; // Mostrar o preview
+        const aiNameText = e.target.textContent;
+        aiName.textContent = `Player: ${aiNameText}`;
+        previewAI.src = e.target.value;  // Atualiza o preview do adversário
+        previewAI.style.display = 'block';
     });
 
     // Mostrar preview da bola quando passar o mouse sobre a opção de bola
     document.getElementById("ballSelect").addEventListener("mouseover", function(e) {
-        const ballPreviewImage = e.target.value;
-        previewBall.src = ballPreviewImage;
-        previewBall.style.display = 'block'; // Mostrar o preview
+        previewBall.src = e.target.value;  // Atualiza o preview da bola
+        previewBall.style.display = 'block';
     });
 
-    // Esconder o preview quando o mouse sair das opções
+    // Esconder os previews quando o mouse sair das opções
     document.getElementById("playerSelect").addEventListener("mouseout", function() {
-        previewPlayer.style.display = 'none'; // Esconder o preview
+        previewPlayer.style.display = 'none';
     });
 
     document.getElementById("aiSelect").addEventListener("mouseout", function() {
-        previewAI.style.display = 'none'; // Esconder o preview
+        previewAI.style.display = 'none';
     });
 
     document.getElementById("ballSelect").addEventListener("mouseout", function() {
-        previewBall.style.display = 'none'; // Esconder o preview
+        previewBall.style.display = 'none';
     });
 
     // Função para iniciar o jogo
