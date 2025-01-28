@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Pong Game --|</title>
+    <title>|-- Sherk Pong Game --|</title>
 
     <style>
         body {
@@ -151,19 +151,19 @@
             transform: translateY(-50%);
             width: 150px;
             height: auto;
-            display: none; /* Inicialmente invisível */
+            display: none;
         }
 
         #previewAI {
-            right: 20px; /* Coloca o preview do adversário no lado direito */
+            right: 20px;
         }
 
         #previewPlayer {
-            left: 20px; /* Coloca o preview do jogador no lado esquerdo */
+            left: 20px;
         }
 
         #previewBall {
-            margin-top: 10px; /* Coloca o preview da bola logo abaixo do playerSelect */
+            margin-top: 10px;
             display: block;
             margin-left: auto;
             margin-right: auto;
@@ -174,7 +174,6 @@
 
 <div class="glow-text">Sherk Pong Game</div>
 
-<!-- Player name dynamically updated -->
 <div class="player-label player-left" id="playerName">Player: Select your Avatar</div>
 <div class="score-label" id="sherkScore">0</div>
     
@@ -183,8 +182,8 @@
 
 <div id="instructions-container" class="instructions-container">
     <div class="instructions">
-Use the touch to control Sherk on mobile or mouse on PC.<br>
-First to 5 points wins!<br><br>
+        Use the touch to control Sherk on mobile or mouse on PC.<br>
+        First to 5 points wins!<br><br>
     </div>
 
     <label for="playerSelect">Select your Avatar:</label>
@@ -210,7 +209,7 @@ First to 5 points wins!<br><br>
         <option value="ball2.png">Basket ball</option>
         <option value="ball3.png">Football</option>
     </select><br><br>
-        <p><br><br><br><br><br><br><button class="button" onclick="startGame()">Play Now</button></p>
+    <p><br><br><br><br><br><br><button class="button" onclick="startGame()">Play Now</button></p>
 </div>
 
 <canvas id="pongCanvas"></canvas>
@@ -240,8 +239,8 @@ First to 5 points wins!<br><br>
     const canvas = document.getElementById("pongCanvas");
     const ctx = canvas.getContext("2d");
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = Math.min(window.innerWidth, 1200);
+    canvas.height = Math.min(window.innerHeight, 800);
 
     const ball = document.getElementById("ball");
 
@@ -253,25 +252,35 @@ First to 5 points wins!<br><br>
 
     bgMusic.volume = 0.3;
 
-    // Começar a música de fundo quando a página carrega
     function startGame() {
         document.getElementById("instructions-container").style.display = "none";
         gameRunning = true;
         bgMusic.play();  // Play music on game start
+        document.getElementById("playerSelect").disabled = true;
+        document.getElementById("aiSelect").disabled = true;
+        document.getElementById("ballSelect").disabled = true;
+        currentBallImage = document.getElementById("ballSelect").value || 'ball.png';
+        aiImage = document.getElementById("aiSelect").value || 'playerAI1.png';
+        playerImage = document.getElementById("playerSelect").value || 'Sherk.png';
+        playerName.textContent = `Player: ${document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].text}`;
+        aiName.textContent = `Player: ${document.getElementById("aiSelect").options[document.getElementById("aiSelect").selectedIndex].text}`;
+
+        document.getElementById("ball").src = currentBallImage;
+        document.getElementById("bonk").src = aiImage;
+        document.getElementById("sherk").src = playerImage;
+        
         gameLoop();
     }
-    
-    // Variáveis de velocidade
-    const initialSpeedX = 2; 
-    const initialSpeedY = 1.5; 
+
+    let initialSpeedX = 2;
+    let initialSpeedY = 1.5;
     let ballX = canvas.width / 2;
     let ballY = canvas.height / 2;
     let ballSpeedX = initialSpeedX;
     let ballSpeedY = initialSpeedY;
     let ballAngle = 0;
-    let speedIncrement = 0.01; // Incremento gradual de velocidade
-    let maxSpeed = 5; // Limite de velocidade
-
+    let speedIncrement = 0.01;
+    let maxSpeed = 5;
     let sherkY = canvas.height / 2 - 150 / 2;
     let bonkY = canvas.height / 2 - 150 / 2;
 
@@ -281,7 +290,7 @@ First to 5 points wins!<br><br>
 
     let currentBallImage = 'ball.png';
     let aiImage = 'playerAI1.png';
-    let playerImage = 'Sherk.png'; // Imagem inicial do jogador
+    let playerImage = 'Sherk.png';
 
     const previewPlayer = document.getElementById("previewPlayer");
     const previewAI = document.getElementById("previewAI");
@@ -289,26 +298,22 @@ First to 5 points wins!<br><br>
     const playerName = document.getElementById("playerName");
     const aiName = document.getElementById("aiName");
 
-    // Função para capturar o movimento do mouse
     document.addEventListener("mousemove", (e) => {
         if (gameRunning) {
             sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight / 2));
         }
     });
 
-    // Função para capturar o movimento do toque (para dispositivos móveis)
-    let touchStartY = 0;
     document.addEventListener("touchstart", (e) => {
-        touchStartY = e.touches[0].clientY; // Pega a posição inicial do toque
+        touchStartY = e.touches[0].clientY;
     });
 
     document.addEventListener("touchmove", (e) => {
         if (gameRunning) {
             const touchEndY = e.touches[0].clientY;
-            const deltaY = touchEndY - touchStartY; // Movimento do toque
-
-            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, sherkY + deltaY)); // Atualiza a posição do Sherk
-            touchStartY = touchEndY; // Atualiza o valor de referência do toque
+            const deltaY = touchEndY - touchStartY;
+            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, sherkY + deltaY));
+            touchStartY = touchEndY;
         }
     });
 
@@ -316,7 +321,6 @@ First to 5 points wins!<br><br>
         document.getElementById("sherkScore").innerText = leftScore;
         document.getElementById("bonkScore").innerText = rightScore;
 
-        // Alterar cor do placar
         if (leftScore > rightScore) {
             document.getElementById("sherkScore").style.color = "blue";
             document.getElementById("bonkScore").style.color = "red";
@@ -329,112 +333,36 @@ First to 5 points wins!<br><br>
         }
     }
 
-    // Atualizar o nome do jogador
-    document.getElementById("playerSelect").addEventListener("change", function() {
-        const selectedOption = this.options[this.selectedIndex];
-        const playerNameText = selectedOption.text;
-        playerName.textContent = `Player: ${playerNameText}`;
-    });
-
-    // Atualizar o nome do adversário IA
-    document.getElementById("aiSelect").addEventListener("change", function() {
-        const selectedOption = this.options[this.selectedIndex];
-        const aiNameText = selectedOption.text;
-        aiName.textContent = `Player: ${aiNameText}`;
-    });
-
-    // Mostrar preview do jogador quando passar o mouse sobre a opção de jogador
-    document.getElementById("playerSelect").addEventListener("mouseover", function(e) {
-        const playerPreviewImage = e.target.value;
-        previewPlayer.src = playerPreviewImage;
-        previewPlayer.style.display = 'block'; // Mostrar o preview
-    });
-
-    // Mostrar preview do adversário IA quando passar o mouse sobre a opção de IA
-    document.getElementById("aiSelect").addEventListener("mouseover", function(e) {
-        const aiPreviewImage = e.target.value;
-        previewAI.src = aiPreviewImage;
-        previewAI.style.display = 'block'; // Mostrar o preview
-    });
-
-    // Mostrar preview da bola quando passar o mouse sobre a opção de bola
-    document.getElementById("ballSelect").addEventListener("mouseover", function(e) {
-        const ballPreviewImage = e.target.value;
-        previewBall.src = ballPreviewImage;
-        previewBall.style.display = 'block'; // Mostrar o preview
-    });
-
-    // Esconder o preview quando o mouse sair das opções
-    document.getElementById("playerSelect").addEventListener("mouseout", function() {
-        previewPlayer.style.display = 'none'; // Esconder o preview
-    });
-
-    document.getElementById("aiSelect").addEventListener("mouseout", function() {
-        previewAI.style.display = 'none'; // Esconder o preview
-    });
-
-    document.getElementById("ballSelect").addEventListener("mouseout", function() {
-        previewBall.style.display = 'none'; // Esconder o preview
-    });
-
-    // Função para iniciar o jogo
-    function startGame() {
-        document.getElementById("instructions-container").style.display = "none";
-        gameRunning = true;
-        bgMusic.play();  // Música de fundo
-
-        // Se o usuário não escolheu avatar ou bola, usa os valores padrão
-        currentBallImage = document.getElementById("ballSelect").value || 'ball.png';
-        aiImage = document.getElementById("aiSelect").value || 'playerAI1.png';
-        playerImage = document.getElementById("playerSelect").value || 'Sherk.png';
-
-        // Atualizando os nomes dos jogadores
-        playerName.textContent = `Player: ${document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].text}`;
-        aiName.textContent = `Player: ${document.getElementById("aiSelect").options[document.getElementById("aiSelect").selectedIndex].text}`;
-
-        // Atualizando as imagens
-        document.getElementById("ball").src = currentBallImage;
-        document.getElementById("bonk").src = aiImage;
-        document.getElementById("sherk").src = playerImage;
-        
-        gameLoop();
-    }
-
-    // Função de atualização da bola
     function updateBall() {
         ballX += ballSpeedX;
         ballY += ballSpeedY;
-        ballAngle += 5;  // Incrementa o ângulo da bola para rotação
+        ballAngle += 5;
         ball.style.transform = `rotate(${ballAngle}deg)`;
 
-        // Rebater na parede superior e inferior
         if (ballY <= 0 || ballY + ball.height >= canvas.height) {
             ballSpeedY = -ballSpeedY;
         }
 
-        // Rebater na raquete do Sherk (jogador)
         if (ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
             ballSpeedX = -ballSpeedX;
             increaseBallSpeed();
-            hitSound.play(); // Som de rebote
+            hitSound.play();
         }
 
-        // Rebater na raquete do Bonk (IA)
         if (ballX >= canvas.width - 100 - ball.width && ballY > bonkY && ballY < bonkY + playerHeight) {
             ballSpeedX = -ballSpeedX;
             increaseBallSpeed();
-            hitSound.play(); // Som de rebote
+            hitSound.play();
         }
 
-        // Verificar se a bola saiu pelos lados
         if (ballX < 0) {
             rightScore++;
             drawScore();
-            pointSound.play(); // Som de ponto
+            pointSound.play();
             if (rightScore === 5) {
                 showWinner("Pepe Wins!");
-                bgMusic.pause(); // Para a música de fundo quando alguém vence
-                victorySound.play(); // Som de vitória
+                bgMusic.pause();
+                victorySound.play();
                 return;
             }
             resetBall();
@@ -443,11 +371,11 @@ First to 5 points wins!<br><br>
         if (ballX > canvas.width) {
             leftScore++;
             drawScore();
-            pointSound.play(); // Som de ponto
+            pointSound.play();
             if (leftScore === 5) {
                 showWinner("Sherk Wins!");
-                bgMusic.pause(); // Para a música de fundo quando alguém vence
-                victorySound.play(); // Som de vitória
+                bgMusic.pause();
+                victorySound.play();
                 return;
             }
             resetBall();
@@ -457,7 +385,6 @@ First to 5 points wins!<br><br>
         movePlayers();
     }
 
-    // Função de aumento gradual de velocidade
     function increaseBallSpeed() {
         if (ballSpeedX < maxSpeed) {
             ballSpeedX += speedIncrement;
@@ -465,7 +392,6 @@ First to 5 points wins!<br><br>
         }
     }
 
-    // Função de reinício da bola
     function resetBall() {
         ballX = canvas.width / 2;
         ballY = canvas.height / 2;
@@ -474,7 +400,6 @@ First to 5 points wins!<br><br>
         ballAngle = 0;
     }
 
-    // Função para mover o jogador AI
     function moveBonk() {
         let targetY = ballY - playerHeight / 2;
         bonkY += (targetY - bonkY) * 0.05;
@@ -488,28 +413,26 @@ First to 5 points wins!<br><br>
         ball.style.top = `${ballY}px`;
     }
 
-    function increaseBallSpeed() {
-        ballSpeedX *= 1.05;
-        ballSpeedY *= 1.05;
-    }
-
-    function resetBall() {
-        ballX = canvas.width / 2;
-        ballY = canvas.height / 2;
-        ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * initialSpeedX;
-        ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * initialSpeedY;
-        ballAngle = 0;  // Resetando o ângulo da bola
-    }
-
     function showWinner(winnerMessage) {
         gameRunning = false;
         document.getElementById("winner-text").innerText = winnerMessage;
         document.getElementById("winner-message").style.display = "block";
     }
 
-    // Função para reiniciar o jogo ao clicar no botão "Restart"
     function restartGame() {
-        location.reload();  // Isso simula a tecla F5 e recarrega a página
+        leftScore = 0;
+        rightScore = 0;
+        ballX = canvas.width / 2;
+        ballY = canvas.height / 2;
+        ballSpeedX = initialSpeedX;
+        ballSpeedY = initialSpeedY;
+        gameRunning = false;
+        drawScore();
+        document.getElementById("winner-message").style.display = "none";
+        bgMusic.play();
+        document.getElementById("playerSelect").disabled = false;
+        document.getElementById("aiSelect").disabled = false;
+        document.getElementById("ballSelect").disabled = false;
     }
 
     function gameLoop() {
