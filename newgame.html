@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Pong Game --|</title>
+    <title>|- Sherk Pong Game --|</title>
 
     <style>
         body {
@@ -304,16 +304,14 @@ First to 5 points wins!<br><br>
 
     // Atualizar o nome do jogador automaticamente ao passar o mouse
     document.getElementById("playerSelect").addEventListener("mouseover", function(e) {
-        const playerNameText = e.target.textContent;
-        playerName.textContent = `Player: ${playerNameText}`;
+        playerName.textContent = `Player: ${e.target.textContent}`;
         previewPlayer.src = e.target.value;  // Atualiza o preview do jogador
         previewPlayer.style.display = 'block';
     });
 
     // Atualizar o nome do adversário IA automaticamente ao passar o mouse
     document.getElementById("aiSelect").addEventListener("mouseover", function(e) {
-        const aiNameText = e.target.textContent;
-        aiName.textContent = `Player: ${aiNameText}`;
+        aiName.textContent = `Player: ${e.target.textContent}`;
         previewAI.src = e.target.value;  // Atualiza o preview do adversário
         previewAI.style.display = 'block';
     });
