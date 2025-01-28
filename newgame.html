@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Pong Game --|</title>
+    <title>|-- Sherk Pong Game --|</title>
 
     <style>
         body {
@@ -302,52 +302,30 @@ First to 5 points wins!<br><br>
         }
     });
 
-// Atualizar o nome do jogador automaticamente ao passar o mouse
-document.getElementById("playerSelect").addEventListener("mouseover", function(e) {
-    // A partir de agora, somente o nome do item sobre o qual o mouse está será exibido no topo
-    if (e.target.tagName === 'OPTION') {
-        const playerNameText = e.target.textContent;
-        playerName.textContent = `Player: ${playerNameText}`;
-        previewPlayer.src = e.target.value;  // Atualiza o preview do jogador
-        previewPlayer.style.display = 'block'; // Mostrar o preview
-    }
-});
-
-// Atualizar o nome do adversário IA automaticamente ao passar o mouse
-document.getElementById("aiSelect").addEventListener("mouseover", function(e) {
-    // A partir de agora, somente o nome do item sobre o qual o mouse está será exibido no topo
-    if (e.target.tagName === 'OPTION') {
-        const aiNameText = e.target.textContent;
-        aiName.textContent = `Player: ${aiNameText}`;
-        previewAI.src = e.target.value;  // Atualiza o preview do adversário
-        previewAI.style.display = 'block'; // Mostrar o preview
-    }
-});
-
-    // Atualizar a bola automaticamente ao selecionar
-    document.getElementById("ballSelect").addEventListener("change", function() {
-        currentBallImage = this.value;
-        previewBall.src = currentBallImage; // Atualiza o preview da bola
-    });
-
-    // Mostrar preview do jogador quando passar o mouse sobre a opção de jogador
+    // Atualizar o nome do jogador automaticamente ao passar o mouse
     document.getElementById("playerSelect").addEventListener("mouseover", function(e) {
-        previewPlayer.style.display = 'block';
-        previewPlayer.src = e.target.value;
-        playerName.textContent = `Player: ${e.target.textContent}`;
+        if (e.target.tagName === 'OPTION') {
+            const playerNameText = e.target.textContent;
+            playerName.textContent = `Player: ${playerNameText}`;
+            previewPlayer.src = e.target.value;
+            previewPlayer.style.display = 'block';
+        }
     });
 
-    // Mostrar preview do adversário IA quando passar o mouse sobre a opção de IA
+    // Atualizar o nome do adversário IA automaticamente ao passar o mouse
     document.getElementById("aiSelect").addEventListener("mouseover", function(e) {
-        previewAI.style.display = 'block';
-        previewAI.src = e.target.value;
-        aiName.textContent = `Player: ${e.target.textContent}`;
+        if (e.target.tagName === 'OPTION') {
+            const aiNameText = e.target.textContent;
+            aiName.textContent = `Player: ${aiNameText}`;
+            previewAI.src = e.target.value;
+            previewAI.style.display = 'block';
+        }
     });
 
-    // Mostrar preview da bola quando passar o mouse sobre a opção de bola
+    // Mostrar preview da bola automaticamente
     document.getElementById("ballSelect").addEventListener("mouseover", function(e) {
-        previewBall.style.display = 'block';
         previewBall.src = e.target.value;
+        previewBall.style.display = 'block';
     });
 
     // Esconder os previews quando o mouse sair das opções
@@ -369,12 +347,18 @@ document.getElementById("aiSelect").addEventListener("mouseover", function(e) {
         gameRunning = true;
         bgMusic.play();  // Música de fundo
 
-        // Atualizando as imagens e os nomes com as seleções feitas
+        currentBallImage = document.getElementById("ballSelect").value || 'ball.png';
+        aiImage = document.getElementById("aiSelect").value || 'playerAI1.png';
+        playerImage = document.getElementById("playerSelect").value || 'Sherk.png';
+
+        playerName.textContent = `Player: ${document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].text}`;
+        aiName.textContent = `Player: ${document.getElementById("aiSelect").options[document.getElementById("aiSelect").selectedIndex].text}`;
+
         document.getElementById("ball").src = currentBallImage;
         document.getElementById("bonk").src = aiImage;
         document.getElementById("sherk").src = playerImage;
 
-        // Esconder previews ao iniciar o jogo
+        // Esconder os previews quando o jogo começar
         previewPlayer.style.display = 'none';
         previewAI.style.display = 'none';
         previewBall.style.display = 'none';
