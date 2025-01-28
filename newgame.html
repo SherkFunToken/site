@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Pong Game --|</title>
+    <title>|- Sherk Pong Game --|</title>
 
     <style>
         body {
@@ -252,37 +252,21 @@
 
     bgMusic.volume = 0.3;
 
-    function startGame() {
-        document.getElementById("instructions-container").style.display = "none";
-        gameRunning = true;
-        bgMusic.play();  // Play music on game start
-        document.getElementById("playerSelect").disabled = true;
-        document.getElementById("aiSelect").disabled = true;
-        document.getElementById("ballSelect").disabled = true;
-        currentBallImage = document.getElementById("ballSelect").value || 'ball.png';
-        aiImage = document.getElementById("aiSelect").value || 'playerAI1.png';
-        playerImage = document.getElementById("playerSelect").value || 'Sherk.png';
-        playerName.textContent = `Player: ${document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].text}`;
-        aiName.textContent = `Player: ${document.getElementById("aiSelect").options[document.getElementById("aiSelect").selectedIndex].text}`;
+    // Definindo altura do jogador
+    const playerHeight = 150;
+    const playerWidth = 20;
+    const aiHeight = 150;
+    const aiWidth = 20;
 
-        document.getElementById("ball").src = currentBallImage;
-        document.getElementById("bonk").src = aiImage;
-        document.getElementById("sherk").src = playerImage;
-        
-        gameLoop();
-    }
+    // Controle do jogador
+    let sherkY = canvas.height / 2 - playerHeight / 2;
+    let bonkY = canvas.height / 2 - aiHeight / 2;
 
-    let initialSpeedX = 2;
-    let initialSpeedY = 1.5;
     let ballX = canvas.width / 2;
     let ballY = canvas.height / 2;
-    let ballSpeedX = initialSpeedX;
-    let ballSpeedY = initialSpeedY;
+    let ballSpeedX = 2;
+    let ballSpeedY = 1.5;
     let ballAngle = 0;
-    let speedIncrement = 0.01;
-    let maxSpeed = 5;
-    let sherkY = canvas.height / 2 - 150 / 2;
-    let bonkY = canvas.height / 2 - 150 / 2;
 
     let leftScore = 0;
     let rightScore = 0;
@@ -298,41 +282,46 @@
     const playerName = document.getElementById("playerName");
     const aiName = document.getElementById("aiName");
 
+    // Mostrar preview do jogador, IA e bola
+    document.getElementById("playerSelect").addEventListener("mouseover", function(e) {
+        const playerPreviewImage = e.target.value;
+        previewPlayer.src = playerPreviewImage;
+        previewPlayer.style.display = 'block';
+    });
+
+    document.getElementById("aiSelect").addEventListener("mouseover", function(e) {
+        const aiPreviewImage = e.target.value;
+        previewAI.src = aiPreviewImage;
+        previewAI.style.display = 'block';
+    });
+
+    document.getElementById("ballSelect").addEventListener("mouseover", function(e) {
+        const ballPreviewImage = e.target.value;
+        previewBall.src = ballPreviewImage;
+        previewBall.style.display = 'block';
+    });
+
+    // Esconder preview quando o mouse sai
+    document.getElementById("playerSelect").addEventListener("mouseout", function() {
+        previewPlayer.style.display = 'none';
+    });
+
+    document.getElementById("aiSelect").addEventListener("mouseout", function() {
+        previewAI.style.display = 'none';
+    });
+
+    document.getElementById("ballSelect").addEventListener("mouseout", function() {
+        previewBall.style.display = 'none';
+    });
+
+    // Movimentação do jogador
     document.addEventListener("mousemove", (e) => {
         if (gameRunning) {
             sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight / 2));
         }
     });
 
-    document.addEventListener("touchstart", (e) => {
-        touchStartY = e.touches[0].clientY;
-    });
-
-    document.addEventListener("touchmove", (e) => {
-        if (gameRunning) {
-            const touchEndY = e.touches[0].clientY;
-            const deltaY = touchEndY - touchStartY;
-            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, sherkY + deltaY));
-            touchStartY = touchEndY;
-        }
-    });
-
-    function drawScore() {
-        document.getElementById("sherkScore").innerText = leftScore;
-        document.getElementById("bonkScore").innerText = rightScore;
-
-        if (leftScore > rightScore) {
-            document.getElementById("sherkScore").style.color = "blue";
-            document.getElementById("bonkScore").style.color = "red";
-        } else if (rightScore > leftScore) {
-            document.getElementById("bonkScore").style.color = "blue";
-            document.getElementById("sherkScore").style.color = "red";
-        } else {
-            document.getElementById("sherkScore").style.color = "#00ff00";
-            document.getElementById("bonkScore").style.color = "#00ff00";
-        }
-    }
-
+    // Movimentação da bola e lógica de jogo
     function updateBall() {
         ballX += ballSpeedX;
         ballY += ballSpeedY;
@@ -345,13 +334,11 @@
 
         if (ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
             ballSpeedX = -ballSpeedX;
-            increaseBallSpeed();
             hitSound.play();
         }
 
-        if (ballX >= canvas.width - 100 - ball.width && ballY > bonkY && ballY < bonkY + playerHeight) {
+        if (ballX >= canvas.width - 100 - ball.width && ballY > bonkY && ballY < bonkY + aiHeight) {
             ballSpeedX = -ballSpeedX;
-            increaseBallSpeed();
             hitSound.play();
         }
 
@@ -385,25 +372,10 @@
         movePlayers();
     }
 
-    function increaseBallSpeed() {
-        if (ballSpeedX < maxSpeed) {
-            ballSpeedX += speedIncrement;
-            ballSpeedY += speedIncrement;
-        }
-    }
-
-    function resetBall() {
-        ballX = canvas.width / 2;
-        ballY = canvas.height / 2;
-        ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * initialSpeedX;
-        ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * initialSpeedY;
-        ballAngle = 0;
-    }
-
     function moveBonk() {
-        let targetY = ballY - playerHeight / 2;
+        let targetY = ballY - aiHeight / 2;
         bonkY += (targetY - bonkY) * 0.05;
-        bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
+        bonkY = Math.max(0, Math.min(canvas.height - aiHeight, bonkY));
     }
 
     function movePlayers() {
@@ -411,6 +383,45 @@
         document.getElementById("bonk").style.top = `${bonkY}px`;
         ball.style.left = `${ballX}px`;
         ball.style.top = `${ballY}px`;
+    }
+
+    function drawScore() {
+        document.getElementById("sherkScore").innerText = leftScore;
+        document.getElementById("bonkScore").innerText = rightScore;
+    }
+
+    // Função para iniciar o jogo
+    function startGame() {
+        document.getElementById("instructions-container").style.display = "none";
+        gameRunning = true;
+        bgMusic.play();
+        document.getElementById("playerSelect").disabled = true;
+        document.getElementById("aiSelect").disabled = true;
+        document.getElementById("ballSelect").disabled = true;
+        currentBallImage = document.getElementById("ballSelect").value || 'ball.png';
+        aiImage = document.getElementById("aiSelect").value || 'playerAI1.png';
+        playerImage = document.getElementById("playerSelect").value || 'Sherk.png';
+        playerName.textContent = `Player: ${document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].text}`;
+        aiName.textContent = `Player: ${document.getElementById("aiSelect").options[document.getElementById("aiSelect").selectedIndex].text}`;
+
+        document.getElementById("ball").src = currentBallImage;
+        document.getElementById("bonk").src = aiImage;
+        document.getElementById("sherk").src = playerImage;
+        
+        gameLoop();
+    }
+
+    // Função de atualização da bola e movimento
+    function gameLoop() {
+        updateBall();
+        if (gameRunning) requestAnimationFrame(gameLoop);
+    }
+
+    function resetBall() {
+        ballX = canvas.width / 2;
+        ballY = canvas.height / 2;
+        ballSpeedX = 2;
+        ballSpeedY = 1.5;
     }
 
     function showWinner(winnerMessage) {
@@ -424,8 +435,8 @@
         rightScore = 0;
         ballX = canvas.width / 2;
         ballY = canvas.height / 2;
-        ballSpeedX = initialSpeedX;
-        ballSpeedY = initialSpeedY;
+        ballSpeedX = 2;
+        ballSpeedY = 1.5;
         gameRunning = false;
         drawScore();
         document.getElementById("winner-message").style.display = "none";
@@ -433,11 +444,6 @@
         document.getElementById("playerSelect").disabled = false;
         document.getElementById("aiSelect").disabled = false;
         document.getElementById("ballSelect").disabled = false;
-    }
-
-    function gameLoop() {
-        updateBall();
-        if (gameRunning) requestAnimationFrame(gameLoop);
     }
 </script>
 
