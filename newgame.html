@@ -144,6 +144,22 @@
             font-size: 2vw;
             text-shadow: 0 0 10px #00ff00;
         }
+                 #previewPlayer, #previewAI {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 150px;
+            height: auto;
+            display: none; /* Inicialmente invisível */
+        }
+
+        #previewAI {
+            right: 20px; /* Coloca o preview do adversário no lado direito */
+        }
+
+        #previewPlayer {
+            left: 20px; /* Coloca o preview do jogador no lado esquerdo */
+        }
     </style>
 </head>
 <body>
@@ -177,6 +193,14 @@
         <option value="playerAI2.png">Krueger Sherk</option>
         <option value="playerAI3.png">Astronalt</option>
         <option value="playerAI4.png">Bitcoin</option>
+    </select><br><br>
+
+    <label for="playerSelect">Escolha o jogador:</label>
+    <select id="playerSelect">
+        <option value="sherk.png">Sherk</option>
+        <option value="bonk.png">Bonk</option>
+        <option value="player3.png">Jogador 3</option>
+        <option value="player4.png">Jogador 4</option>
     </select>
 </div>
 
@@ -184,6 +208,10 @@
 <img id="sherk" class="player">
 <img id="bonk" class="player">
 <img id="ball">
+
+<!-- Previews -->
+<img id="previewPlayer" src="" alt="Preview do jogador">
+<img id="previewAI" src="" alt="Preview do adversário IA">
 
 <div id="winner-message">
     <p id="winner-text"></p>
@@ -235,6 +263,10 @@
 
     let currentBallImage = 'ball.png';
     let aiImage = 'playerAI1.png';
+    let playerImage = 'sherk.png'; // Imagem inicial do jogador
+
+    const previewPlayer = document.getElementById("previewPlayer");
+    const previewAI = document.getElementById("previewAI");
 
     // Funções de controle do mouse e toque
     document.addEventListener("mousemove", (e) => {
@@ -256,6 +288,29 @@
         }
     });
 
+    // Mostrar preview do jogador quando passar o mouse sobre a opção de jogador
+    document.getElementById("playerSelect").addEventListener("mouseover", function(e) {
+        const playerPreviewImage = e.target.value;
+        previewPlayer.src = playerPreviewImage;
+        previewPlayer.style.display = 'block'; // Mostrar o preview
+    });
+
+    // Mostrar preview do adversário IA quando passar o mouse sobre a opção de IA
+    document.getElementById("aiSelect").addEventListener("mouseover", function(e) {
+        const aiPreviewImage = e.target.value;
+        previewAI.src = aiPreviewImage;
+        previewAI.style.display = 'block'; // Mostrar o preview
+    });
+
+    // Esconder o preview quando o mouse sair da opção
+    document.getElementById("playerSelect").addEventListener("mouseout", function() {
+        previewPlayer.style.display = 'none'; // Esconder o preview
+    });
+
+    document.getElementById("aiSelect").addEventListener("mouseout", function() {
+        previewAI.style.display = 'none'; // Esconder o preview
+    });
+
     // Função para iniciar o jogo
     function startGame() {
         document.getElementById("instructions-container").style.display = "none";
@@ -263,8 +318,13 @@
         bgMusic.play();  // Música de fundo
         currentBallImage = document.getElementById("ballSelect").value;
         aiImage = document.getElementById("aiSelect").value;
+        playerImage = document.getElementById("playerSelect").value;
+        
+        // Atualizando as imagens
         document.getElementById("ball").src = currentBallImage;
         document.getElementById("bonk").src = aiImage;
+        document.getElementById("sherk").src = playerImage;
+        
         gameLoop();
     }
 
@@ -367,6 +427,5 @@
         if (gameRunning) requestAnimationFrame(gameLoop);
     }
 </script>
-
 </body>
 </html>
