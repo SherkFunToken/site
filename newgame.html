@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>|-- Sherk Pong Game --|</title>
 
-     <style>
+    <style>
         body {
             margin: 0;
             padding: 0;
@@ -144,7 +144,8 @@
             font-size: 2vw;
             text-shadow: 0 0 10px #00ff00;
         }
-                 #previewPlayer, #previewAI {
+
+        #previewPlayer, #previewAI {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
@@ -166,7 +167,8 @@
 
 <div class="glow-text">Sherk Pong Game</div>
 
-<div class="player-label player-left">Player: Marcelinho</div>
+<!-- Player name dynamically updated -->
+<div class="player-label player-left" id="playerName">Player: Marcelinho</div>
 <div class="score-label" id="sherkScore">0</div>
     
 <div class="player-label player-right">Player: Minion</div>
@@ -179,7 +181,7 @@ First to 5 points wins!<br><br>
     </div><br><br>
     <button class="button" onclick="startGame()">Play Now</button><br><br>
     
-    <label for="ballSelect">Slect the ball game:</label>
+    <label for="ballSelect">Select the ball game:</label>
     <select id="ballSelect">
         <option value="ball.png">SherkHead ball</option>
         <option value="ball1.png">Soccer ball</option>
@@ -187,7 +189,7 @@ First to 5 points wins!<br><br>
         <option value="ball3.png">Football</option>
     </select><br><br>
 
-    <label for="aiSelect">Selecte the IA player:</label>
+    <label for="aiSelect">Select the IA player:</label>
     <select id="aiSelect">
         <option value="playerAI1.png">Pepe</option>
         <option value="playerAI2.png">Krueger Sherk</option>
@@ -199,8 +201,8 @@ First to 5 points wins!<br><br>
     <select id="playerSelect">
         <option value="sherk.png">Sherk</option>
         <option value="bonk.png">Bonk</option>
-        <option value="player3.png">Jogador 3</option>
-        <option value="player4.png">Jogador 4</option>
+        <option value="player3.png">Player 3</option>
+        <option value="player4.png">Player 4</option>
     </select>
 </div>
 
@@ -267,6 +269,7 @@ First to 5 points wins!<br><br>
 
     const previewPlayer = document.getElementById("previewPlayer");
     const previewAI = document.getElementById("previewAI");
+    const playerName = document.getElementById("playerName");
 
     // Funções de controle do mouse e toque
     document.addEventListener("mousemove", (e) => {
@@ -286,6 +289,13 @@ First to 5 points wins!<br><br>
             sherkY = Math.max(0, Math.min(canvas.height - 150, sherkY + deltaY));
             touchStartY = touchEndY;
         }
+    });
+
+    // Atualizar o nome do jogador
+    document.getElementById("playerSelect").addEventListener("change", function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const playerNameText = selectedOption.text;
+        playerName.textContent = `Player: ${playerNameText}`;
     });
 
     // Mostrar preview do jogador quando passar o mouse sobre a opção de jogador
@@ -356,7 +366,7 @@ First to 5 points wins!<br><br>
             drawScore();
             pointSound.play();
             if (rightScore === 5) {
-                showWinner("IA pplayer Wins!");
+                showWinner("IA Player Wins!");
                 bgMusic.pause();
                 victorySound.play();
                 return;
@@ -427,5 +437,6 @@ First to 5 points wins!<br><br>
         if (gameRunning) requestAnimationFrame(gameLoop);
     }
 </script>
+
 </body>
 </html>
