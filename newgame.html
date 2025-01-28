@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Marcelinho Pong Play --|</title>
+    <title>|-- Sherk Pong Game --|</title>
 
      <style>
         body {
@@ -164,7 +164,7 @@
 </head>
 <body>
 
-<div class="glow-text">Marcelinho Pong Play</div>
+<div class="glow-text">Sherk Pong Game</div>
 
 <div class="player-label player-left">Player: Marcelinho</div>
 <div class="score-label" id="sherkScore">0</div>
@@ -174,12 +174,12 @@
 
 <div id="instructions-container" class="instructions-container">
     <div class="instructions">
-        Use o mouse ou arraste o dedo na tela para controlar voce.<br>
-        Ganha quem faz 5 pontos primeiro!<br><br>
+Use the touch to control Sherk on mobile or mouse on PC.<br>
+First to 5 points wins!<br><br>
     </div><br><br>
-    <button class="button" onclick="startGame()">Jogar</button><br><br>
+    <button class="button" onclick="startGame()">Play Now</button><br><br>
     
-    <label for="ballSelect">Escolha a bola:</label>
+    <label for="ballSelect">Slect the ball game:</label>
     <select id="ballSelect">
         <option value="ball.png">SherkHead ball</option>
         <option value="ball1.png">Soccer ball</option>
@@ -187,7 +187,7 @@
         <option value="ball3.png">Football</option>
     </select><br><br>
 
-    <label for="aiSelect">Escolha o adversário IA:</label>
+    <label for="aiSelect">Selecte the IA player:</label>
     <select id="aiSelect">
         <option value="playerAI1.png">Pepe</option>
         <option value="playerAI2.png">Krueger Sherk</option>
@@ -195,7 +195,7 @@
         <option value="playerAI4.png">Bitcoin</option>
     </select><br><br>
 
-    <label for="playerSelect">Escolha o jogador:</label>
+    <label for="playerSelect">Select your Avatar:</label>
     <select id="playerSelect">
         <option value="sherk.png">Sherk</option>
         <option value="bonk.png">Bonk</option>
@@ -215,10 +215,10 @@
 
 <div id="winner-message">
     <p id="winner-text"></p>
-    <button onclick="restartGame()" class="button">Reiniciar</button>
+    <button onclick="restartGame()" class="button">Restart the game</button>
 </div>
 
-<div class="footer">Marcelinho Games</div>
+<div class="footer">Sherk Games - Sherkfun.io</div>
 
 <!-- Sons -->
 <audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
@@ -356,7 +356,7 @@
             drawScore();
             pointSound.play();
             if (rightScore === 5) {
-                showWinner("Minion Ganhou!");
+                showWinner("IA pplayer Wins!");
                 bgMusic.pause();
                 victorySound.play();
                 return;
@@ -369,7 +369,7 @@
             drawScore();
             pointSound.play();
             if (leftScore === 5) {
-                showWinner("Marcelinho Ganhou!");
+                showWinner("You Win!");
                 bgMusic.pause();
                 victorySound.play();
                 return;
