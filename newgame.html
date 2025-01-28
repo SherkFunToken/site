@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Pong Game --|</title>
+    <title>|-- Sherk Pong Game --|</title>
 
     <style>
         body {
@@ -45,6 +45,16 @@
             0% { filter: drop-shadow(0 0 10px #00f0ff); }
             50% { filter: drop-shadow(0 0 20px #ff0000); }
             100% { filter: drop-shadow(0 0 10px #00f0ff); }
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .pulsing-text {
+            animation: blink 1s infinite;
         }
 
         .glow-text {
@@ -176,10 +186,10 @@
 
 <div class="glow-text">Sherk Pong Game</div>
 
-<div class="player-label player-left" id="playerName">Player: Select your Avatar</div>
+<div class="player-label player-left" id="playerName" class="pulsing-text">Player: Select your Avatar</div>
 <div class="score-label" id="sherkScore">0</div>
     
-<div class="player-label player-right" id="aiName">Player: Select AI Avatar</div>
+<div class="player-label player-right" id="aiName" class="pulsing-text">Player: Select AI Avatar</div>
 <div class="score-label" id="bonkScore">0</div>
 
 <div id="instructions-container" class="instructions-container">
@@ -222,7 +232,7 @@
 <!-- Previews -->
 <img id="previewPlayer" src="" alt="Preview do jogador">
 <img id="previewAI" src="" alt="Preview do adversário IA">
-<img id="previewBall" src="" alt="">
+<img id="previewBall" src="" alt="Preview da Bola">
 
 <div id="winner-message">
     <p id="winner-text"></p>
@@ -331,14 +341,14 @@
         }
     });
 
-// Função para aumentar a velocidade da bola a cada rebatida
-function increaseBallSpeed() {
-    if (ballSpeedX < 5) {  // Limite máximo de velocidade
-        ballSpeedX *= 1.05;
-        ballSpeedY *= 1.05;
+    // Função para aumentar a velocidade da bola a cada rebatida
+    function increaseBallSpeed() {
+        if (ballSpeedX < 5) {  // Limite máximo de velocidade
+            ballSpeedX *= 1.05;
+            ballSpeedY *= 1.05;
+        }
     }
-}
-    
+
     // Movimentação da bola e lógica de jogo
     function updateBall() {
         ballX += ballSpeedX;
@@ -362,34 +372,31 @@ function increaseBallSpeed() {
             hitSound.play();
         }
 
-if (ballX < 0) {
-    rightScore++;
-    drawScore();
-    pointSound.play();
-    if (rightScore === 5) {
-        // Exibe o nome do jogador da IA como vencedor
-        showWinner(`${document.getElementById("aiSelect").options[document.getElementById("aiSelect").selectedIndex].text} Wins!`);
-        bgMusic.pause();
-        victorySound.play();
-        return;
-    }
-    resetBall();
-}
+        if (ballX < 0) {
+            rightScore++;
+            drawScore();
+            pointSound.play();
+            if (rightScore === 5) {
+                showWinner(`${document.getElementById("aiSelect").options[document.getElementById("aiSelect").selectedIndex].text} Wins!`);
+                bgMusic.pause();
+                victorySound.play();
+                return;
+            }
+            resetBall();
+        }
 
-if (ballX > canvas.width) {
-    leftScore++;
-    drawScore();
-    pointSound.play();
-    if (leftScore === 5) {
-        // Exibe o nome do jogador selecionado como vencedor
-        showWinner(`${document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].text} Wins!`);
-        bgMusic.pause();
-        victorySound.play();
-        return;
-    }
-    resetBall();
-}
-
+        if (ballX > canvas.width) {
+            leftScore++;
+            drawScore();
+            pointSound.play();
+            if (leftScore === 5) {
+                showWinner(`${document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].text} Wins!`);
+                bgMusic.pause();
+                victorySound.play();
+                return;
+            }
+            resetBall();
+        }
 
         moveBonk();
         movePlayers();
