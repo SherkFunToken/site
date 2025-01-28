@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Pong Game --|</title>
+    <title>|-- Sherk Pong Game --|</title>
 
     <style>
         body {
@@ -322,6 +322,26 @@ First to 5 points wins!<br><br>
         }
     });
 
+// Mostrar preview do jogador quando passar o mouse sobre as opções
+document.getElementById("playerSelect").addEventListener("mouseover", function(e) {
+    if (e.target.tagName === 'OPTION') {
+        const playerNameText = e.target.textContent;
+        playerName.textContent = `Player: ${playerNameText}`;
+        previewPlayer.src = e.target.value;  // Atualiza a imagem do preview
+        previewPlayer.style.display = 'block';  // Torna o preview visível
+    }
+});
+
+// Mostrar preview do adversário IA quando passar o mouse sobre as opções
+document.getElementById("aiSelect").addEventListener("mouseover", function(e) {
+    if (e.target.tagName === 'OPTION') {
+        const aiNameText = e.target.textContent;
+        aiName.textContent = `Player: ${aiNameText}`;
+        previewAI.src = e.target.value;  // Atualiza a imagem do preview
+        previewAI.style.display = 'block';  // Torna o preview visível
+    }
+});
+    
     // Mostrar preview da bola automaticamente
     document.getElementById("ballSelect").addEventListener("mouseover", function(e) {
         previewBall.src = e.target.value;
