@@ -171,7 +171,7 @@
 <div class="player-label player-left" id="playerName">Player: Marcelinho</div>
 <div class="score-label" id="sherkScore">0</div>
     
-<div class="player-label player-right">Player: Minion</div>
+<div class="player-label player-right" id="aiName">Player: Minion</div>
 <div class="score-label" id="bonkScore">0</div>
 
 <div id="instructions-container" class="instructions-container">
@@ -270,6 +270,7 @@ First to 5 points wins!<br><br>
     const previewPlayer = document.getElementById("previewPlayer");
     const previewAI = document.getElementById("previewAI");
     const playerName = document.getElementById("playerName");
+    const aiName = document.getElementById("aiName");
 
     // Funções de controle do mouse e toque
     document.addEventListener("mousemove", (e) => {
@@ -296,6 +297,13 @@ First to 5 points wins!<br><br>
         const selectedOption = this.options[this.selectedIndex];
         const playerNameText = selectedOption.text;
         playerName.textContent = `Player: ${playerNameText}`;
+    });
+
+    // Atualizar o nome do adversário IA
+    document.getElementById("aiSelect").addEventListener("change", function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const aiNameText = selectedOption.text;
+        aiName.textContent = `Player: ${aiNameText}`;
     });
 
     // Mostrar preview do jogador quando passar o mouse sobre a opção de jogador
