@@ -222,7 +222,7 @@
 <!-- Previews -->
 <img id="previewPlayer" src="" alt="Preview do jogador">
 <img id="previewAI" src="" alt="Preview do adversário IA">
-<img id="previewBall" src="" alt="Preview da Bola">
+<img id="previewBall" src="" alt="">
 
 <div id="winner-message">
     <p id="winner-text"></p>
@@ -362,31 +362,34 @@ function increaseBallSpeed() {
             hitSound.play();
         }
 
-        if (ballX < 0) {
-            rightScore++;
-            drawScore();
-            pointSound.play();
-            if (rightScore === 5) {
-                showWinner("Pepe Wins!");
-                bgMusic.pause();
-                victorySound.play();
-                return;
-            }
-            resetBall();
-        }
+if (ballX < 0) {
+    rightScore++;
+    drawScore();
+    pointSound.play();
+    if (rightScore === 5) {
+        // Exibe o nome do jogador da IA como vencedor
+        showWinner(`${document.getElementById("aiSelect").options[document.getElementById("aiSelect").selectedIndex].text} Wins!`);
+        bgMusic.pause();
+        victorySound.play();
+        return;
+    }
+    resetBall();
+}
 
-        if (ballX > canvas.width) {
-            leftScore++;
-            drawScore();
-            pointSound.play();
-            if (leftScore === 5) {
-                showWinner("Sherk Wins!");
-                bgMusic.pause();
-                victorySound.play();
-                return;
-            }
-            resetBall();
-        }
+if (ballX > canvas.width) {
+    leftScore++;
+    drawScore();
+    pointSound.play();
+    if (leftScore === 5) {
+        // Exibe o nome do jogador selecionado como vencedor
+        showWinner(`${document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].text} Wins!`);
+        bgMusic.pause();
+        victorySound.play();
+        return;
+    }
+    resetBall();
+}
+
 
         moveBonk();
         movePlayers();
