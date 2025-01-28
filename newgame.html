@@ -183,11 +183,11 @@
 
 <div id="instructions-container" class="instructions-container">
     <div class="instructions">
+Select the game players Avatar and the ball game!<br>
 Use the touch to control Sherk on mobile or mouse on PC.<br>
-Select your Avatar to play.>br>
 First to 5 points wins!<br><br>
     </div><br><br>
-    
+
     <label for="playerSelect">Select your Avatar:</label>
     <select id="playerSelect">
         <option value="Sherk.png">Sherk</option>
@@ -211,7 +211,7 @@ First to 5 points wins!<br><br>
         <option value="ball2.png">Basket ball</option>
         <option value="ball3.png">Football</option>
     </select><br><br>
-    <button class="button" onclick="startGame()">Play Now</button><br><br>
+        <button class="button" onclick="startGame()">Play Now</button><br><br>
 </div>
 
 <canvas id="pongCanvas"></canvas>
@@ -274,7 +274,7 @@ First to 5 points wins!<br><br>
 
     let currentBallImage = 'ball.png';
     let aiImage = 'playerAI1.png';
-    let playerImage = 'sherk.png'; // Imagem inicial do jogador
+    let playerImage = 'Sherk.png'; // Imagem inicial do jogador
 
     const previewPlayer = document.getElementById("previewPlayer");
     const previewAI = document.getElementById("previewAI");
@@ -355,10 +355,16 @@ First to 5 points wins!<br><br>
         document.getElementById("instructions-container").style.display = "none";
         gameRunning = true;
         bgMusic.play();  // Música de fundo
-        currentBallImage = document.getElementById("ballSelect").value;
-        aiImage = document.getElementById("aiSelect").value;
-        playerImage = document.getElementById("playerSelect").value;
-        
+
+        // Se o usuário não escolheu avatar ou bola, usa os valores padrão
+        currentBallImage = document.getElementById("ballSelect").value || 'ball.png';
+        aiImage = document.getElementById("aiSelect").value || 'playerAI1.png';
+        playerImage = document.getElementById("playerSelect").value || 'Sherk.png';
+
+        // Atualizando os nomes dos jogadores
+        playerName.textContent = `Player: ${document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].text}`;
+        aiName.textContent = `Player: ${document.getElementById("aiSelect").options[document.getElementById("aiSelect").selectedIndex].text}`;
+
         // Atualizando as imagens
         document.getElementById("ball").src = currentBallImage;
         document.getElementById("bonk").src = aiImage;
