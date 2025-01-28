@@ -145,7 +145,7 @@
             text-shadow: 0 0 10px #00ff00;
         }
 
-        #previewPlayer, #previewAI {
+        #previewPlayer, #previewAI, #previewBall {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
@@ -161,6 +161,13 @@
         #previewPlayer {
             left: 20px; /* Coloca o preview do jogador no lado esquerdo */
         }
+
+        #previewBall {
+            margin-top: 10px; /* Coloca o preview da bola logo abaixo do playerSelect */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 </head>
 <body>
@@ -168,10 +175,10 @@
 <div class="glow-text">Sherk Pong Game</div>
 
 <!-- Player name dynamically updated -->
-<div class="player-label player-left" id="playerName">Player: Select your Avatar</div>
+<div class="player-label player-left" id="playerName">Player: Marcelinho</div>
 <div class="score-label" id="sherkScore">0</div>
     
-<div class="player-label player-right" id="aiName">Player: Select the Avatar</div>
+<div class="player-label player-right" id="aiName">Player: Minion</div>
 <div class="score-label" id="bonkScore">0</div>
 
 <div id="instructions-container" class="instructions-container">
@@ -214,6 +221,7 @@ First to 5 points wins!<br><br>
 <!-- Previews -->
 <img id="previewPlayer" src="" alt="Preview do jogador">
 <img id="previewAI" src="" alt="Preview do adversário IA">
+<img id="previewBall" src="" alt="Preview da Bola">
 
 <div id="winner-message">
     <p id="winner-text"></p>
@@ -269,6 +277,7 @@ First to 5 points wins!<br><br>
 
     const previewPlayer = document.getElementById("previewPlayer");
     const previewAI = document.getElementById("previewAI");
+    const previewBall = document.getElementById("previewBall");
     const playerName = document.getElementById("playerName");
     const aiName = document.getElementById("aiName");
 
@@ -320,13 +329,24 @@ First to 5 points wins!<br><br>
         previewAI.style.display = 'block'; // Mostrar o preview
     });
 
-    // Esconder o preview quando o mouse sair da opção
+    // Mostrar preview da bola quando passar o mouse sobre a opção de bola
+    document.getElementById("ballSelect").addEventListener("mouseover", function(e) {
+        const ballPreviewImage = e.target.value;
+        previewBall.src = ballPreviewImage;
+        previewBall.style.display = 'block'; // Mostrar o preview
+    });
+
+    // Esconder o preview quando o mouse sair das opções
     document.getElementById("playerSelect").addEventListener("mouseout", function() {
         previewPlayer.style.display = 'none'; // Esconder o preview
     });
 
     document.getElementById("aiSelect").addEventListener("mouseout", function() {
         previewAI.style.display = 'none'; // Esconder o preview
+    });
+
+    document.getElementById("ballSelect").addEventListener("mouseout", function() {
+        previewBall.style.display = 'none'; // Esconder o preview
     });
 
     // Função para iniciar o jogo
