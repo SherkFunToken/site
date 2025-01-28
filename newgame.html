@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Pong Game --|</title>
+    <title>|- Sherk Pong Game --|</title>
 
     <style>
         body {
@@ -331,6 +331,14 @@
         }
     });
 
+// Função para aumentar a velocidade da bola a cada rebatida
+function increaseBallSpeed() {
+    if (ballSpeedX < 5) {  // Limite máximo de velocidade
+        ballSpeedX *= 1.05;
+        ballSpeedY *= 1.05;
+    }
+}
+    
     // Movimentação da bola e lógica de jogo
     function updateBall() {
         ballX += ballSpeedX;
@@ -344,11 +352,13 @@
 
         if (ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
             ballSpeedX = -ballSpeedX;
+            increaseBallSpeed();  // Aumenta a velocidade após a rebatida
             hitSound.play();
         }
 
         if (ballX >= canvas.width - 100 - ball.width && ballY > bonkY && ballY < bonkY + aiHeight) {
             ballSpeedX = -ballSpeedX;
+            increaseBallSpeed();  // Aumenta a velocidade após a rebatida
             hitSound.play();
         }
 
