@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Pong Game --|</title>
+    <title>|- Sherk Pong Game --|</title>
 
     <style>
         body {
@@ -433,6 +433,10 @@
         playerImage = document.getElementById("playerSelect").value || 'Sherk.png';
         playerName.textContent = `Player: ${document.getElementById("playerSelect").options[document.getElementById("playerSelect").selectedIndex].text}`;
         aiName.textContent = `Player: ${document.getElementById("aiSelect").options[document.getElementById("aiSelect").selectedIndex].text}`;
+
+        // Remove a animação de piscamento
+        document.getElementById("playerName").classList.remove("pulsing-text");
+        document.getElementById("aiName").classList.remove("pulsing-text");
 
         document.getElementById("ball").src = currentBallImage;
         document.getElementById("bonk").src = aiImage;
