@@ -47,7 +47,7 @@
     </style>
 </head>
 <body>
-    <div class="instructions">Use as teclas ← e → para mover o carro. Evite os obstáculos!</div>
+    <div class="instructions">Use as teclas ← e → para mover o tubarão. Evite os obstáculos!</div>
     <div class="game-over" id="gameOver">Game Over! Pressione R para reiniciar.</div>
     <canvas id="gameCanvas"></canvas>
 
@@ -59,29 +59,27 @@
         canvas.height = window.innerHeight;
 
         const roadWidth = 30;
-        const carWidth = 40;
-        const carHeight = 80;
-        let carX = canvas.width / 2 - carWidth / 2;
-        const carY = canvas.height - 150;
+        const sharkWidth = 40;
+        const sharkHeight = 80;
+        let sharkX = canvas.width / 2 - sharkWidth / 2;
+        const sharkY = canvas.height - 150;
 
         const obstacles = [];
         const speed = 5;
         let frameCount = 0;
         let gameRunning = true;
 
-        function drawCar() {
-            const carAscii = [
-                "   _____",
-                "  /_||_\\`.__",
-                " (   _    _ _\\",
-                " =`-(_)--(_)-'"
-            ];
+        function drawShark() {
+            const sharkAscii = [
+                "      __",
+                "  ___/o\\__,",
+                "  \_________/"];
 
             ctx.font = "16px monospace";
             ctx.fillStyle = "lime";
 
-            carAscii.forEach((line, index) => {
-                ctx.fillText(line, carX, carY + index * 16);
+            sharkAscii.forEach((line, index) => {
+                ctx.fillText(line, sharkX, sharkY + index * 16);
             });
         }
 
@@ -146,10 +144,10 @@
         function checkCollision() {
             for (const obstacle of obstacles) {
                 if (
-                    carX < obstacle.x + obstacle.width &&
-                    carX + carWidth > obstacle.x &&
-                    carY < obstacle.y + obstacle.height &&
-                    carY + carHeight > obstacle.y
+                    sharkX < obstacle.x + obstacle.width &&
+                    sharkX + sharkWidth > obstacle.x &&
+                    sharkY < obstacle.y + obstacle.height &&
+                    sharkY + sharkHeight > obstacle.y
                 ) {
                     gameRunning = false;
                     document.getElementById('gameOver').style.display = 'block';
@@ -163,7 +161,7 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             drawRoadAndLandscape();
-            drawCar();
+            drawShark();
             drawObstacles();
             moveObstacles();
             checkCollision();
@@ -174,9 +172,9 @@
 
         window.addEventListener('keydown', e => {
             if (e.key === 'ArrowLeft') {
-                carX = Math.max(canvas.width / 2 - roadWidth / 2, carX - roadWidth / 3);
+                sharkX = Math.max(canvas.width / 2 - roadWidth / 2, sharkX - roadWidth / 3);
             } else if (e.key === 'ArrowRight') {
-                carX = Math.min(canvas.width / 2 + roadWidth / 2 - carWidth, carX + roadWidth / 3);
+                sharkX = Math.min(canvas.width / 2 + roadWidth / 2 - sharkWidth, sharkX + roadWidth / 3);
             } else if (e.key === 'r' || e.key === 'R') {
                 if (!gameRunning) {
                     location.reload();
