@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>|-- Sherk Pong - Best of 3 (Tennis Logic) --|</title>
+  <title>|-- Sherk Pong - Best of 3 (Tennis Style) --|</title>
 
   <style>
     /* ==================== BASIC STYLES ==================== */
@@ -198,9 +198,9 @@
   <div id="instructions-container" class="instructions-container">
     <div class="instructions">
       Touch or move your mouse to control Sherk.<br>
-      Each game uses tennis-like points: 1,2,3,4, then Deuce & Advantage.<br>
-      You need a 2-point lead to win the game.<br>
-      First to 3 games (Matches) is the Champion!<br><br>
+      Each game uses tennis-like points (1,2,3,4, Deuce, Advantage).<br>
+      You need a 2-point lead to win a game.<br>
+      First to 3 games is the Champion.<br><br>
     </div>
     <button class="button" onclick="startGame()">Play</button>
   </div>
@@ -226,7 +226,6 @@
   <!-- SOUNDS -->
   <audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
   <audio id="bgMusic" src="bg_music.MP3" loop="true" preload="auto"></audio>
-  <audio id="victorySound" src="victory_sound.MP3" preload="auto"></audio>
   <audio id="pointSound" src="point.MP3" preload="auto"></audio>
   <audio id="pointSound" src="point.mp3" preload="auto"></audio>
   <audio id="matchPointSound" src="match_point.mp3" preload="auto"></audio>
@@ -270,22 +269,19 @@
     let sherkY = canvas.height / 2 - playerHeight / 2;
     let bonkY  = canvas.height / 2 - playerHeight / 2;
 
-    // TENNIS-STYLE SCORES (player game points):
-    // We'll store numeric: 0=0 points, 1=1 point, 2=2, 3=3, 4=4, 5=Adv, 6=Game
-    // But to display: 1->'15', 2->'30', 3->'40', 4->'? Deuce / Advantage?'
-    // We just keep it numeric and handle logic carefully.
-
-    let sherkPoints  = 0; // Points in the current game
-    let bonkPoints   = 0;
-    let sherkMatches = 0; // Games (Matches) won
+    // TENNIS-STYLE POINTS PER GAME:
+    let sherkPoints  = 0; 
+    let bonkPoints   = 0; 
+    // MATCHES WON:
+    let sherkMatches = 0; 
     let bonkMatches  = 0;
 
     let gameRunning  = false;
 
-    /* ==================== MESSAGES ==================== */
-    function showMessage(msg) {
-      if(!msg) return;
-      gameMessage.innerText = msg;
+    /* ==================== MESSAGE HELPER ==================== */
+    function showMessage(text) {
+      if(!text) return;
+      gameMessage.innerText = text;
       gameMessage.style.display = "block";
       setTimeout(() => {
         gameMessage.style.display = "none";
@@ -295,7 +291,7 @@
     /* ==================== INPUT EVENTS ==================== */
     document.addEventListener("mousemove", e => {
       if(gameRunning) {
-        sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight/2));
+        sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight / 2));
       }
     });
     let touchStartY = 0;
@@ -315,75 +311,73 @@
     function startGame() {
       document.getElementById("instructions-container").style.display = "none";
       gameRunning = true;
+      bgMusic.currentTime = 0;
       bgMusic.play();
       gameLoop();
     }
 
-    /* ==================== TENNIS SCORING LOGIC ==================== */
+    /* ==================== TENNIS SCORING ==================== */
     function updateTennisScore(winner) {
-      // Add 1 point to the winner
-      if(winner === 'Sherk') {
+      // Give 1 point to the winner
+      if(winner === "Sherk") {
         sherkPoints++;
       } else {
         bonkPoints++;
       }
 
-      // Basic tennis logic: need 2 points lead to close if >=4
+      let diff = sherkPoints - bonkPoints;
       if(sherkPoints >=4 || bonkPoints >=4) {
-        // Check difference
-        let diff = sherkPoints - bonkPoints;
+        // Check if at least a 2-point lead
         if(diff === 0 && sherkPoints >=4) {
           // Deuce
           showMessage("Deuce!");
           deuceSound.play();
-        } else if(diff === 1 && sherkPoints >=4) {
+        }
+        else if(diff === 1 && sherkPoints >=4) {
           // Advantage Sherk
           showMessage("Advantage Sherk!");
           matchPointSound.play();
-        } else if(diff === -1 && bonkPoints >=4) {
+        }
+        else if(diff === -1 && bonkPoints >=4) {
           // Advantage Pepe
           showMessage("Advantage Pepe!");
           matchPointSound.play();
-        } else if(diff >= 2 && sherkPoints >=4) {
+        }
+        else if(diff >= 2 && sherkPoints >=4) {
           // Sherk wins the game
           gameWonBy("Sherk");
-        } else if(diff <= -2 && bonkPoints >=4) {
+        }
+        else if(diff <= -2 && bonkPoints >=4) {
           // Pepe wins the game
           gameWonBy("Pepe");
         }
-      } else {
-        // Show normal point message
-        let displayScore = (winner === 'Sherk') ? "Point for Sherk!" : "Point for Pepe!";
-        showMessage(displayScore);
+        else {
+          // Normal point
+          showMessage(`Point for ${winner}!`);
+          pointSound.play();
+        }
+      }
+      else {
+        // Normal point (under 4)
+        showMessage(`Point for ${winner}!`);
         pointSound.play();
       }
     }
 
     function gameWonBy(player) {
-      // The "game" is over in tennis terms => increment that player's matches
+      // Add a match to that player
       if(player === "Sherk") sherkMatches++;
       else                   bonkMatches++;
 
       showMessage(`${player} wins the Game!`);
-      pointSound.play();
-
-      // Check if there's a "Match Point" scenario => if a player has 2 matches, next game is match point
-      // But let's finalize the game now
-      setTimeout(() => {
-        checkGameChampion();
-      }, 1500);
-    }
-
-    function checkGameChampion() {
-      // Reset points for new game
+      // Reset the game points
       sherkPoints = 0;
       bonkPoints  = 0;
-
       drawScore();
 
-      // If a player reached 3 matches, he is the champion
+      // Check if this match ended the entire best-of-3
       if(sherkMatches === 3 || bonkMatches === 3) {
-        // End the entire Best-of-3 match
+        // The champion is decided
         gameRunning = false;
         bgMusic.pause();
         gameSetMatchSound.currentTime = 0;
@@ -395,78 +389,72 @@
       }
     }
 
-    /* ==================== UPDATE & DRAW SCORES ==================== */
+    /* ==================== DRAW SCORES ==================== */
     function drawScore() {
-      // Show tennis-like numeric for the game scoreboard
-      // We won't do the exact 15,30,40 text. We'll show raw numeric or messages like "A" for advantage
-      const leftDisplay  = tennisScoreDisplay(sherkPoints, bonkPoints);
-      const rightDisplay = tennisScoreDisplay(bonkPoints, sherkPoints);
+      // We'll display raw numeric or "Adv" for advantage, etc.
+      sherkScoreEl.innerText = tennisDisplay(sherkPoints, bonkPoints);
+      bonkScoreEl.innerText  = tennisDisplay(bonkPoints, sherkPoints);
 
-      sherkScoreEl.innerText = leftDisplay;
-      bonkScoreEl.innerText  = rightDisplay;
-
-      // Color changes if someone is leading
+      // Color changes
       if(sherkPoints > bonkPoints) {
         sherkScoreEl.style.color = "blue";
         bonkScoreEl.style.color  = "red";
       } else if(bonkPoints > sherkPoints) {
-        bonkScoreEl.style.color  = "blue";
         sherkScoreEl.style.color = "red";
+        bonkScoreEl.style.color  = "blue";
       } else {
         sherkScoreEl.style.color = "#00ff00";
         bonkScoreEl.style.color  = "#00ff00";
       }
 
-      // Matches scoreboard
       sherkMatchEl.innerText = `Matches: ${sherkMatches}`;
       bonkMatchEl.innerText  = `Matches: ${bonkMatches}`;
     }
 
-    function tennisScoreDisplay(playerPts, oppPts) {
-      // If both >= 3
-      if(playerPts >= 4 || oppPts >= 4) {
+    function tennisDisplay(playerPts, oppPts) {
+      // For clarity, just show numeric or 'Adv' if difference=1
+      // or 'Deuce' if they are equal >=4
+      if(playerPts >=4 || oppPts >=4) {
         let diff = playerPts - oppPts;
+        if(diff === 0 && playerPts >=4) return "Deuce";
+        if(diff === 1 && playerPts >=4) return "Adv";
         if(diff >= 2) return "Game";
-        if(diff === 1) return "Adv";
-        if(diff === 0) return "Deuce";
-        return playerPts; 
       }
-      return playerPts.toString();
+      return String(playerPts);
     }
 
-    /* ==================== BALL / MOVEMENT ==================== */
+    /* ==================== BALL / LOOP ==================== */
     function updateBall() {
       ballX += ballSpeedX;
       ballY += ballSpeedY;
       ballAngle += 5;
       ball.style.transform = `rotate(${ballAngle}deg)`;
 
-      // Collisions top/bottom
-      if(ballY <= 0 || (ballY + ball.height >= canvas.height)) {
+      // Top/bottom collisions
+      if(ballY <= 0 || ballY + ball.height >= canvas.height) {
         ballSpeedY = -ballSpeedY;
       }
-      // Collision with Sherk
+      // Sherk collision
       if(ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
         ballSpeedX = -ballSpeedX;
         increaseBallSpeed();
         hitSound.play();
       }
-      // Collision with Pepe
+      // Pepe collision
       if(ballX >= canvas.width - 100 - ball.width && ballY > bonkY && ballY < bonkY + playerHeight) {
         ballSpeedX = -ballSpeedX;
         increaseBallSpeed();
         hitSound.play();
       }
 
-      // If ball goes out left => Pepe wins a point
+      // Out left => Pepe point
       if(ballX < 0) {
         updateTennisScore("Pepe");
         drawScore();
         resetBall();
       }
-
-      // If ball goes out right => Sherk wins a point
-      if(ballX > canvas.width) {
+      // Out right => Sherk point
+      else if(ballX > canvas.width) {
         updateTennisScore("Sherk");
         drawScore();
         resetBall();
@@ -485,7 +473,7 @@
     }
 
     function moveBonk() {
-      let targetY = ballY - playerHeight / 2;
+      let targetY = ballY - playerHeight/2;
       bonkY += (targetY - bonkY) * 0.05;
       bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
@@ -504,7 +492,7 @@
 
     /* ==================== WINNER BUTTON ==================== */
     function startNextAction() {
-      // If a player had 3 matches => new tournament
+      // If someone had 3 matches => new tournament
       if(sherkMatches === 3 || bonkMatches === 3) {
         sherkMatches = 0;
         bonkMatches  = 0;
