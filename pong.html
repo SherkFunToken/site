@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>|- Sherk Pong - Best of 3 --|</title>
+  <title>Sherk Pong - Best of 3</title>
 
   <style>
     body {
@@ -81,11 +81,11 @@
       text-shadow: 0 0 10px #00ff00;
     }
     .player-left {
-      top: 45px; 
+      top: 100px; 
       left: 20px;
     }
     .player-right {
-      top: 45px;
+      top: 100px;
       right: 20px;
     }
 
@@ -325,7 +325,7 @@
     /* ===================== ATUALIZA SCORE ===================== */
     function updateScore(winner) {
       // Primeiro: Point for X
-      const pointMessage = Point for ${winner}!;
+      const pointMessage = `Point for ${winner}!`;
       let finalMessages = [ pointMessage ]; // Mensagens iniciais
 
       if (winner === "Sherk") {
@@ -396,8 +396,8 @@
       }
 
       // Matches
-      sherkMatchEl.innerText = Matches: ${sherkMatches};
-      bonkMatchEl.innerText  = Matches: ${bonkMatches};
+      sherkMatchEl.innerText = `Matches: ${sherkMatches}`;
+      bonkMatchEl.innerText  = `Matches: ${bonkMatches}`;
     }
 
     /* ===================== RESETAR BOLA ===================== */
@@ -434,7 +434,7 @@
       ballX += ballSpeedX;
       ballY += ballSpeedY;
       ballAngle += 5;
-      ball.style.transform = rotate(${ballAngle}deg);
+      ball.style.transform = `rotate(${ballAngle}deg)`;
 
       // Paredes superior/inferior
       if (ballY <= 0 || ballY + ball.height >= canvas.height) {
@@ -489,10 +489,10 @@
     }
 
     function movePlayers() {
-      document.getElementById("sherk").style.top = ${sherkY}px;
-      document.getElementById("bonk").style.top  = ${bonkY}px;
-      ball.style.left = ${ballX}px;
-      ball.style.top  = ${ballY}px;
+      document.getElementById("sherk").style.top = `${sherkY}px`;
+      document.getElementById("bonk").style.top  = `${bonkY}px`;
+      ball.style.left = `${ballX}px`;
+      ball.style.top  = `${ballY}px`;
     }
 
     function gameLoop() {
