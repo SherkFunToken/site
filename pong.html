@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sherk Pong Games.</title>
+    <title>|-- Sherk Pong --|</title>
+
+ By: @Marcelo_VP
+ https://token4fun.github.io/crypto/
+ 
     <style>
         body {
             margin: 0;
             padding: 0;
-            background: green;
+            background: url('back.gif') center center no-repeat;
+            background-size: cover;
             overflow: hidden;
             font-family: monospace;
             text-align: center;
@@ -19,14 +24,28 @@
             flex-direction: column;
         }
 
+        .message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4vw;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 20px red, 0 0 40px blue;
+            display: none;
+        }
+
+
         canvas {
             display: block;
         }
 
         .player {
             position: absolute;
-            height: 150px;
+            height: 200px;
             width: auto;
+            animation: glow-animation 1.5s infinite alternate;
         }
 
         #sherk {
@@ -39,8 +58,8 @@
 
         @keyframes glow-animation {
             0% { filter: drop-shadow(0 0 10px #00f0ff); }
-            0% { filter: drop-shadow(0 0 20px #ff0000); }
-            0% { filter: drop-shadow(0 0 10px #00f0ff); }
+            50% { filter: drop-shadow(0 0 20px #ff0000); }
+            100% { filter: drop-shadow(0 0 10px #00f0ff); }
         }
 
         .glow-text {
@@ -58,6 +77,23 @@
             font-size: 2vw;
             color: #00ff00;
             text-shadow: 0 0 10px #00ff00;
+        }
+
+        .score-label {
+            position: absolute;
+            font-size: 5vw;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+            font-weight: bold;
+            top: 30px;
+        }
+
+        #sherkScore {
+            left: 60px;
+        }
+
+        #bonkScore {
+            right: 60px;
         }
 
         .player-left {
@@ -102,11 +138,10 @@
         #winner-message {
             font-size: 3vw;
             color: #00ff00;
-            text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000, 0 0 30px #0077ff;
+            text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000;
             white-space: pre-wrap;
             display: none;
             position: absolute;
-            width: 100%;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -115,8 +150,8 @@
 
         #ball {
             position: absolute;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
         }
 
         .footer {
@@ -130,18 +165,27 @@
 </head>
 <body>
 
+    <div id="game-message" class="message"></div>
+    <canvas id="pongCanvas"></canvas>
+
+    <audio id="pointSound" src="point.mp3" preload="auto"></audio>
+    <audio id="matchPointSound" src="match_point.mp3" preload="auto"></audio>
+    <audio id="deuceSound" src="deuce.mp3" preload="auto"></audio>
+    <audio id="gameSetMatchSound" src="game_set_match.mp3" preload="auto"></audio>
+    
 <div class="glow-text">Sherk Pong</div>
 
 <div class="player-label player-left">Player: Sherk</div>
-<div class="player-label player-right">Player: Bonk</div>
+<div class="score-label" id="sherkScore">0</div>
+    
+<div class="player-label player-right">Player: Pepe</div>
+<div class="score-label" id="bonkScore">0</div>
 
 <div id="instructions-container" class="instructions-container">
     <div class="instructions">
-        Use the mouse to control Sherk.<br>
-        Click "Play" to start the game.<br>
-        (F5) to update the page.<br>
-        First to 5 points wins!
-    </div>
+        Use the touch to control Sherk on mobile or mouse on PC.<br>
+        First to 5 points wins!<br><br>
+    </div><br><br>
     <button class="button" onclick="startGame()">Play</button>
 </div>
 
@@ -151,13 +195,62 @@
 <img src="ball.png" id="ball">
 
 <div id="winner-message">
-    SHERK always wins<br>Listen to the Sherk<br>
-    <button class="button" onclick="restartGame()">Play Again</button>
+    <p id="winner-text"></p>
+    <button onclick="restartGame()" class="button">Restart</button>
 </div>
 
-<div class="footer">Sherk Games - By MVP</div>
+<div class="footer">Sherk Games - Sherkfun.io</div>
+
+<!-- Sons -->
+<audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
+<audio id="bgMusic" src="bg_music.MP3" loop="true" preload="auto"></audio>
+<audio id="victorySound" src="victory_sound.MP3" preload="auto"></audio>
+<audio id="pointSound" src="point.MP3" preload="auto"></audio>
 
 <script>
+        let leftScore = 0;
+        let rightScore = 0;
+
+        function updateScore(winner) {
+            if (winner === 'Sherk') {
+                leftScore++;
+            } else {
+                rightScore++;
+            }
+            
+            let message = "";
+            let sound = null;
+
+            if (leftScore === 4 && rightScore === 4) {
+                message = "Deuce!";
+                sound = document.getElementById("deuceSound");
+            } else if (leftScore === 4 || rightScore === 4) {
+                message = "Match Point!";
+                sound = document.getElementById("matchPointSound");
+            } else if (leftScore === 5 || rightScore === 5) {
+                message = "Game, Set, Match!";
+                sound = document.getElementById("gameSetMatchSound");
+                leftScore = 0;
+                rightScore = 0;
+            } else {
+                message = `Point for ${winner}!`;
+                sound = document.getElementById("pointSound");
+            }
+            
+            showMessage(message);
+            sound.play();
+        }
+
+        function showMessage(text) {
+            let messageDiv = document.getElementById("game-message");
+            messageDiv.innerText = text;
+            messageDiv.style.display = "block";
+            setTimeout(() => { messageDiv.style.display = "none"; }, 1500);
+        }
+
+
+
+    
     const canvas = document.getElementById("pongCanvas");
     const ctx = canvas.getContext("2d");
 
@@ -165,93 +258,141 @@
     canvas.height = window.innerHeight;
 
     const ball = document.getElementById("ball");
+
+    // Sons
+    const hitSound = document.getElementById("hitSound");
+    const bgMusic = document.getElementById("bgMusic");
+    const victorySound = document.getElementById("victorySound");
+    const pointSound = document.getElementById("pointSound");
+
+    // Ajuste do volume da música de fundo para 3 em uma escala de 0 a 10 (volume 0.3)
+    bgMusic.volume = 0.3;
+
+    // Começar a música de fundo quando a página carrega
+    function startGame() {
+        document.getElementById("instructions-container").style.display = "none";
+        gameRunning = true;
+        bgMusic.play();  // Play music on game start
+        gameLoop();
+    }
+
+    // Velocidade inicial mais lenta
+    const initialSpeedX = 2; 
+    const initialSpeedY = 1.5; 
     let ballX = canvas.width / 2;
     let ballY = canvas.height / 2;
-    let ballSpeedX = 2;
-    let ballSpeedY = 1.5;
+    let ballSpeedX = initialSpeedX;
+    let ballSpeedY = initialSpeedY;
     let ballAngle = 0;
 
-    const playerHeight = 150;
+    const playerHeight = 200;
     let sherkY = canvas.height / 2 - playerHeight / 2;
     let bonkY = canvas.height / 2 - playerHeight / 2;
 
     let leftScore = 0;
     let rightScore = 0;
     let gameRunning = false;
-    let bonkMissNext = false;
 
+    // Função para capturar o movimento do mouse
     document.addEventListener("mousemove", (e) => {
         if (gameRunning) {
-            sherkY = e.clientY - playerHeight / 2;
+            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight / 2));
+        }
+    });
+
+    // Função para capturar o movimento do toque (para dispositivos móveis)
+    let touchStartY = 0;
+    document.addEventListener("touchstart", (e) => {
+        touchStartY = e.touches[0].clientY; // Pega a posição inicial do toque
+    });
+
+    document.addEventListener("touchmove", (e) => {
+        if (gameRunning) {
+            const touchEndY = e.touches[0].clientY;
+            const deltaY = touchEndY - touchStartY; // Movimento do toque
+
+            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, sherkY + deltaY)); // Atualiza a posição do Sherk
+            touchStartY = touchEndY; // Atualiza o valor de referência do toque
         }
     });
 
     function drawScore() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.font = "5vw Arial";
-        ctx.fillStyle = leftScore > rightScore ? "#0077ff" : "#ff0000";
-        ctx.fillText(leftScore, canvas.width / 3, 50);
+        document.getElementById("sherkScore").innerText = leftScore;
+        document.getElementById("bonkScore").innerText = rightScore;
 
-        ctx.fillStyle = rightScore > leftScore ? "#0077ff" : "#ff0000";
-        ctx.fillText(rightScore, (canvas.width / 3) * 2, 50);
+        // Alterar cor do placar
+        if (leftScore > rightScore) {
+            document.getElementById("sherkScore").style.color = "blue";
+            document.getElementById("bonkScore").style.color = "red";
+        } else if (rightScore > leftScore) {
+            document.getElementById("bonkScore").style.color = "blue";
+            document.getElementById("sherkScore").style.color = "red";
+        } else {
+            document.getElementById("sherkScore").style.color = "#00ff00";
+            document.getElementById("bonkScore").style.color = "#00ff00";
+        }
     }
 
     function updateBall() {
         ballX += ballSpeedX;
         ballY += ballSpeedY;
-        ballAngle += 5;
+        ballAngle += 5;  // Incrementa o ângulo da bola para rotação
         ball.style.transform = `rotate(${ballAngle}deg)`;
 
+        // Rebater na parede superior e inferior
         if (ballY <= 0 || ballY + ball.height >= canvas.height) {
             ballSpeedY = -ballSpeedY;
         }
 
+        // Rebater na raquete do Sherk (jogador)
         if (ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
             ballSpeedX = -ballSpeedX;
+            increaseBallSpeed();
+            hitSound.play(); // Som de rebote
         }
 
-        if (ballX >= canvas.width - 100 - ball.width) {
-            if (bonkMissNext) {
-                leftScore++;
-                bonkMissNext = false;
-                resetBall();
-            } else if (ballY > bonkY && ballY < bonkY + playerHeight) {
-                ballSpeedX = -ballSpeedX;
-                bonkMissNext = Math.random() < 0.3; 
-            }
+        // Rebater na raquete do Bonk (IA)
+        if (ballX >= canvas.width - 100 - ball.width && ballY > bonkY && ballY < bonkY + playerHeight) {
+            ballSpeedX = -ballSpeedX;
+            increaseBallSpeed();
+            hitSound.play(); // Som de rebote
         }
 
+        // Verificar se a bola saiu pelos lados
         if (ballX < 0) {
             rightScore++;
+            drawScore();
+            pointSound.play(); // Som de ponto
+            if (rightScore === 5) {
+                showWinner("Pepe Wins!");
+                bgMusic.pause(); // Para a música de fundo quando alguém vence
+                victorySound.play(); // Som de vitória
+                return;
+            }
             resetBall();
         }
 
-        if (leftScore === 5) {
-            showWinner();
+        if (ballX > canvas.width) {
+            leftScore++;
+            drawScore();
+            pointSound.play(); // Som de ponto
+            if (leftScore === 5) {
+                showWinner("Sherk Wins!");
+                bgMusic.pause(); // Para a música de fundo quando alguém vence
+                victorySound.play(); // Som de vitória
+                return;
+            }
+            resetBall();
         }
-    }
 
-    function resetBall() {
-        ballX = canvas.width / 2;
-        ballY = canvas.height / 2;
-        ballSpeedX = -ballSpeedX;
-    }
-
-    function showWinner() {
-        gameRunning = false;
-        document.getElementById("winner-message").style.display = "block";
-    }
-
-    function restartGame() {
-        leftScore = 0;
-        rightScore = 0;
-        document.getElementById("winner-message").style.display = "none";
-        document.getElementById("instructions-container").style.display = "block";
+        moveBonk();
+        movePlayers();
     }
 
     function moveBonk() {
-        const targetY = bonkMissNext ? canvas.height : ballY - playerHeight / 2;
+        let targetY = ballY - playerHeight / 2;
         bonkY += (targetY - bonkY) * 0.05;
+        bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
 
     function movePlayers() {
@@ -261,18 +402,33 @@
         ball.style.top = `${ballY}px`;
     }
 
-    function gameLoop() {
-        drawScore();
-        moveBonk();
-        updateBall();
-        movePlayers();
-        if (gameRunning) requestAnimationFrame(gameLoop);
+    function increaseBallSpeed() {
+        ballSpeedX *= 1.05;
+        ballSpeedY *= 1.05;
     }
 
-    function startGame() {
-        document.getElementById("instructions-container").style.display = "none";
-        gameRunning = true;
-        gameLoop();
+    function resetBall() {
+        ballX = canvas.width / 2;
+        ballY = canvas.height / 2;
+        ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * initialSpeedX;
+        ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * initialSpeedY;
+        ballAngle = 0;  // Resetando o ângulo da bola
+    }
+
+    function showWinner(winnerMessage) {
+        gameRunning = false;
+        document.getElementById("winner-text").innerText = winnerMessage;
+        document.getElementById("winner-message").style.display = "block";
+    }
+
+    // Função para reiniciar o jogo ao clicar no botão "Restart"
+    function restartGame() {
+        location.reload();  // Isso simula a tecla F5 e recarrega a página
+    }
+
+    function gameLoop() {
+        updateBall();
+        if (gameRunning) requestAnimationFrame(gameLoop);
     }
 </script>
 
