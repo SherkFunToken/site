@@ -7,6 +7,16 @@
 
   <style>
     /* ===== BASIC PAGE STYLES ===== */
+    :root {
+      --paddleDistance: 100; /* default for desktop */
+    }
+
+    @media (max-width: 600px) {
+      :root {
+        --paddleDistance: 50; /* smaller distance for mobile */
+      }
+    }
+
     body {
       margin: 0;
       padding: 0;
@@ -59,7 +69,7 @@
       right: 20px;
     }
 
-    /* ===== SCORES FOR THE CURRENT GAME ===== */
+    /* ===== SCORES ===== */
     .score-label {
       position: absolute;
       font-size: 5vw;
@@ -95,7 +105,7 @@
     /* ===== CHARACTERS (SHERK & PEPE) ===== */
     .player {
       position: absolute;
-      height: 200px; /* default (desktop) size */
+      height: 200px; 
       width: auto;
       animation: glow-animation 1.5s infinite alternate;
     }
@@ -241,22 +251,17 @@
 
     /* ===== MEDIA QUERY FOR MOBILE ===== */
     @media (max-width: 600px) {
-      .popup-content {
-        font-size: 1rem;
-      }
-      .popup-content h2 {
-        font-size: 1.5rem;
-      }
       /* Characters at 50% height on mobile */
       .player {
         height: 100px; /* half of 200px */
       }
       #sherk {
-        top: 75px; /* also half of 150px to keep the proportion */
+        top: 75px; /* half of 150px */
       }
       #bonk {
         top: 75px;
       }
+      /* scale up text for smaller screens, etc. */
       .glow-text {
         font-size: 6vw;
       }
@@ -290,17 +295,21 @@
 </head>
 <body>
 
+  <!-- Title -->
   <div class="glow-text">Sherk Pong</div>
 
+  <!-- Matches (Best of 3) -->
   <div class="match-label" id="sherkMatches">Matches: 0</div>
   <div class="match-label" id="bonkMatches">Matches: 0</div>
 
+  <!-- Player Names & Score -->
   <div class="player-label player-left">Player: Sherk</div>
   <div class="score-label" id="sherkScore">0</div>
 
   <div class="player-label player-right">Player: Pepe</div>
   <div class="score-label" id="bonkScore">0</div>
 
+  <!-- Instructions & Start Button -->
   <div id="instructions-container" class="instructions-container">
     <div class="instructions">
       Use touch or mouse to move Sherk up/down.<br>
@@ -310,18 +319,22 @@
     <button class="button" onclick="startGame()">Play</button>
   </div>
 
+  <!-- Canvas & Characters -->
   <canvas id="pongCanvas"></canvas>
   <img src="Sherk.png" id="sherk" class="player">
   <img src="Bonk.png" id="bonk" class="player">
   <img src="ball.png" id="ball">
 
+  <!-- End-of-match/tournament message -->
   <div id="winner-message">
     <p id="winner-text"></p>
     <button id="winner-button" class="button" onclick="startNextAction()">...</button>
   </div>
 
+  <!-- Temporary message (Point for..., Deuce, etc.) -->
   <div id="game-message" class="message"></div>
 
+  <!-- Footer + Docs button -->
   <div class="footer">
     Sherk Games - Sherkfun.io &nbsp;
     <button class="button" style="font-size:1rem; padding:5px 10px;" onclick="openDocs()">Docs</button>
@@ -338,17 +351,17 @@
       </p>
       <p>
         <strong>How to move:</strong><br>
-        - On PC, move your mouse up or down to control Sherk’s paddle.<br>
-        - On mobile, just drag your finger on the screen. Easy enough, right?
+        - On PC, move your mouse up/down to control Sherk.<br>
+        - On mobile, just drag your finger on the screen. Piece of cake!
       </p>
       <p>
         <strong>Pepe’s AI:</strong><br>
-        - Pepe (Bonk) follows the ball with a slight delay. He won't miss often, so be ready!
+        - Pepe (Bonk) follows the ball. He won't miss often!
       </p>
       <p>
         <strong>Pro tips:</strong><br>
-        - Watch out if the score hits 4–4—things get crazy with “Deuce!” and possible “Match Point!” messages if someone might clinch the series.<br>
-        - The ball gets faster with every bounce, so keep your reflexes sharp!
+        - Watch out if the score hits 4–4—things get crazy with “Deuce!” or “Match Point!” if someone’s about to take the best-of-3.<br>
+        - The ball speeds up each time it bounces, so keep your eyes sharp!
       </p>
       <button onclick="closeDocs()">Close</button>
     </div>
@@ -401,13 +414,16 @@
     let ballY = canvas.height / 2;
     let ballSpeedX = initialSpeedX;
     let ballSpeedY = initialSpeedY;
-    let ballAngle = 0;
+    let ballAngle  = 0;
     let sherkY = canvas.height / 2 - playerHeight / 2;
     let bonkY  = canvas.height / 2 - playerHeight / 2;
 
+    // We'll use the CSS variable "paddleDistance" to do collision checks:
+    let paddleDistance = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--paddleDistance'));
+
     // Score
-    let leftScore = 0;
-    let rightScore = 0;
+    let leftScore    = 0;
+    let rightScore   = 0;
     let sherkMatches = 0;
     let bonkMatches  = 0;
     let gameRunning  = false;
@@ -429,8 +445,8 @@
 
     /* ===================== INPUT CONTROL ===================== */
     document.addEventListener("mousemove", e => {
-      if (gameRunning) {
-        sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight / 2));
+      if(gameRunning) {
+        sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight/2));
       }
     });
     let touchStartY = 0;
@@ -471,7 +487,7 @@
         rightScore++;
       }
 
-      // If 4x4 => Deuce
+      // 4x4 => Deuce
       if (leftScore === 4 && rightScore === 4) {
         finalMessages.push("Deuce!");
         let hasSherk2Matches = (sherkMatches === 2);
@@ -566,14 +582,20 @@
       if (ballY <= 0 || (ballY + ball.height >= canvas.height)) {
         ballSpeedY = -ballSpeedY;
       }
+
       // Paddle bounce (Sherk)
-      if (ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
+      // Instead of fixed 100, use paddleDistance from CSS :root
+      if (ballX <= paddleDistance && ballY > sherkY && ballY < sherkY + playerHeight) {
         ballSpeedX = -ballSpeedX;
         increaseBallSpeed();
         hitSound.play();
       }
       // Paddle bounce (Bonk)
-      if (ballX >= canvas.width - 100 - ball.width && ballY > bonkY && ballY < bonkY + playerHeight) {
+      if (
+        ballX >= canvas.width - paddleDistance - ball.width &&
+        ballY > bonkY &&
+        ballY < bonkY + playerHeight
+      ) {
         ballSpeedX = -ballSpeedX;
         increaseBallSpeed();
         hitSound.play();
@@ -646,7 +668,7 @@
       gameLoop();
     }
 
-    /* ===================== DOCS POPUP ===================== */
+    /* ===== DOCS POPUP ===== */
     function openDocs() {
       document.getElementById("docs-popup").style.display = "block";
     }
