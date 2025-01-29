@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>|-- Sherk Pong --|</title>
+  <title>|- Sherk Pong --|</title>
 
   <!-- By: @Marcelo_VP / https://token4fun.github.io/crypto/ -->
 
@@ -91,11 +91,11 @@
       text-shadow: 0 0 10px #00ff00;
     }
     .player-left {
-      top: 100px; 
+      top: 45px; 
       left: 20px;
     }
     .player-right {
-      top: 100px;
+      top: 45px;
       right: 20px;
     }
 
@@ -335,6 +335,7 @@
 
     /* ===================== ATUALIZAÇÃO DE PLACAR (POR PONTO) ===================== */
     function updateScore(winner) {
+      // Incrementa pontuação
       if (winner === 'Sherk') {
         leftScore++;
       } else {
@@ -349,30 +350,28 @@
         message = "Deuce!";
         sound   = deuceSound;
 
-      // 2) Se chegarmos a 4x3 => Pode ser 'Match Point!' ou 'Game Point!'
+      // 2) Quando chega a 4x3 => “This is the Match point” ou “This is the Game point”
       } else if (
         (leftScore === 4 && rightScore === 3) ||
         (rightScore === 4 && leftScore === 3)
       ) {
-        // Se Sherk tem 4 e 2 matches ganhos => Game Point!
+        // Se Sherk acabou de fazer 4 pontos e já tem 2 matches => Match point
         if (leftScore === 4 && leftScore - rightScore === 1) {
           if (sherkMatches === 2) {
-            message = "Game Point!";
-            sound   = matchPointSound;
+            message = "This is the Match point";
           } else {
-            message = "Match Point!";
-            sound   = matchPointSound;
+            message = "This is the Game point";
           }
+          sound = matchPointSound;
         }
-        // Se Pepe tem 4 e 2 matches ganhos => Game Point!
+        // Se Pepe acabou de fazer 4 pontos e já tem 2 matches => Match point
         else if (rightScore === 4 && rightScore - leftScore === 1) {
           if (bonkMatches === 2) {
-            message = "Game Point!";
-            sound   = matchPointSound;
+            message = "This is the Match point";
           } else {
-            message = "Match Point!";
-            sound   = matchPointSound;
+            message = "This is the Game point";
           }
+          sound = matchPointSound;
         }
 
       // 3) Caso normal => Point for X
@@ -381,7 +380,7 @@
         sound   = pointSound;
       }
 
-      // Exibe mensagem especial (se houver)
+      // Exibe mensagem (se houver)
       if (message !== "") {
         showMessage(message);
         sound.play();
@@ -414,7 +413,7 @@
         bonkScoreEl.style.color  = "#00ff00";
       }
 
-      // Atualizar placar de partidas
+      // Atualiza partidas ganhas
       sherkMatchEl.innerText = `Matches: ${sherkMatches}`;
       bonkMatchEl.innerText  = `Matches: ${bonkMatches}`;
     }
@@ -449,12 +448,11 @@
         hitSound.play();
       }
 
-      // Bola saiu pela esquerda (Pepe ganha ponto)
+      // Bola saiu pela esquerda => Pepe ganha ponto
       if (ballX < 0) {
         updateScore("Pepe");
         drawScore();
-
-        // Se Pepe chegou a 5 pontos => encerra a partida com 'Game, Set, Match!'
+        // Se Pepe chegou a 5 => Ganhou a partida
         if (rightScore === 5) {
           bonkMatches++;
           drawScore();
@@ -464,12 +462,11 @@
         resetBall();
       }
 
-      // Bola saiu pela direita (Sherk ganha ponto)
+      // Bola saiu pela direita => Sherk ganha ponto
       if (ballX > canvas.width) {
         updateScore("Sherk");
         drawScore();
-
-        // Se Sherk chegou a 5 pontos => encerra a partida com 'Game, Set, Match!'
+        // Se Sherk chegou a 5 => Ganhou a partida
         if (leftScore === 5) {
           sherkMatches++;
           drawScore();
@@ -519,18 +516,17 @@
       gameRunning = false;
       bgMusic.pause();
 
-      // Toca som final 'Game, Set, Match!'
+      // Toca som final: 'Game, Set, Match!'
       gameSetMatchSound.currentTime = 0;
       gameSetMatchSound.play();
 
+      // Mostra mensagem final da PARTIDA
       winnerMsgEl.style.display = "block";
-      // Mensagem ao final da partida
-      // Exibimos SEMPRE 'Game, Set, Match!'
       winnerTextEl.innerText = "Game, Set, Match!";
 
       // Se alguém já tiver 3 vitórias, esse é o grande campeão
       if (sherkMatches === 3 || bonkMatches === 3) {
-        // Botão deve virar 'Start New Game'
+        // Botão => 'Start New Game'
         winnerButton.innerText = "Start New Game";
       } else {
         // Ainda não temos um campeão final
@@ -546,7 +542,7 @@
         bonkMatches  = 0;
       }
 
-      // Fecha mensagem e zera a partida para jogar novamente
+      // Fecha mensagem e zera a partida
       winnerMsgEl.style.display = "none";
       leftScore  = 0;
       rightScore = 0;
