@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sherk Racing Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: black;
+            color: lime;
+            font-family: monospace;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #gameCanvas {
+            background: black;
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .instructions {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: red;
+            font-size: 2rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">Use as teclas ← e → para mover o carro. Evite os obstáculos!</div>
+    <div class="game-over" id="gameOver">Game Over! Pressione R para reiniciar.</div>
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const roadWidth = 30;
+        const carWidth = 40;
+        const carHeight = 80;
+        let carX = canvas.width / 2 - carWidth / 2;
+        const carY = canvas.height - 150;
+
+        const obstacles = [];
+        const speed = 5;
+        let frameCount = 0;
+        let gameRunning = true;
+
+        function drawCar() {
+            const carAscii = [
+                "   _____",
+                "  /_||_\\`.__",
+                " (   _    _ _\\",
+                " =`-(_)--(_)-'"
+            ];
+
+            ctx.font = "16px monospace";
+            ctx.fillStyle = "lime";
+
+            carAscii.forEach((line, index) => {
+                ctx.fillText(line, carX, carY + index * 16);
+            });
+        }
+
+        function drawRoadAndLandscape() {
+            const roadChar = "|"; // Borda da pista
+            const centerLine = "."; // Linha central
+            const grass = "~"; // Grama ou paisagem
+            const leftLandscape = [" 🌲 ", " 🌳 ", " 🏔 ", " 🏠 "];
+            const rightLandscape = [" 🌲 ", " 🌳 ", " 🏔 ", " 🏢 "];
+
+            ctx.font = "16px monospace";
+            ctx.fillStyle = "lime";
+
+            for (let y = 0; y < canvas.height; y += 16) {
+                const offset = Math.sin((y + frameCount * 0.1) / 50) * 5; // Simula curva
+
+                const leftGrass = grass.repeat(5 - Math.floor(offset));
+                const rightGrass = grass.repeat(5 + Math.floor(offset));
+                const leftSide = leftLandscape[Math.floor(Math.random() * leftLandscape.length)];
+                const rightSide = rightLandscape[Math.floor(Math.random() * rightLandscape.length)];
+
+                const line =
+                    leftGrass +
+                    leftSide +
+                    roadChar +
+                    centerLine.repeat(roadWidth) +
+                    roadChar +
+                    rightSide +
+                    rightGrass;
+
+                ctx.fillText(line, canvas.width / 2 - 150, y);
+            }
+        }
+
+        function drawObstacles() {
+            ctx.fillStyle = "red";
+            obstacles.forEach(obstacle => {
+                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+            });
+        }
+
+        function moveObstacles() {
+            obstacles.forEach(obstacle => {
+                obstacle.y += speed;
+            });
+
+            if (obstacles.length > 0 && obstacles[0].y > canvas.height) {
+                obstacles.shift();
+            }
+
+            if (Math.random() < 0.02) {
+                const lane = Math.floor(Math.random() * 3);
+                obstacles.push({
+                    x: canvas.width / 2 - roadWidth / 2 + lane * (roadWidth / 3) + (roadWidth / 6),
+                    y: -100,
+                    width: roadWidth / 3,
+                    height: 40
+                });
+            }
+        }
+
+        function checkCollision() {
+            for (const obstacle of obstacles) {
+                if (
+                    carX < obstacle.x + obstacle.width &&
+                    carX + carWidth > obstacle.x &&
+                    carY < obstacle.y + obstacle.height &&
+                    carY + carHeight > obstacle.y
+                ) {
+                    gameRunning = false;
+                    document.getElementById('gameOver').style.display = 'block';
+                }
+            }
+        }
+
+        function update() {
+            if (!gameRunning) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            drawRoadAndLandscape();
+            drawCar();
+            drawObstacles();
+            moveObstacles();
+            checkCollision();
+
+            frameCount++;
+            requestAnimationFrame(update);
+        }
+
+        window.addEventListener('keydown', e => {
+            if (e.key === 'ArrowLeft') {
+                carX = Math.max(canvas.width / 2 - roadWidth / 2, carX - roadWidth / 3);
+            } else if (e.key === 'ArrowRight') {
+                carX = Math.min(canvas.width / 2 + roadWidth / 2 - carWidth, carX + roadWidth / 3);
+            } else if (e.key === 'r' || e.key === 'R') {
+                if (!gameRunning) {
+                    location.reload();
+                }
+            }
+        });
+
+        update();
+    </script>
+</body>
+</html>
