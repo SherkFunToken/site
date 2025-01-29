@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Pong --|</title>
+    <title>|-- Sherk Pong --|</title>
 
  By: @Marcelo_VP
  https://token4fun.github.io/crypto/
@@ -286,34 +286,35 @@ body::after {
     });
 
     function updateScore(winner) {
-        if (winner === 'Sherk') {
-            leftScore++;
-        } else {
-            rightScore++;
-        }
-
-        let message = "";
-        let sound = null;
-
-        if (leftScore === 4 && rightScore === 4) {
-            message = "Deuce!";
-            sound = deuceSound;
-        } else if (leftScore === 4 || rightScore === 4) {
-            message = "Match Point!";
-            sound = matchPointSound;
-        } else if (leftScore === 5 || rightScore === 5) {
-            message = "Game, Set, Match!";
-            sound = gameSetMatchSound;
-            leftScore = 0;
-            rightScore = 0;
-        } else {
-            message = `Point for ${winner}!`;
-            sound = pointSound;
-        }
-
-        showMessage(message);
-        sound.play();
+    if (winner === 'Sherk') {
+        leftScore++;
+    } else {
+        rightScore++;
     }
+
+    let message = "";
+    let sound = null;
+
+    if (leftScore === 4 && rightScore === 4) {
+        message = "Deuce!";
+        sound = deuceSound;
+    } else if (leftScore === 4 || rightScore === 4) {
+        message = "Match Point!";
+        sound = matchPointSound;
+    } else if (leftScore === 5 || rightScore === 5) {
+        message = "Game, Set, Match!";
+        sound = gameSetMatchSound;
+        // Remova as linhas abaixo:
+        // leftScore = 0;
+        // rightScore = 0;
+    } else {
+        message = `Point for ${winner}!`;
+        sound = pointSound;
+    }
+
+    showMessage(message);
+    sound.play();
+}
 
     function showMessage(text) {
         let messageDiv = document.getElementById("game-message");
