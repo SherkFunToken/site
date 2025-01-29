@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|-- Sherk Pong --|</title>
+    <title>|- Sherk Pong --|</title>
 
  By: @Marcelo_VP
  https://token4fun.github.io/crypto/
@@ -211,10 +211,10 @@ body::after {
 <audio id="bgMusic" src="bg_music.MP3" loop="true" preload="auto"></audio>
 <audio id="victorySound" src="victory_sound.MP3" preload="auto"></audio>
 <audio id="pointSound" src="point.MP3" preload="auto"></audio>
-        <audio id="pointSound" src="point.mp3" preload="auto"></audio>
-    <audio id="matchPointSound" src="match_point.mp3" preload="auto"></audio>
-    <audio id="deuceSound" src="deuce.mp3" preload="auto"></audio>
-    <audio id="gameSetMatchSound" src="game_set_match.mp3" preload="auto"></audio>
+<audio id="pointSound" src="point.mp3" preload="auto"></audio>
+<audio id="matchPointSound" src="match_point.mp3" preload="auto"></audio>
+<audio id="deuceSound" src="deuce.mp3" preload="auto"></audio>
+<audio id="gameSetMatchSound" src="game_set_match.mp3" preload="auto"></audio>
 
 <script>
     const canvas = document.getElementById("pongCanvas");
@@ -230,7 +230,6 @@ body::after {
     const bgMusic = document.getElementById("bgMusic");
     const victorySound = document.getElementById("victorySound");
     const pointSound = document.getElementById("pointSound");
-
     const deuceSound = document.getElementById("deuceSound");
     const matchPointSound = document.getElementById("matchPointSound");
     const gameSetMatchSound = document.getElementById("gameSetMatchSound");
@@ -417,7 +416,7 @@ body::after {
         ballY = canvas.height / 2;
         ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * initialSpeedX;
         ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * initialSpeedY;
-        ballAngle = 0;
+        ballAngle = 0;  // Resetando o ângulo da bola
     }
 
     function showWinner(winnerMessage) {
@@ -426,8 +425,9 @@ body::after {
         document.getElementById("winner-message").style.display = "block";
     }
 
+    // Função para reiniciar o jogo ao clicar no botão "Restart"
     function restartGame() {
-        location.reload();
+        location.reload();  // Isso simula a tecla F5 e recarrega a página
     }
 
     function gameLoop() {
