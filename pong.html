@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>|- Sherk Pong --|</title>
+  <title>|-- Sherk Pong --|</title>
 
   <!-- By: @Marcelo_VP / https://token4fun.github.io/crypto/ -->
 
@@ -61,7 +61,7 @@
       text-shadow: 0 0 10px #00ff00;
     }
     #sherkMatches {
-      top: 10px;    /* Ajuste aqui caso queira mais/menos distância do topo */
+      top: 10px;   
       left: 20px;
     }
     #bonkMatches {
@@ -78,11 +78,11 @@
       font-weight: bold;
     }
     #sherkScore {
-      top: 60px;  /* Mover o placar um pouco para baixo */
+      top: 70px;
       left: 60px;
     }
     #bonkScore {
-      top: 60px;
+      top: 70px;
       right: 60px;
     }
 
@@ -94,7 +94,7 @@
       text-shadow: 0 0 10px #00ff00;
     }
     .player-left {
-      top: 100px; /* Ajusta o texto Player: Sherk ainda mais abaixo */
+      top: 100px; 
       left: 20px;
     }
     .player-right {
@@ -110,7 +110,7 @@
       animation: glow-animation 1.5s infinite alternate;
     }
     #sherk {
-      top: 150px; /* Ajusta a posição do Sherk ainda mais para baixo */
+      top: 150px; 
       left: 20px;
     }
     #bonk {
@@ -236,7 +236,8 @@
   <!-- MENSAGEM DE VITÓRIA DA PARTIDA OU TORNEIO -->
   <div id="winner-message">
     <p id="winner-text"></p>
-    <button onclick="startNewGame()" class="button">Start New Game</button>
+    <!-- Observe que o texto do botão mudará dinamicamente -->
+    <button id="winner-button" class="button" onclick="startNextAction()">...</button>
   </div>
 
   <!-- MENSAGEM MOMENTÂNEA (Deuce, Match Point, etc.) -->
@@ -263,14 +264,15 @@
     canvas.height = window.innerHeight;
 
     // Referências aos elementos HTML
-    const ball         = document.getElementById("ball");
-    const sherkScoreEl = document.getElementById("sherkScore");
-    const bonkScoreEl  = document.getElementById("bonkScore");
-    const sherkMatchEl = document.getElementById("sherkMatches");
-    const bonkMatchEl  = document.getElementById("bonkMatches");
-    const winnerMsgEl  = document.getElementById("winner-message");
-    const winnerTextEl = document.getElementById("winner-text");
-    const gameMessage  = document.getElementById("game-message");
+    const ball            = document.getElementById("ball");
+    const sherkScoreEl    = document.getElementById("sherkScore");
+    const bonkScoreEl     = document.getElementById("bonkScore");
+    const sherkMatchEl    = document.getElementById("sherkMatches");
+    const bonkMatchEl     = document.getElementById("bonkMatches");
+    const winnerMsgEl     = document.getElementById("winner-message");
+    const winnerTextEl    = document.getElementById("winner-text");
+    const winnerButton    = document.getElementById("winner-button");
+    const gameMessage     = document.getElementById("game-message");
 
     // Sons
     const hitSound         = document.getElementById("hitSound");
@@ -500,21 +502,31 @@
       // Exibir mensagem de quem venceu a PARTIDA
       winnerTextEl.innerText = matchMessage;
       winnerMsgEl.style.display = "block";
+
+      // Se alguém já tiver 3 vitórias, esse é o grande campeão
+      if (sherkMatches === 3 || bonkMatches === 3) {
+        // Botão deve virar 'Start New Game'
+        winnerButton.innerText = "Start New Game";
+      } else {
+        // Ainda não temos um campeão final
+        winnerButton.innerText = "Start Next Match Game";
+      }
     }
 
-    /* ===================== NOVO JOGO (APÓS O MATCH OU TORNEIO) ===================== */
-    function startNewGame() {
-      winnerMsgEl.style.display = "none";
-
-      // Se alguém atingiu 3 vitórias, é campeão final
+    /* ===================== AÇÃO AO CLICAR NO BOTÃO FINAL ===================== */
+    function startNextAction() {
+      // Se alguém já é campeão final, reinicia tudo
       if (sherkMatches === 3 || bonkMatches === 3) {
         sherkMatches = 0;
         bonkMatches  = 0;
       }
+
+      // Fecha mensagem e zera a partida para jogar novamente
+      winnerMsgEl.style.display = "none";
       leftScore  = 0;
       rightScore = 0;
-
       drawScore();
+
       resetBall();
       bgMusic.currentTime = 0;
       bgMusic.play();
