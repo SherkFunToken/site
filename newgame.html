@@ -6,19 +6,33 @@
     <title>|- Crypto Pong Game --|</title>
 
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: black;
-            overflow: hidden;
-            font-family: monospace;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-        }
+body {
+    margin: 0;
+    padding: 0;
+    background: url('back.gif') center center no-repeat;
+    background-size: cover;
+    overflow: hidden;
+    font-family: monospace;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    opacity: 0.5;
+    z-index: -1; /* Certifique-se de que este pseudo-elemento fique atrás de todos os outros elementos */
+}
+
 
         canvas {
             display: block;
