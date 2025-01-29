@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>|- Sherk Pong - Best of 3 (Tennis Style) --|</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>|-- Sherk Pong - Best of 3 (Tennis Style) --|</title>
 
   <style>
     /* ==================== BASIC STYLES ==================== */
     body {
       margin: 0;
       padding: 0;
-      background: url('back.gif') center center no-repeat;
+      background: url("back.gif") center center no-repeat;
       background-size: cover;
       overflow: hidden;
       font-family: monospace;
@@ -30,8 +30,9 @@
       height: 100%;
       background: black;
       opacity: 0.5;
-      z-index: -1; 
+      z-index: -1;
     }
+
     .glow-text {
       font-size: 4vw;
       color: #00ff00;
@@ -50,7 +51,7 @@
       text-shadow: 0 0 10px #00ff00;
     }
     #sherkMatches {
-      top: 10px;   
+      top: 10px;
       left: 20px;
     }
     #bonkMatches {
@@ -83,7 +84,7 @@
       text-shadow: 0 0 10px #00ff00;
     }
     .player-left {
-      top: 45px; 
+      top: 45px;
       left: 20px;
     }
     .player-right {
@@ -98,13 +99,25 @@
       width: auto;
       animation: glow-animation 1.5s infinite alternate;
     }
-    #sherk { top: 150px; left: 20px; }
-    #bonk  { top: 150px; right: 20px; }
+    #sherk {
+      top: 150px;
+      left: 20px;
+    }
+    #bonk {
+      top: 150px;
+      right: 20px;
+    }
 
     @keyframes glow-animation {
-      0%   { filter: drop-shadow(0 0 10px #00f0ff); }
-      50%  { filter: drop-shadow(0 0 20px #ff0000); }
-      100% { filter: drop-shadow(0 0 10px #00f0ff); }
+      0% {
+        filter: drop-shadow(0 0 10px #00f0ff);
+      }
+      50% {
+        filter: drop-shadow(0 0 20px #ff0000);
+      }
+      100% {
+        filter: drop-shadow(0 0 10px #00f0ff);
+      }
     }
 
     /* ====== INSTRUCTIONS ====== */
@@ -164,7 +177,7 @@
       text-shadow: 0 0 10px #00ff00;
     }
 
-    /* ====== MESSAGES (Point, Deuce, Advantage, etc.) ====== */
+    /* ====== TEMPORARY MESSAGES (Point, Deuce, Advantage, etc.) ====== */
     .message {
       position: absolute;
       top: 50%;
@@ -233,14 +246,16 @@
   <audio id="gameSetMatchSound" src="game_set_match.mp3" preload="auto"></audio>
 
   <script>
-    /* ==================== CONFIG ==================== */
+    /* ==================== GAME SETUP ==================== */
     const canvas = document.getElementById("pongCanvas");
     const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // HTML References
+    // References
     const ball         = document.getElementById("ball");
+    const ballWidth    = 50; // Fixed dimension to avoid undefined
+    const ballHeight   = 50; // same reason
     const sherkScoreEl = document.getElementById("sherkScore");
     const bonkScoreEl  = document.getElementById("bonkScore");
     const sherkMatchEl = document.getElementById("sherkMatches");
@@ -258,40 +273,39 @@
     const matchPointSound  = document.getElementById("matchPointSound");
     const gameSetMatchSound= document.getElementById("gameSetMatchSound");
 
-    // Music Volume
+    // Music volume
     bgMusic.volume = 0.3;
 
-    // Gameplay Variables
+    /* ==================== GAME VARIABLES ==================== */
     const initialSpeedX = 2, initialSpeedY = 1.5;
     const playerHeight  = 200;
     let ballX = canvas.width / 2, ballY = canvas.height / 2;
-    let ballSpeedX = initialSpeedX, ballSpeedY = initialSpeedY, ballAngle = 0;
+    let ballSpeedX = initialSpeedX, ballSpeedY = initialSpeedY;
+    let ballAngle = 0;
     let sherkY = canvas.height / 2 - playerHeight / 2;
     let bonkY  = canvas.height / 2 - playerHeight / 2;
 
-    // TENNIS-STYLE POINTS PER GAME:
-    let sherkPoints  = 0; 
-    let bonkPoints   = 0; 
-    // MATCHES WON:
-    let sherkMatches = 0; 
+    // Tennis-like points
+    let sherkPoints  = 0;
+    let bonkPoints   = 0;
+    let sherkMatches = 0;
     let bonkMatches  = 0;
-
     let gameRunning  = false;
 
-    /* ==================== MESSAGE HELPER ==================== */
-    function showMessage(text) {
-      if(!text) return;
-      gameMessage.innerText = text;
+    /* ==================== MESSAGING ==================== */
+    function showMessage(txt) {
+      if(!txt) return;
+      gameMessage.innerText = txt;
       gameMessage.style.display = "block";
       setTimeout(() => {
         gameMessage.style.display = "none";
       }, 1500);
     }
 
-    /* ==================== INPUT EVENTS ==================== */
+    /* ==================== EVENT LISTENERS ==================== */
     document.addEventListener("mousemove", e => {
       if(gameRunning) {
-        sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight / 2));
+        sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight/2));
       }
     });
     let touchStartY = 0;
@@ -318,37 +332,33 @@
 
     /* ==================== TENNIS SCORING ==================== */
     function updateTennisScore(winner) {
-      // Give 1 point to the winner
       if(winner === "Sherk") {
         sherkPoints++;
       } else {
         bonkPoints++;
       }
 
-      let diff = sherkPoints - bonkPoints;
+      const diff = sherkPoints - bonkPoints;
       if(sherkPoints >=4 || bonkPoints >=4) {
-        // Check if at least a 2-point lead
         if(diff === 0 && sherkPoints >=4) {
           // Deuce
           showMessage("Deuce!");
           deuceSound.play();
         }
         else if(diff === 1 && sherkPoints >=4) {
-          // Advantage Sherk
           showMessage("Advantage Sherk!");
           matchPointSound.play();
         }
         else if(diff === -1 && bonkPoints >=4) {
-          // Advantage Pepe
           showMessage("Advantage Pepe!");
           matchPointSound.play();
         }
         else if(diff >= 2 && sherkPoints >=4) {
-          // Sherk wins the game
+          // Sherk wins game
           gameWonBy("Sherk");
         }
         else if(diff <= -2 && bonkPoints >=4) {
-          // Pepe wins the game
+          // Pepe wins game
           gameWonBy("Pepe");
         }
         else {
@@ -356,46 +366,49 @@
           showMessage(`Point for ${winner}!`);
           pointSound.play();
         }
-      }
-      else {
-        // Normal point (under 4)
+      } else {
+        // Under 4 points, standard
         showMessage(`Point for ${winner}!`);
         pointSound.play();
       }
     }
 
     function gameWonBy(player) {
-      // Add a match to that player
-      if(player === "Sherk") sherkMatches++;
-      else                   bonkMatches++;
-
+      if(player === "Sherk") {
+        sherkMatches++;
+      } else {
+        bonkMatches++;
+      }
       showMessage(`${player} wins the Game!`);
-      // Reset the game points
+
+      // reset points, continue playing
       sherkPoints = 0;
       bonkPoints  = 0;
       drawScore();
 
-      // Check if this match ended the entire best-of-3
+      // Check if match is over
       if(sherkMatches === 3 || bonkMatches === 3) {
-        // The champion is decided
-        gameRunning = false;
-        bgMusic.pause();
-        gameSetMatchSound.currentTime = 0;
-        gameSetMatchSound.play();
-
-        winnerMsgEl.style.display = "block";
-        winnerTextEl.innerText    = "Match Over!";
-        winnerButton.innerText    = "Start New Match";
+        endMatch();
       }
+    }
+
+    function endMatch() {
+      // End entire best-of-3
+      gameRunning = false;
+      bgMusic.pause();
+      gameSetMatchSound.currentTime = 0;
+      gameSetMatchSound.play();
+
+      winnerMsgEl.style.display = "block";
+      winnerTextEl.innerText    = "Match Over!";
+      winnerButton.innerText    = "Start New Match";
     }
 
     /* ==================== DRAW SCORES ==================== */
     function drawScore() {
-      // We'll display raw numeric or "Adv" for advantage, etc.
       sherkScoreEl.innerText = tennisDisplay(sherkPoints, bonkPoints);
       bonkScoreEl.innerText  = tennisDisplay(bonkPoints, sherkPoints);
 
-      // Color changes
       if(sherkPoints > bonkPoints) {
         sherkScoreEl.style.color = "blue";
         bonkScoreEl.style.color  = "red";
@@ -412,10 +425,8 @@
     }
 
     function tennisDisplay(playerPts, oppPts) {
-      // For clarity, just show numeric or 'Adv' if difference=1
-      // or 'Deuce' if they are equal >=4
+      let diff = playerPts - oppPts;
       if(playerPts >=4 || oppPts >=4) {
-        let diff = playerPts - oppPts;
         if(diff === 0 && playerPts >=4) return "Deuce";
         if(diff === 1 && playerPts >=4) return "Adv";
         if(diff >= 2) return "Game";
@@ -423,7 +434,7 @@
       return String(playerPts);
     }
 
-    /* ==================== BALL / LOOP ==================== */
+    /* ==================== BALL LOOP ==================== */
     function updateBall() {
       ballX += ballSpeedX;
       ballY += ballSpeedY;
@@ -431,30 +442,38 @@
       ball.style.transform = `rotate(${ballAngle}deg)`;
 
       // Top/bottom collisions
-      if(ballY <= 0 || ballY + ball.height >= canvas.height) {
+      if(ballY <= 0 || (ballY + ballHeight >= canvas.height)) {
         ballSpeedY = -ballSpeedY;
       }
-      // Sherk collision
-      if(ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
+      // Collision with Sherk
+      if(
+        ballX <= 100 &&
+        ballY + ballHeight > sherkY &&
+        ballY < sherkY + playerHeight
+      ) {
         ballSpeedX = -ballSpeedX;
         increaseBallSpeed();
         hitSound.play();
       }
-      // Pepe collision
-      if(ballX >= canvas.width - 100 - ball.width && ballY > bonkY && ballY < bonkY + playerHeight) {
+      // Collision with Pepe
+      if(
+        ballX + ballWidth >= canvas.width - 100 &&
+        ballY + ballHeight > bonkY &&
+        ballY < bonkY + playerHeight
+      ) {
         ballSpeedX = -ballSpeedX;
         increaseBallSpeed();
         hitSound.play();
       }
 
       // Out left => Pepe point
-      if(ballX < 0) {
+      if(ballX + ballWidth < 0) {
         updateTennisScore("Pepe");
         drawScore();
         resetBall();
       }
       // Out right => Sherk point
-      else if(ballX > canvas.width) {
+      if(ballX > canvas.width) {
         updateTennisScore("Sherk");
         drawScore();
         resetBall();
@@ -465,15 +484,15 @@
     }
 
     function resetBall() {
-      ballX = canvas.width / 2;
-      ballY = canvas.height / 2;
+      ballX = canvas.width / 2 - ballWidth/2;
+      ballY = canvas.height / 2 - ballHeight/2;
       ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * initialSpeedX;
       ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * initialSpeedY;
       ballAngle = 0;
     }
 
     function moveBonk() {
-      let targetY = ballY - playerHeight/2;
+      const targetY = ballY + ballHeight/2 - playerHeight/2;
       bonkY += (targetY - bonkY) * 0.05;
       bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
@@ -490,9 +509,9 @@
       if(gameRunning) requestAnimationFrame(gameLoop);
     }
 
-    /* ==================== WINNER BUTTON ==================== */
+    /* ==================== MATCH RESTART ==================== */
     function startNextAction() {
-      // If someone had 3 matches => new tournament
+      // If we had a champion:
       if(sherkMatches === 3 || bonkMatches === 3) {
         sherkMatches = 0;
         bonkMatches  = 0;
