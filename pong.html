@@ -9,32 +9,32 @@
  https://token4fun.github.io/crypto/
  
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: url('back.gif') center center no-repeat;
-            background-size: cover;
-            overflow: hidden;
-            font-family: monospace;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-        }
+body {
+    margin: 0;
+    padding: 0;
+    background: url('back.gif') center center no-repeat;
+    background-size: cover;
+    overflow: hidden;
+    font-family: monospace;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
 
-        .message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 4vw;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 0 20px red, 0 0 40px blue;
-            display: none;
-        }
+body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    opacity: 0.5;
+    z-index: -1; /* Certifique-se de que este pseudo-elemento fique atrás de todos os outros elementos */
+}
 
 
         canvas {
@@ -161,18 +161,21 @@
             font-size: 2vw;
             text-shadow: 0 0 10px #00ff00;
         }
+                .message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4vw;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 20px red, 0 0 40px blue;
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-    <div id="game-message" class="message"></div>
-    <canvas id="pongCanvas"></canvas>
-
-    <audio id="pointSound" src="point.mp3" preload="auto"></audio>
-    <audio id="matchPointSound" src="match_point.mp3" preload="auto"></audio>
-    <audio id="deuceSound" src="deuce.mp3" preload="auto"></audio>
-    <audio id="gameSetMatchSound" src="game_set_match.mp3" preload="auto"></audio>
-    
 <div class="glow-text">Sherk Pong</div>
 
 <div class="player-label player-left">Player: Sherk</div>
@@ -198,7 +201,9 @@
     <p id="winner-text"></p>
     <button onclick="restartGame()" class="button">Restart</button>
 </div>
+<div id="game-message" class="message"></div>
 
+<canvas id="pongCanvas"></canvas>
 <div class="footer">Sherk Games - Sherkfun.io</div>
 
 <!-- Sons -->
@@ -206,51 +211,12 @@
 <audio id="bgMusic" src="bg_music.MP3" loop="true" preload="auto"></audio>
 <audio id="victorySound" src="victory_sound.MP3" preload="auto"></audio>
 <audio id="pointSound" src="point.MP3" preload="auto"></audio>
+        <audio id="pointSound" src="point.mp3" preload="auto"></audio>
+    <audio id="matchPointSound" src="match_point.mp3" preload="auto"></audio>
+    <audio id="deuceSound" src="deuce.mp3" preload="auto"></audio>
+    <audio id="gameSetMatchSound" src="game_set_match.mp3" preload="auto"></audio>
 
 <script>
-        let leftScore = 0;
-        let rightScore = 0;
-
-        function updateScore(winner) {
-            if (winner === 'Sherk') {
-                leftScore++;
-            } else {
-                rightScore++;
-            }
-            
-            let message = "";
-            let sound = null;
-
-            if (leftScore === 4 && rightScore === 4) {
-                message = "Deuce!";
-                sound = document.getElementById("deuceSound");
-            } else if (leftScore === 4 || rightScore === 4) {
-                message = "Match Point!";
-                sound = document.getElementById("matchPointSound");
-            } else if (leftScore === 5 || rightScore === 5) {
-                message = "Game, Set, Match!";
-                sound = document.getElementById("gameSetMatchSound");
-                leftScore = 0;
-                rightScore = 0;
-            } else {
-                message = `Point for ${winner}!`;
-                sound = document.getElementById("pointSound");
-            }
-            
-            showMessage(message);
-            sound.play();
-        }
-
-        function showMessage(text) {
-            let messageDiv = document.getElementById("game-message");
-            messageDiv.innerText = text;
-            messageDiv.style.display = "block";
-            setTimeout(() => { messageDiv.style.display = "none"; }, 1500);
-        }
-
-
-
-    
     const canvas = document.getElementById("pongCanvas");
     const ctx = canvas.getContext("2d");
 
@@ -264,6 +230,10 @@
     const bgMusic = document.getElementById("bgMusic");
     const victorySound = document.getElementById("victorySound");
     const pointSound = document.getElementById("pointSound");
+
+    const deuceSound = document.getElementById("deuceSound");
+    const matchPointSound = document.getElementById("matchPointSound");
+    const gameSetMatchSound = document.getElementById("gameSetMatchSound");
 
     // Ajuste do volume da música de fundo para 3 em uma escala de 0 a 10 (volume 0.3)
     bgMusic.volume = 0.3;
@@ -316,6 +286,43 @@
         }
     });
 
+    function updateScore(winner) {
+        if (winner === 'Sherk') {
+            leftScore++;
+        } else {
+            rightScore++;
+        }
+
+        let message = "";
+        let sound = null;
+
+        if (leftScore === 4 && rightScore === 4) {
+            message = "Deuce!";
+            sound = deuceSound;
+        } else if (leftScore === 4 || rightScore === 4) {
+            message = "Match Point!";
+            sound = matchPointSound;
+        } else if (leftScore === 5 || rightScore === 5) {
+            message = "Game, Set, Match!";
+            sound = gameSetMatchSound;
+            leftScore = 0;
+            rightScore = 0;
+        } else {
+            message = `Point for ${winner}!`;
+            sound = pointSound;
+        }
+
+        showMessage(message);
+        sound.play();
+    }
+
+    function showMessage(text) {
+        let messageDiv = document.getElementById("game-message");
+        messageDiv.innerText = text;
+        messageDiv.style.display = "block";
+        setTimeout(() => { messageDiv.style.display = "none"; }, 1500);
+    }
+
     function drawScore() {
         document.getElementById("sherkScore").innerText = leftScore;
         document.getElementById("bonkScore").innerText = rightScore;
@@ -348,38 +355,36 @@
         if (ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
             ballSpeedX = -ballSpeedX;
             increaseBallSpeed();
-            hitSound.play(); // Som de rebote
+            hitSound.play();
         }
 
         // Rebater na raquete do Bonk (IA)
         if (ballX >= canvas.width - 100 - ball.width && ballY > bonkY && ballY < bonkY + playerHeight) {
             ballSpeedX = -ballSpeedX;
             increaseBallSpeed();
-            hitSound.play(); // Som de rebote
+            hitSound.play();
         }
 
-        // Verificar se a bola saiu pelos lados
+        // Verificar se a bola saiu pelos lados e atualizar placar corretamente
         if (ballX < 0) {
-            rightScore++;
+            updateScore("Pepe");
             drawScore();
-            pointSound.play(); // Som de ponto
             if (rightScore === 5) {
                 showWinner("Pepe Wins!");
-                bgMusic.pause(); // Para a música de fundo quando alguém vence
-                victorySound.play(); // Som de vitória
+                bgMusic.pause();
+                victorySound.play();
                 return;
             }
             resetBall();
         }
 
         if (ballX > canvas.width) {
-            leftScore++;
+            updateScore("Sherk");
             drawScore();
-            pointSound.play(); // Som de ponto
             if (leftScore === 5) {
                 showWinner("Sherk Wins!");
-                bgMusic.pause(); // Para a música de fundo quando alguém vence
-                victorySound.play(); // Som de vitória
+                bgMusic.pause();
+                victorySound.play();
                 return;
             }
             resetBall();
@@ -412,7 +417,7 @@
         ballY = canvas.height / 2;
         ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * initialSpeedX;
         ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * initialSpeedY;
-        ballAngle = 0;  // Resetando o ângulo da bola
+        ballAngle = 0;
     }
 
     function showWinner(winnerMessage) {
@@ -421,9 +426,8 @@
         document.getElementById("winner-message").style.display = "block";
     }
 
-    // Função para reiniciar o jogo ao clicar no botão "Restart"
     function restartGame() {
-        location.reload();  // Isso simula a tecla F5 e recarrega a página
+        location.reload();
     }
 
     function gameLoop() {
@@ -431,6 +435,7 @@
         if (gameRunning) requestAnimationFrame(gameLoop);
     }
 </script>
+
 
 </body>
 </html>
