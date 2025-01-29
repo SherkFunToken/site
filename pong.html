@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>|-- Sherk Pong --|</title>
+  <title>|- Sherk Pong --|</title>
 
   <!-- By: @Marcelo_VP / https://token4fun.github.io/crypto/ -->
 
@@ -78,11 +78,11 @@
       font-weight: bold;
     }
     #sherkScore {
-      top: 70px;
+      top: 60px;
       left: 60px;
     }
     #bonkScore {
-      top: 70px;
+      top: 60px;
       right: 60px;
     }
 
@@ -236,11 +236,10 @@
   <!-- MENSAGEM DE VITÓRIA DA PARTIDA OU TORNEIO -->
   <div id="winner-message">
     <p id="winner-text"></p>
-    <!-- Observe que o texto do botão mudará dinamicamente -->
     <button id="winner-button" class="button" onclick="startNextAction()">...</button>
   </div>
 
-  <!-- MENSAGEM MOMENTÂNEA (Deuce, Match Point, etc.) -->
+  <!-- MENSAGEM MOMENTÂNEA (Deuce, Match Point, Game Point, etc.) -->
   <div id="game-message" class="message"></div>
 
   <!-- RODAPÉ -->
@@ -348,16 +347,44 @@
       let message = "";
       let sound   = null;
 
-      // Efeitos sonoros e mensagens especiais
+      // 1) Deuce => 4x4
       if (leftScore === 4 && rightScore === 4) {
         message = "Deuce!";
         sound   = deuceSound;
-      } else if (leftScore === 4 || rightScore === 4) {
-        message = "Match Point!";
-        sound   = matchPointSound;
+
+      // 2) Se alguém chegou a 5 pontos => Game, Set, Match!
       } else if (leftScore === 5 || rightScore === 5) {
         message = "Game, Set, Match!";
         sound   = gameSetMatchSound;
+
+      // 3) Se alguém chegou a 4x3 => pode ser 'Match Point!', 'Game Point!' ou 'Match Point!'
+      } else if (
+        (leftScore === 4 && rightScore === 3) ||
+        (rightScore === 4 && leftScore === 3)
+      ) {
+        // Verifica quem está com 4
+        if (leftScore === 4 && leftScore - rightScore === 1) {
+          // Se Sherk tem 2 matches, então é "Game Point!"
+          if (sherkMatches === 2) {
+            message = "Game Point!";
+            sound   = matchPointSound; // Podem usar outro som se preferir
+          } else {
+            message = "Match Point!";
+            sound   = matchPointSound;
+          }
+        }
+        else if (rightScore === 4 && rightScore - leftScore === 1) {
+          // Se Pepe tem 2 matches, então é "Game Point!"
+          if (bonkMatches === 2) {
+            message = "Game Point!";
+            sound   = matchPointSound;
+          } else {
+            message = "Match Point!";
+            sound   = matchPointSound;
+          }
+        }
+
+      // 4) Caso normal => Point for Sherk/Pepe
       } else {
         message = `Point for ${winner}!`;
         sound   = pointSound;
