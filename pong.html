@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>- Sherk Pong - Best of 3</title>
+  <title>|- Sherk Pong - Best of 3</title>
 
   <style>
-    /* Basic page setup */
+    /* BASIC PAGE SETUP */
     body {
       margin: 0;
       padding: 0;
@@ -41,7 +41,7 @@
       transform: translateX(-50%);
     }
 
-    /* Matches (best of 3) */
+    /* BEST-OF-3 MATCH LABELS */
     .match-label {
       position: absolute;
       font-size: 3vw;
@@ -51,7 +51,7 @@
     #sherkMatches { top: 10px;  left: 20px; }
     #bonkMatches  { top: 10px;  right: 20px; }
 
-    /* Score (points) */
+    /* SCORE LABELS */
     .score-label {
       position: absolute;
       font-size: 5vw;
@@ -62,7 +62,7 @@
     #sherkScore { top: 60px; left: 60px; }
     #bonkScore  { top: 60px; right: 60px; }
 
-    /* Player names */
+    /* PLAYER NAMES */
     .player-label {
       position: absolute;
       font-size: 2vw;
@@ -72,11 +72,10 @@
     .player-left  { top: 45px; left: 20px; }
     .player-right { top: 45px; right: 20px; }
 
-    /* Characters:
-       We'll rely on JavaScript to set correct collisions for mobile vs. desktop. */
+    /* CHARACTERS: Sherk & Pepe */
     .player {
       position: absolute;
-      height: 200px;
+      height: 200px;  /* desktop default */
       width: auto;
       animation: glow-animation 1.5s infinite alternate;
     }
@@ -89,7 +88,7 @@
       100% { filter: drop-shadow(0 0 10px #00f0ff); }
     }
 
-    /* Instructions area */
+    /* INSTRUCTIONS & START BUTTON */
     .instructions-container {
       position: absolute;
       top: 40%;
@@ -116,7 +115,7 @@
       box-shadow: 0 0 40px #ff0000;
     }
 
-    /* Winner message */
+    /* WINNER MESSAGE */
     #winner-message {
       font-size: 3vw;
       color: #00ff00;
@@ -130,14 +129,14 @@
       text-align: center;
     }
 
-    /* We'll keep the ball at 50x50 for desktop, but 35x35 on mobile, set in code. */
+    /* BALL: default 50x50 on desktop, 35x35 on mobile. We'll set in code. */
     #ball {
       position: absolute;
       width: 50px;
       height: 50px;
     }
 
-    /* Footer + Docs button */
+    /* FOOTER + DOCS BUTTON */
     .footer {
       position: absolute;
       bottom: 10px;
@@ -146,7 +145,7 @@
       text-shadow: 0 0 10px #00ff00;
     }
 
-    /* Messages (Point for..., Deuce, etc.) */
+    /* POINT FOR..., DEUCE, ETC. */
     .message {
       position: absolute;
       top: 50%;
@@ -159,7 +158,7 @@
       display: none;
     }
 
-    /* Docs popup overlay */
+    /* DOCS POPUP */
     #docs-popup {
       display: none;
       position: fixed;
@@ -208,10 +207,10 @@
       cursor: pointer;
     }
 
-    /* Mobile media query */
+    /* MOBILE MEDIA QUERY */
     @media (max-width: 600px) {
       .player {
-        height: 100px;
+        height: 100px; /* half */
       }
       #sherk {
         top: 75px;
@@ -219,7 +218,6 @@
       #bonk {
         top: 75px;
       }
-      /* Ball 30% smaller => from 50 to 35 */
       #ball {
         width: 35px;
         height: 35px;
@@ -278,7 +276,7 @@
 
   <canvas id="pongCanvas"></canvas>
   <img src="Sherk.png" id="sherk" class="player">
-  <img src="Bonk.png"  id="bonk" class="player">
+  <img src="Bonk.png"  id="bonk"  class="player">
   <img src="ball.png" id="ball">
 
   <div id="winner-message">
@@ -293,7 +291,6 @@
     <button class="button" style="font-size:1rem; padding:5px 10px;" onclick="openDocs()">Docs</button>
   </div>
 
-  <!-- Docs Pop-up -->
   <div id="docs-popup">
     <div class="popup-content">
       <h2>Sherk Pong Docs</h2>
@@ -320,6 +317,7 @@
     </div>
   </div>
 
+  <!-- SFX -->
   <audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
   <audio id="bgMusic" src="bg_music.MP3" loop="true" preload="auto"></audio>
   <audio id="victorySound" src="victory_sound.MP3" preload="auto"></audio>
@@ -330,30 +328,29 @@
   <audio id="gameSetMatchSound" src="game_set_match.mp3" preload="auto"></audio>
 
   <script>
-    /* ===================== DETECT MOBILE & Setup Dimensions ===================== */
+    /* ===================== DETECT MOBILE & SETUP DIMENSIONS ===================== */
     function isMobile() {
       return window.innerWidth <= 600;
     }
-    const ballSize      = isMobile() ? 35 : 50;    // 30% smaller for mobile
-    const playerHeight  = isMobile() ? 100 : 200; // 50% smaller paddle on mobile
-    const paddleDistance= 100;                    // Distance from edges for collisions
+    const ballSize      = isMobile() ? 35 : 50;  
+    const playerHeight  = isMobile() ? 100 : 200;
+    const paddleDistance= isMobile() ? 50 : 100; 
+      // smaller distance for mobile, so collisions happen closer to the edges
 
-    /* We'll set the collision-based ball width/height in code. */
-    let ballWidth  = ballSize;
-    let ballHeight = ballSize;
-
-    /* ========== CANVAS ========== */
+    /* Canvas */
     const canvas = document.getElementById("pongCanvas");
     const ctx = canvas.getContext("2d");
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    /* Set the #ball image to the correct size, so it visually matches code collisions */
+    /* Ball dimensions & element */
+    let ballWidth  = ballSize;
+    let ballHeight = ballSize;
     const ball = document.getElementById("ball");
-    ball.style.width  = ballWidth + "px";
-    ball.style.height = ballHeight + "px";
+    ball.style.width  = `${ballWidth}px`;
+    ball.style.height = `${ballHeight}px`;
 
-    /* References for scoreboard, messages, etc. */
+    /* References */
     const sherkScoreEl = document.getElementById("sherkScore");
     const bonkScoreEl  = document.getElementById("bonkScore");
     const sherkMatchEl = document.getElementById("sherkMatches");
@@ -372,22 +369,17 @@
     const gameSetMatchSound= document.getElementById("gameSetMatchSound");
     bgMusic.volume = 0.3;
 
-    /* Some initial speeds */
-    let initialSpeedX = 2,
-        initialSpeedY = 1.5;
+    /* Speeds */
+    let initialSpeedX = 2, initialSpeedY = 1.5;
+    let ballX = canvas.width / 2,  ballY = canvas.height / 2;
+    let ballSpeedX = initialSpeedX,  ballSpeedY = initialSpeedY;
+    let ballAngle  = 0;
 
-    /* Ball position */
-    let ballX = canvas.width / 2,
-        ballY = canvas.height / 2;
-    let ballSpeedX = initialSpeedX,
-        ballSpeedY = initialSpeedY,
-        ballAngle  = 0;
-
-    /* Player paddle positions */
+    /* Player paddles */
     let sherkY = canvas.height / 2 - playerHeight / 2;
     let bonkY  = canvas.height / 2 - playerHeight / 2;
 
-    /* Score + Matches */
+    /* Score & matches */
     let leftScore    = 0,
         rightScore   = 0;
     let sherkMatches = 0,
@@ -402,27 +394,25 @@
       gameMessage.style.display = "block";
       setTimeout(() => {
         gameMessage.style.display = "none";
-        if(rest.length > 0) showMessageSequence(rest);
+        if (rest.length > 0) showMessageSequence(rest);
       }, 1500);
     }
 
     /* ===================== INPUT EVENTS ===================== */
     document.addEventListener("mousemove", e => {
-      if(gameRunning) {
+      if (gameRunning) {
         sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight/2));
       }
     });
-
     let touchStartY = 0;
     document.addEventListener("touchstart", e => {
       touchStartY = e.touches[0].clientY;
     });
     document.addEventListener("touchmove", e => {
       if(gameRunning) {
-        const touchEndY = e.touches[0].clientY;
-        const deltaY = touchEndY - touchStartY;
+        const deltaY = e.touches[0].clientY - touchStartY;
         sherkY = Math.max(0, Math.min(canvas.height - playerHeight, sherkY + deltaY));
-        touchStartY = touchEndY;
+        touchStartY = e.touches[0].clientY;
       }
     });
 
@@ -434,7 +424,7 @@
       gameLoop();
     }
 
-    /* Speed up the ball a little each bounce */
+    /* ===================== SPEED UP BALL ===================== */
     function increaseBallSpeed() {
       ballSpeedX *= 1.05;
       ballSpeedY *= 1.05;
@@ -445,13 +435,13 @@
       const pointMessage = `Point for ${winner}!`;
       let finalMessages  = [ pointMessage ];
 
-      if(winner === "Sherk") {
+      if (winner === "Sherk") {
         leftScore++;
       } else {
         rightScore++;
       }
 
-      // 4-4 => Deuce
+      // Deuce logic
       if (leftScore === 4 && rightScore === 4) {
         finalMessages.push("Deuce!");
         let hasSherk2 = (sherkMatches === 2);
@@ -463,7 +453,8 @@
         }
       }
       // 4-3 => "Match point" or "Game point"
-      else if((leftScore === 4 && rightScore === 3) || (rightScore === 4 && leftScore === 3)){
+      else if ((leftScore === 4 && rightScore === 3) ||
+               (rightScore === 4 && leftScore === 3)) {
         const leadIsSherk = (leftScore === 4 && leftScore - rightScore === 1);
         const leadIsBonk  = (rightScore === 4 && rightScore - leftScore === 1);
 
@@ -510,8 +501,8 @@
     function resetBall() {
       ballX = canvas.width / 2;
       ballY = canvas.height / 2;
-      ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * initialSpeedX;
-      ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * initialSpeedY;
+      ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * 2;
+      ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * 1.5;
       ballAngle  = 0;
     }
 
@@ -539,39 +530,35 @@
       ballAngle += 5;
       ball.style.transform = `rotate(${ballAngle}deg)`;
 
-      // bounce top/bottom
+      // bounce top
       if(ballY <= 0) {
-        ballY = 0; /* nudge out */
+        ballY = 0;
         ballSpeedY = -ballSpeedY;
       }
+      // bounce bottom
       else if(ballY + ballHeight >= canvas.height) {
-        ballY = canvas.height - ballHeight; /* nudge out */
+        ballY = canvas.height - ballHeight;
         ballSpeedY = -ballSpeedY;
       }
 
-      // collision with Sherk
-      if(ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
-        // nudge out by 1 pixel so it won't keep flipping next frame
-        ballX = 101; 
+      // collide with Sherk
+      if(ballX <= paddleDistance && ballY > sherkY && ballY < sherkY + playerHeight) {
+        // nudge outward
+        ballX = paddleDistance + 1;
+        ballSpeedX = -ballSpeedX;
+        increaseBallSpeed();
+        hitSound.play();
+      }
+      // collide with Bonk
+      if(ballX + ballWidth >= canvas.width - paddleDistance && ballY > bonkY && ballY < bonkY + playerHeight) {
+        // nudge outward
+        ballX = canvas.width - paddleDistance - ballWidth - 1;
         ballSpeedX = -ballSpeedX;
         increaseBallSpeed();
         hitSound.play();
       }
 
-      // collision with Bonk
-      if(
-        ballX + ballWidth >= canvas.width - 100 &&
-        ballY > bonkY &&
-        ballY < bonkY + playerHeight
-      ) {
-        // nudge out a bit
-        ballX = canvas.width - 100 - ballWidth - 1;
-        ballSpeedX = -ballSpeedX;
-        increaseBallSpeed();
-        hitSound.play();
-      }
-
-      // out on the left => point for Pepe
+      // out on left => point for Pepe
       if(ballX < 0) {
         updateScore("Pepe");
         drawScore();
@@ -583,7 +570,7 @@
         }
         resetBall();
       }
-      // out on the right => point for Sherk
+      // out on right => point for Sherk
       else if(ballX > canvas.width) {
         updateScore("Sherk");
         drawScore();
@@ -620,7 +607,7 @@
       }
     }
 
-    /* START / RESTART MATCH */
+    /* START/RESTART MATCH */
     function startNextAction() {
       if(sherkMatches === 3 || bonkMatches === 3) {
         sherkMatches = 0;
