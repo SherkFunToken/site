@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>|- Sherk Pong --|</title>
+  <title>|-- Sherk Pong --|</title>
 
-  <!-- Autor e links de referência -->
   <!-- By: @Marcelo_VP / https://token4fun.github.io/crypto/ -->
 
   <style>
-    /* ====== ESTILOS GERAIS ====== */
+    /* ==================== ESTILOS GERAIS ==================== */
     body {
       margin: 0;
       padding: 0;
@@ -37,26 +36,20 @@
       z-index: -1; 
     }
 
-    /* ====== CANVAS ====== */
+    /* ==================== CANVAS ==================== */
     canvas {
       display: block;
     }
 
-    /* ====== PERSONAGENS (SHERK E BONK) ====== */
+    /* ==================== PERSONAGENS (SHERK E BONK) ==================== */
     .player {
       position: absolute;
       height: 200px;
       width: auto;
       animation: glow-animation 1.5s infinite alternate;
     }
-
-    #sherk {
-      left: 20px;
-    }
-
-    #bonk {
-      right: 20px;
-    }
+    #sherk { left: 20px; }
+    #bonk  { right: 20px; }
 
     @keyframes glow-animation {
       0% {
@@ -70,7 +63,7 @@
       }
     }
 
-    /* ====== TÍTULO ====== */
+    /* ==================== TÍTULO ==================== */
     .glow-text {
       font-size: 4vw;
       color: #00ff00;
@@ -81,14 +74,13 @@
       transform: translateX(-50%);
     }
 
-    /* ====== LABELS E PLACARES ====== */
+    /* ==================== LABELS E PLACARES ==================== */
     .player-label {
       position: absolute;
       font-size: 2vw;
       color: #00ff00;
       text-shadow: 0 0 10px #00ff00;
     }
-
     .score-label {
       position: absolute;
       font-size: 5vw;
@@ -97,26 +89,21 @@
       font-weight: bold;
       top: 30px;
     }
-
-    #sherkScore {
-      left: 60px;
-    }
-
-    #bonkScore {
-      right: 60px;
-    }
+    /* Sherk */
+    #sherkScore { left: 60px; }
+    /* Pepe */
+    #bonkScore  { right: 60px; }
 
     .player-left {
       top: 10px;
       left: 20px;
     }
-
     .player-right {
       top: 10px;
       right: 20px;
     }
 
-    /* ====== CONTÊINER DE INSTRUÇÕES ====== */
+    /* ==================== CONTÊINER DE INSTRUÇÕES ==================== */
     .instructions-container {
       position: absolute;
       top: 40%;
@@ -125,13 +112,10 @@
       text-align: center;
       color: #fff;
     }
-
     .instructions {
       font-size: 2vw;
       margin-bottom: 20px;
     }
-
-    /* ====== BOTÃO PADRÃO ====== */
     .button {
       padding: 15px 30px;
       font-size: 2vw;
@@ -142,12 +126,11 @@
       cursor: pointer;
       box-shadow: 0 0 20px #00f0ff;
     }
-
     .button:hover {
       box-shadow: 0 0 40px #ff0000;
     }
 
-    /* ====== MENSAGEM DE VITÓRIA DA PARTIDA ====== */
+    /* ==================== MENSAGEM DE VITÓRIA ==================== */
     #winner-message {
       font-size: 3vw;
       color: #00ff00;
@@ -161,14 +144,14 @@
       text-align: center;
     }
 
-    /* ====== BOLA ====== */
+    /* ==================== BOLA ==================== */
     #ball {
       position: absolute;
       width: 50px;
       height: 50px;
     }
 
-    /* ====== RODAPÉ ====== */
+    /* ==================== RODAPÉ ==================== */
     .footer {
       position: absolute;
       bottom: 10px;
@@ -177,7 +160,7 @@
       text-shadow: 0 0 10px #00ff00;
     }
 
-    /* ====== MENSAGENS (MATCH POINT, DEUCE, ETC.) ====== */
+    /* ==================== MENSAGENS (DEUCE, MATCH POINT, ETC.) ==================== */
     .message {
       position: absolute;
       top: 50%;
@@ -190,19 +173,23 @@
       display: none;
     }
 
-    /* ====== LABELS PARA AS PARTIDAS (BEST OF 3) ====== */
+    /* ==================== LABELS PARA PARTIDAS (BEST OF 3) ==================== */
     .match-label {
       position: absolute;
       font-size: 3vw;
       color: #00ff00;
       text-shadow: 0 0 10px #00ff00;
-      top: 90px;
+      /* Ajuste de 'top' para ficar acima do placar de pontos */
     }
+    /* Sherk (acima do .player-left e do score) */
     #sherkMatches {
-      left: 60px;
+      top: 0px;
+      left: 20px; /* Ajuste conforme desejar */
     }
+    /* Pepe (acima do .player-right e do score) */
     #bonkMatches {
-      right: 60px;
+      top: 0px;
+      right: 20px; /* Ajuste conforme desejar */
     }
   </style>
 </head>
@@ -211,7 +198,7 @@
   <!-- TÍTULO PRINCIPAL -->
   <div class="glow-text">Sherk Pong</div>
 
-  <!-- LABELS E PLACAR (PONTOS DA PARTIDA) -->
+  <!-- LABELS DO JOGADOR E PLACAR (PONTOS DA PARTIDA) -->
   <div class="player-label player-left">Player: Sherk</div>
   <div class="score-label" id="sherkScore">0</div>
 
@@ -222,7 +209,7 @@
   <div class="match-label" id="sherkMatches">Matches: 0</div>
   <div class="match-label" id="bonkMatches">Matches: 0</div>
 
-  <!-- INSTRUÇÕES E BOTÃO -->
+  <!-- INSTRUÇÕES E BOTÃO DE PLAY -->
   <div id="instructions-container" class="instructions-container">
     <div class="instructions">
       Use the touch to control Sherk on mobile or mouse on PC.<br>
@@ -238,10 +225,10 @@
   <img src="Bonk.png" id="bonk" class="player">
   <img src="ball.png" id="ball">
 
-  <!-- MENSAGEM DE VITÓRIA DA PARTIDA -->
+  <!-- MENSAGEM DE VITÓRIA DA PARTIDA OU TORNEIO -->
   <div id="winner-message">
     <p id="winner-text"></p>
-    <button onclick="restartGame()" class="button">Restart</button>
+    <button onclick="startNewGame()" class="button">Start New Game</button>
   </div>
 
   <!-- MENSAGEM MOMENTÂNEA (Deuce, Match Point, etc.) -->
@@ -370,7 +357,7 @@
       sound.play();
     }
 
-    /* ===================== MOSTRAR MENSAGEM RÁPIDA (Match Point, Deuce, etc.) ===================== */
+    /* ===================== MOSTRAR MENSAGEM RÁPIDA ===================== */
     function showMessage(text) {
       gameMessage.innerText = text;
       gameMessage.style.display = "block";
@@ -408,7 +395,7 @@
       ballAngle += 5;
       ball.style.transform = `rotate(${ballAngle}deg)`;
 
-      // Colisão com paredes superior e inferior
+      // Colisão com paredes
       if (ballY <= 0 || ballY + ball.height >= canvas.height) {
         ballSpeedY = -ballSpeedY;
       }
@@ -431,7 +418,7 @@
         hitSound.play();
       }
 
-      // Bola saiu pela esquerda (ponto de Pepe)
+      // Bola saiu pela esquerda (Pepe ganha ponto)
       if (ballX < 0) {
         updateScore("Pepe");
         drawScore();
@@ -446,7 +433,7 @@
         resetBall();
       }
 
-      // Bola saiu pela direita (ponto de Sherk)
+      // Bola saiu pela direita (Sherk ganha ponto)
       if (ballX > canvas.width) {
         updateScore("Sherk");
         drawScore();
@@ -472,7 +459,7 @@
       bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
 
-    /* ===================== ATUALIZA POSIÇÃO DOS ELEMENTOS NA TELA ===================== */
+    /* ===================== ATUALIZA POSIÇÃO DOS ELEMENTOS ===================== */
     function movePlayers() {
       document.getElementById("sherk").style.top = `${sherkY}px`;
       document.getElementById("bonk").style.top  = `${bonkY}px`;
@@ -480,13 +467,13 @@
       ball.style.top  = `${ballY}px`;
     }
 
-    /* ===================== AUMENTAR VELOCIDADE DA BOLA APÓS REBOTE ===================== */
+    /* ===================== AUMENTAR VELOCIDADE DA BOLA ===================== */
     function increaseBallSpeed() {
       ballSpeedX *= 1.05;
       ballSpeedY *= 1.05;
     }
 
-    /* ===================== REDEFINIR BOLA PARA O CENTRO ===================== */
+    /* ===================== REDEFINIR BOLA ===================== */
     function resetBall() {
       ballX = canvas.width / 2;
       ballY = canvas.height / 2;
@@ -495,12 +482,10 @@
       ballAngle = 0;
     }
 
-    /* ===================== VERIFICAR SE ALGUÉM FOI CAMPEÃO (BEST OF 3) ===================== */
+    /* ===================== CHECK BEST OF 3 ===================== */
     function checkChampion(matchMessage) {
-      // Pausar momentaneamente o jogo
+      // Pausa momentânea
       gameRunning = false;
-
-      // Toca som de vitória da partida
       bgMusic.pause();
       victorySound.play();
 
@@ -509,41 +494,28 @@
       winnerMsgEl.style.display = "block";
     }
 
-    /* ===================== FUNÇÃO PARA REINICIAR A PRÓXIMA PARTIDA OU ENCERRAR O TORNEIO ===================== */
-    function restartGame() {
+    /* ===================== NOVO JOGO (APÓS O MATCH OU TORNEIO) ===================== */
+    function startNewGame() {
       winnerMsgEl.style.display = "none";
 
-      // Verifica se alguém ganhou 3 partidas
+      // Se alguém atingiu 3 vitórias, é campeão final
       if (sherkMatches === 3 || bonkMatches === 3) {
-        // Alguém é o campeão
-        showChampion();
-      } else {
-        // Continua o torneio - reinicia a PARTIDA
-        leftScore = 0;
-        rightScore = 0;
-        drawScore();
-        resetBall();
-        bgMusic.currentTime = 0;
-        bgMusic.play();
-        gameRunning = true;
-        gameLoop();
+        sherkMatches = 0;
+        bonkMatches  = 0;
       }
+      leftScore  = 0;
+      rightScore = 0;
+
+      drawScore();
+      resetBall();
+      bgMusic.currentTime = 0;
+      bgMusic.play();
+
+      gameRunning = true;
+      gameLoop();
     }
 
-    /* ===================== EXIBIR O CAMPEÃO FINAL ===================== */
-    function showChampion() {
-      let championMsg = "";
-      if (sherkMatches === 3) {
-        championMsg = "Sherk é o grande campeão!";
-      } else {
-        championMsg = "Pepe é o grande campeão!";
-      }
-
-      winnerTextEl.innerText = championMsg;
-      winnerMsgEl.style.display = "block";
-    }
-
-    /* ===================== LOOP PRINCIPAL DO JOGO ===================== */
+    /* ===================== LOOP PRINCIPAL ===================== */
     function gameLoop() {
       updateBall();
       if (gameRunning) {
