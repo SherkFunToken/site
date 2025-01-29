@@ -3,12 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>|- Sherk Pong --|</title>
-
-  <!-- By: @Marcelo_VP / https://token4fun.github.io/crypto/ -->
+  <title>|-- Sherk Pong - Best of 3 --|</title>
 
   <style>
-    /* ==================== ESTILOS GERAIS ==================== */
     body {
       margin: 0;
       padding: 0;
@@ -23,7 +20,6 @@
       height: 100vh;
       flex-direction: column;
     }
-
     body::after {
       content: "";
       position: absolute;
@@ -35,13 +31,6 @@
       opacity: 0.5;
       z-index: -1; 
     }
-
-    /* ==================== CANVAS ==================== */
-    canvas {
-      display: block;
-    }
-
-    /* ==================== TÍTULO ==================== */
     .glow-text {
       font-size: 4vw;
       color: #00ff00;
@@ -51,8 +40,7 @@
       left: 50%;
       transform: translateX(-50%);
     }
-
-    /* ==================== PLAYER & SCORE LABELS ==================== */
+    /* Matches (melhor de 3) */
     .match-label {
       position: absolute;
       font-size: 3vw;
@@ -68,6 +56,7 @@
       right: 20px;
     }
 
+    /* Score (pontos na partida) */
     .score-label {
       position: absolute;
       font-size: 5vw;
@@ -84,6 +73,7 @@
       right: 60px;
     }
 
+    /* Nomes */
     .player-label {
       position: absolute;
       font-size: 2vw;
@@ -99,35 +89,23 @@
       right: 20px;
     }
 
-    /* ==================== PERSONAGENS (SHERK E BONK) ==================== */
+    /* Personagens */
     .player {
       position: absolute;
       height: 200px;
       width: auto;
       animation: glow-animation 1.5s infinite alternate;
     }
-    #sherk {
-      top: 150px; 
-      left: 20px;
-    }
-    #bonk {
-      top: 150px;
-      right: 20px;
-    }
+    #sherk { top: 150px; left: 20px; }
+    #bonk  { top: 150px; right: 20px; }
 
     @keyframes glow-animation {
-      0% {
-        filter: drop-shadow(0 0 10px #00f0ff);
-      }
-      50% {
-        filter: drop-shadow(0 0 20px #ff0000);
-      }
-      100% {
-        filter: drop-shadow(0 0 10px #00f0ff);
-      }
+      0%   { filter: drop-shadow(0 0 10px #00f0ff); }
+      50%  { filter: drop-shadow(0 0 20px #ff0000); }
+      100% { filter: drop-shadow(0 0 10px #00f0ff); }
     }
 
-    /* ==================== INSTRUÇÕES E BOTÃO PLAY ==================== */
+    /* Instructions */
     .instructions-container {
       position: absolute;
       top: 40%;
@@ -154,7 +132,7 @@
       box-shadow: 0 0 40px #ff0000;
     }
 
-    /* ==================== MENSAGEM DE VITÓRIA ==================== */
+    /* Mensagem final da partida */
     #winner-message {
       font-size: 3vw;
       color: #00ff00;
@@ -168,14 +146,14 @@
       text-align: center;
     }
 
-    /* ==================== BOLA ==================== */
+    /* Bola */
     #ball {
       position: absolute;
       width: 50px;
       height: 50px;
     }
 
-    /* ==================== RODAPÉ ==================== */
+    /* Rodapé */
     .footer {
       position: absolute;
       bottom: 10px;
@@ -184,7 +162,7 @@
       text-shadow: 0 0 10px #00ff00;
     }
 
-    /* ==================== MENSAGENS (DEUCE, MATCH POINT, GAME POINT, ETC.) ==================== */
+    /* Mensagens encadeadas (Point for..., Deuce, etc.) */
     .message {
       position: absolute;
       top: 50%;
@@ -200,49 +178,49 @@
 </head>
 <body>
 
-  <!-- TÍTULO PRINCIPAL -->
+  <!-- Título -->
   <div class="glow-text">Sherk Pong</div>
 
-  <!-- PLACAR DE PARTIDAS (BEST OF 3) -->
+  <!-- Placar de partidas (melhor de 3) -->
   <div class="match-label" id="sherkMatches">Matches: 0</div>
   <div class="match-label" id="bonkMatches">Matches: 0</div>
 
-  <!-- LABEL DO JOGADOR E PLACAR (PONTOS POR PARTIDA) -->
+  <!-- Nome e pontuação da partida -->
   <div class="player-label player-left">Player: Sherk</div>
   <div class="score-label"  id="sherkScore">0</div>
 
   <div class="player-label player-right">Player: Pepe</div>
   <div class="score-label"  id="bonkScore">0</div>
 
-  <!-- INSTRUÇÕES E BOTÃO DE PLAY -->
+  <!-- Instruções e botão de início -->
   <div id="instructions-container" class="instructions-container">
     <div class="instructions">
       Use the touch to control Sherk on mobile or mouse on PC.<br>
-      First to 5 points wins <strong>the Match</strong>!<br>
-      First to 3 Matches is <strong>the Champion</strong>!<br><br>
+      First to 5 points wins the Match!<br>
+      First to 3 Matches is the Champion!<br><br>
     </div>
     <button class="button" onclick="startGame()">Play</button>
   </div>
 
-  <!-- CANVAS E IMAGENS -->
+  <!-- Canvas e personagens -->
   <canvas id="pongCanvas"></canvas>
   <img src="Sherk.png" id="sherk" class="player">
   <img src="Bonk.png" id="bonk"  class="player">
   <img src="ball.png" id="ball">
 
-  <!-- MENSAGEM DE VITÓRIA DA PARTIDA OU TORNEIO -->
+  <!-- Mensagem de fim de partida ou torneio -->
   <div id="winner-message">
     <p id="winner-text"></p>
     <button id="winner-button" class="button" onclick="startNextAction()">...</button>
   </div>
 
-  <!-- MENSAGEM MOMENTÂNEA (Deuce, Match Point, Game Point, etc.) -->
+  <!-- Mensagem momentânea (encadeada) -->
   <div id="game-message" class="message"></div>
 
-  <!-- RODAPÉ -->
+  <!-- Rodapé -->
   <div class="footer">Sherk Games - Sherkfun.io</div>
 
-  <!-- ÁUDIOS -->
+  <!-- Sons -->
   <audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
   <audio id="bgMusic" src="bg_music.MP3" loop="true" preload="auto"></audio>
   <audio id="victorySound" src="victory_sound.MP3" preload="auto"></audio>
@@ -259,7 +237,7 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // Referências aos elementos HTML
+    // Referências HTML
     const ball            = document.getElementById("ball");
     const sherkScoreEl    = document.getElementById("sherkScore");
     const bonkScoreEl     = document.getElementById("bonkScore");
@@ -273,135 +251,139 @@
     // Sons
     const hitSound         = document.getElementById("hitSound");
     const bgMusic          = document.getElementById("bgMusic");
-    const victorySound     = document.getElementById("victorySound");
     const pointSound       = document.getElementById("pointSound");
     const deuceSound       = document.getElementById("deuceSound");
     const matchPointSound  = document.getElementById("matchPointSound");
     const gameSetMatchSound= document.getElementById("gameSetMatchSound");
 
-    // Volume da música de fundo
+    // Volume
     bgMusic.volume = 0.3;
 
-    // Variáveis de controle
-    const initialSpeedX = 2; 
-    const initialSpeedY = 1.5; 
-    const playerHeight  = 200;
-
-    // Posições iniciais
-    let ballX     = canvas.width / 2;
-    let ballY     = canvas.height / 2;
-    let ballSpeedX= initialSpeedX;
-    let ballSpeedY= initialSpeedY;
+    // Variáveis de jogo
+    const initialSpeedX = 2, initialSpeedY = 1.5, playerHeight = 200;
+    let ballX = canvas.width / 2, ballY = canvas.height / 2;
+    let ballSpeedX = initialSpeedX, ballSpeedY = initialSpeedY;
     let ballAngle = 0;
-    let sherkY    = canvas.height / 2 - playerHeight / 2;
-    let bonkY     = canvas.height / 2 - playerHeight / 2;
+    let sherkY = canvas.height / 2 - playerHeight / 2;
+    let bonkY  = canvas.height / 2 - playerHeight / 2;
 
     // Pontos e Partidas
-    let leftScore   = 0; // Pontos do Sherk na PARTIDA
-    let rightScore  = 0; // Pontos do Pepe na PARTIDA
-    let sherkMatches= 0; // Partidas ganhas (Sherk)
-    let bonkMatches = 0; // Partidas ganhas (Pepe)
-
+    let leftScore = 0, rightScore = 0; 
+    let sherkMatches = 0, bonkMatches = 0;
     let gameRunning = false;
 
-    /* ===================== INÍCIO DO JOGO ===================== */
-    function startGame() {
-      document.getElementById("instructions-container").style.display = "none";
-      gameRunning = true;
-      bgMusic.play();  // inicia música de fundo
-      gameLoop();
+    /* ===================== Mensagens Encadeadas ===================== */
+    function showMessageSequence(messages) {
+      if (!messages || messages.length === 0) return;
+      const [first, ...rest] = messages;
+      gameMessage.innerText = first;
+      gameMessage.style.display = "block";
+
+      setTimeout(() => {
+        // Esconde a mensagem atual
+        gameMessage.style.display = "none";
+        // Chama o restante das mensagens
+        if (rest.length > 0) {
+          showMessageSequence(rest);
+        }
+      }, 1500);
     }
 
-    /* ===================== EVENTOS DE CONTROLE (MOUSE/TOUCH) ===================== */
+    /* ===================== EVENTOS DE ENTRADA (MOUSE/TOUCH) ===================== */
     document.addEventListener("mousemove", (e) => {
       if (gameRunning) {
         sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight / 2));
       }
     });
-
     let touchStartY = 0;
     document.addEventListener("touchstart", (e) => {
-      touchStartY = e.touches[0].clientY; // Posição inicial do toque
+      touchStartY = e.touches[0].clientY;
     });
-
     document.addEventListener("touchmove", (e) => {
       if (gameRunning) {
         const touchEndY = e.touches[0].clientY;
-        const deltaY    = touchEndY - touchStartY;
+        const deltaY = touchEndY - touchStartY;
         sherkY = Math.max(0, Math.min(canvas.height - playerHeight, sherkY + deltaY));
         touchStartY = touchEndY;
       }
     });
 
-    /* ===================== ATUALIZAÇÃO DE PLACAR (POR PONTO) ===================== */
+    /* ===================== INÍCIO DO JOGO ===================== */
+    function startGame() {
+      document.getElementById("instructions-container").style.display = "none";
+      gameRunning = true;
+      bgMusic.play();
+      gameLoop();
+    }
+
+    /* ===================== AUMENTAR VELOCIDADE DA BOLA ===================== */
+    function increaseBallSpeed() {
+      ballSpeedX *= 1.05;
+      ballSpeedY *= 1.05;
+    }
+
+    /* ===================== ATUALIZA SCORE ===================== */
     function updateScore(winner) {
-      // Incrementa pontuação
-      if (winner === 'Sherk') {
+      // Primeiro: Point for X
+      const pointMessage = `Point for ${winner}!`;
+      let finalMessages = [ pointMessage ]; // Mensagens iniciais
+
+      if (winner === "Sherk") {
         leftScore++;
       } else {
         rightScore++;
       }
 
-      let message = "";
-      let sound   = null;
-
-      // 1) Deuce => 4x4
+      // 4 x 4 => Deuce => + "Next point wins..."
       if (leftScore === 4 && rightScore === 4) {
-        message = "Deuce!";
-        sound   = deuceSound;
+        finalMessages.push("Deuce!");
+        // Próxima mensagem: se o jogador que pontuar tiver 2 matches => next point wins the Match, senão => next point wins the Game
+        // Mas só sabemos isso depois, quando ficar 5 x 4. Então exibimos algo genérico?
+        // O usuário quer: "Next point wins the Match" ou "Next point wins the Game"
+        let hasSherk2Matches = (sherkMatches === 2);
+        let hasBonk2Matches  = (bonkMatches === 2);
+        // Em 4x4, não sabemos quem fará 5 pontos, mas o user pediu "Next point wins the X" mesmo assim:
+        if (hasSherk2Matches || hasBonk2Matches) {
+          finalMessages.push("Next point wins the Match");
+        } else {
+          finalMessages.push("Next point wins the Game");
+        }
 
-      // 2) Quando chega a 4x3 => “This is the Match point” ou “This is the Game point”
+      // 4 x 3 => This is the Match point or This is the Game point
       } else if (
         (leftScore === 4 && rightScore === 3) ||
         (rightScore === 4 && leftScore === 3)
       ) {
-        // Se Sherk acabou de fazer 4 pontos e já tem 2 matches => Match point
-        if (leftScore === 4 && leftScore - rightScore === 1) {
+        let leadIsSherk = (leftScore === 4 && leftScore - rightScore === 1);
+        let leadIsBonk  = (rightScore === 4 && rightScore - leftScore === 1);
+
+        if (leadIsSherk) {
           if (sherkMatches === 2) {
-            message = "This is the Match point";
+            finalMessages.push("This is the Match point for Sherk");
           } else {
-            message = "This is the Game point";
+            finalMessages.push("This is the Game point for Sherk");
           }
-          sound = matchPointSound;
-        }
-        // Se Pepe acabou de fazer 4 pontos e já tem 2 matches => Match point
-        else if (rightScore === 4 && rightScore - leftScore === 1) {
+        } else if (leadIsBonk) {
           if (bonkMatches === 2) {
-            message = "This is the Match point";
+            finalMessages.push("This is the Match point for Pepe");
           } else {
-            message = "This is the Game point";
+            finalMessages.push("This is the Game point for Pepe");
           }
-          sound = matchPointSound;
         }
-
-      // 3) Caso normal => Point for X
-      } else {
-        message = `Point for ${winner}!`;
-        sound   = pointSound;
       }
 
-      // Exibe mensagem (se houver)
-      if (message !== "") {
-        showMessage(message);
-        sound.play();
-      }
+      // Exibir mensagens encadeadas
+      showMessageSequence(finalMessages);
+      // Tocar som do primeiro ponto marcado
+      if (pointMessage) pointSound.play();
     }
 
-    /* ===================== MOSTRAR MENSAGEM RÁPIDA ===================== */
-    function showMessage(text) {
-      gameMessage.innerText = text;
-      gameMessage.style.display = "block";
-      setTimeout(() => {
-        gameMessage.style.display = "none";
-      }, 1500);
-    }
-
-    /* ===================== ATUALIZAR VISUAL DO PLACAR ===================== */
+    /* ===================== DESENHAR SCORE ===================== */
     function drawScore() {
       sherkScoreEl.innerText = leftScore;
       bonkScoreEl.innerText  = rightScore;
 
-      // Alterar cor do placar conforme quem estiver ganhando
+      // Cores
       if (leftScore > rightScore) {
         sherkScoreEl.style.color = "blue";
         bonkScoreEl.style.color  = "red";
@@ -413,46 +395,68 @@
         bonkScoreEl.style.color  = "#00ff00";
       }
 
-      // Atualiza partidas ganhas
+      // Matches
       sherkMatchEl.innerText = `Matches: ${sherkMatches}`;
       bonkMatchEl.innerText  = `Matches: ${bonkMatches}`;
     }
 
-    /* ===================== LOOP PRINCIPAL DE ATUALIZAÇÃO DA BOLA E JOGO ===================== */
+    /* ===================== RESETAR BOLA ===================== */
+    function resetBall() {
+      ballX = canvas.width / 2;
+      ballY = canvas.height / 2;
+      ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * initialSpeedX;
+      ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * initialSpeedY;
+      ballAngle = 0;
+    }
+
+    /* ===================== CHECAR SE ALGUÉM GANHOU A PARTIDA ===================== */
+    function checkChampion() {
+      gameRunning = false;
+      bgMusic.pause();
+
+      // Tocar som final
+      gameSetMatchSound.currentTime = 0;
+      gameSetMatchSound.play();
+
+      winnerMsgEl.style.display = "block";
+      winnerTextEl.innerText = "Game, Set, Match!";
+
+      // Se o jogador chegou a 3 vitórias, acabou o torneio
+      if (sherkMatches === 3 || bonkMatches === 3) {
+        winnerButton.innerText = "Start New Game";
+      } else {
+        winnerButton.innerText = "Start Next Match Game";
+      }
+    }
+
+    /* ===================== LOOP PRINCIPAL ===================== */
     function updateBall() {
       ballX += ballSpeedX;
       ballY += ballSpeedY;
       ballAngle += 5;
       ball.style.transform = `rotate(${ballAngle}deg)`;
 
-      // Colisão com paredes
+      // Paredes superior/inferior
       if (ballY <= 0 || ballY + ball.height >= canvas.height) {
         ballSpeedY = -ballSpeedY;
       }
-
-      // Colisão com raquete do Sherk
+      // Rebote Sherk
       if (ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
         ballSpeedX = -ballSpeedX;
         increaseBallSpeed();
         hitSound.play();
       }
-
-      // Colisão com raquete do Bonk (IA)
-      if (
-        ballX >= canvas.width - 100 - ball.width &&
-        ballY > bonkY &&
-        ballY < bonkY + playerHeight
-      ) {
+      // Rebote Bonk
+      if (ballX >= canvas.width - 100 - ball.width && ballY > bonkY && ballY < bonkY + playerHeight) {
         ballSpeedX = -ballSpeedX;
         increaseBallSpeed();
         hitSound.play();
       }
 
-      // Bola saiu pela esquerda => Pepe ganha ponto
+      // Saiu pela esquerda => Pepe ponto
       if (ballX < 0) {
         updateScore("Pepe");
         drawScore();
-        // Se Pepe chegou a 5 => Ganhou a partida
         if (rightScore === 5) {
           bonkMatches++;
           drawScore();
@@ -461,12 +465,10 @@
         }
         resetBall();
       }
-
-      // Bola saiu pela direita => Sherk ganha ponto
+      // Saiu pela direita => Sherk ponto
       if (ballX > canvas.width) {
         updateScore("Sherk");
         drawScore();
-        // Se Sherk chegou a 5 => Ganhou a partida
         if (leftScore === 5) {
           sherkMatches++;
           drawScore();
@@ -480,14 +482,12 @@
       movePlayers();
     }
 
-    /* ===================== MOVIMENTO DO BONK (IA) ===================== */
     function moveBonk() {
       let targetY = ballY - playerHeight / 2;
       bonkY += (targetY - bonkY) * 0.05;
       bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
 
-    /* ===================== ATUALIZA POSIÇÃO DOS ELEMENTOS ===================== */
     function movePlayers() {
       document.getElementById("sherk").style.top = `${sherkY}px`;
       document.getElementById("bonk").style.top  = `${bonkY}px`;
@@ -495,54 +495,20 @@
       ball.style.top  = `${ballY}px`;
     }
 
-    /* ===================== AUMENTAR VELOCIDADE DA BOLA ===================== */
-    function increaseBallSpeed() {
-      ballSpeedX *= 1.05;
-      ballSpeedY *= 1.05;
-    }
-
-    /* ===================== REDEFINIR BOLA ===================== */
-    function resetBall() {
-      ballX = canvas.width / 2;
-      ballY = canvas.height / 2;
-      ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * initialSpeedX;
-      ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * initialSpeedY;
-      ballAngle = 0;
-    }
-
-    /* ===================== CHECK BEST OF 3 ===================== */
-    function checkChampion() {
-      // Pausa momentânea
-      gameRunning = false;
-      bgMusic.pause();
-
-      // Toca som final: 'Game, Set, Match!'
-      gameSetMatchSound.currentTime = 0;
-      gameSetMatchSound.play();
-
-      // Mostra mensagem final da PARTIDA
-      winnerMsgEl.style.display = "block";
-      winnerTextEl.innerText = "Game, Set, Match!";
-
-      // Se alguém já tiver 3 vitórias, esse é o grande campeão
-      if (sherkMatches === 3 || bonkMatches === 3) {
-        // Botão => 'Start New Game'
-        winnerButton.innerText = "Start New Game";
-      } else {
-        // Ainda não temos um campeão final
-        winnerButton.innerText = "Start Next Match Game";
+    function gameLoop() {
+      updateBall();
+      if (gameRunning) {
+        requestAnimationFrame(gameLoop);
       }
     }
 
-    /* ===================== AÇÃO AO CLICAR NO BOTÃO FINAL ===================== */
+    /* ===================== BOTÃO (FIM DE PARTIDA) ===================== */
     function startNextAction() {
-      // Se alguém já é campeão final, reinicia tudo
+      // Se alguém tem 3 vitórias => acabou o torneio
       if (sherkMatches === 3 || bonkMatches === 3) {
         sherkMatches = 0;
         bonkMatches  = 0;
       }
-
-      // Fecha mensagem e zera a partida
       winnerMsgEl.style.display = "none";
       leftScore  = 0;
       rightScore = 0;
@@ -554,14 +520,6 @@
 
       gameRunning = true;
       gameLoop();
-    }
-
-    /* ===================== LOOP PRINCIPAL ===================== */
-    function gameLoop() {
-      updateBall();
-      if (gameRunning) {
-        requestAnimationFrame(gameLoop);
-      }
     }
   </script>
 </body>
