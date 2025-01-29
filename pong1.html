@@ -1,371 +1,589 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>|- Sherk Pong --|</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sherk Pong - Best of 3</title>
 
- By: @Marcelo_VP
- https://token4fun.github.io/crypto/
- 
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: black;
-            overflow: hidden;
-            font-family: monospace;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-        }
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('back.gif') center center no-repeat;
+      background-size: cover;
+      overflow: hidden;
+      font-family: monospace;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    body::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      opacity: 0.5;
+      z-index: -1; 
+    }
+    .glow-text {
+      font-size: 4vw;
+      color: #00ff00;
+      text-shadow: 0 0 20px #00ff00, 0 0 40px #0077ff;
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    /* Matches (melhor de 3) */
+    .match-label {
+      position: absolute;
+      font-size: 3vw;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00;
+    }
+    #sherkMatches {
+      top: 10px;   
+      left: 20px;
+    }
+    #bonkMatches {
+      top: 10px;
+      right: 20px;
+    }
 
-        canvas {
-            display: block;
-        }
+    /* Score (pontos na partida) */
+    .score-label {
+      position: absolute;
+      font-size: 5vw;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00;
+      font-weight: bold;
+    }
+    #sherkScore {
+      top: 60px;
+      left: 60px;
+    }
+    #bonkScore {
+      top: 60px;
+      right: 60px;
+    }
 
-        .player {
-            position: absolute;
-            height: 150px;
-            width: auto;
-            animation: glow-animation 1.5s infinite alternate;
-        }
+    /* Nomes */
+    .player-label {
+      position: absolute;
+      font-size: 2vw;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00;
+    }
+    .player-left {
+      top: 45px; 
+      left: 20px;
+    }
+    .player-right {
+      top: 45px;
+      right: 20px;
+    }
 
-        #sherk {
-            left: 20px;
-        }
+    /* Personagens */
+    .player {
+      position: absolute;
+      height: 200px;
+      width: auto;
+      animation: glow-animation 1.5s infinite alternate;
+    }
+    #sherk { top: 150px; left: 20px; }
+    #bonk  { top: 150px; right: 20px; }
 
-        #bonk {
-            right: 20px;
-        }
+    @keyframes glow-animation {
+      0%   { filter: drop-shadow(0 0 10px #00f0ff); }
+      50%  { filter: drop-shadow(0 0 20px #ff0000); }
+      100% { filter: drop-shadow(0 0 10px #00f0ff); }
+    }
 
-        @keyframes glow-animation {
-            0% { filter: drop-shadow(0 0 10px #00f0ff); }
-            50% { filter: drop-shadow(0 0 20px #ff0000); }
-            100% { filter: drop-shadow(0 0 10px #00f0ff); }
-        }
+    /* Instructions */
+    .instructions-container {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #fff;
+    }
+    .instructions {
+      font-size: 2vw;
+      margin-bottom: 20px;
+    }
+    .button {
+      padding: 15px 30px;
+      font-size: 2vw;
+      color: #fff;
+      background: linear-gradient(90deg, #00f0ff, #ff0000);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 20px #00f0ff;
+    }
+    .button:hover {
+      box-shadow: 0 0 40px #ff0000;
+    }
 
-        .glow-text {
-            font-size: 4vw;
-            color: #00ff00;
-            text-shadow: 0 0 20px #00ff00, 0 0 40px #0077ff;
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
+    /* Mensagem final da partida */
+    #winner-message {
+      font-size: 3vw;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000;
+      white-space: pre-wrap;
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
 
-        .player-label {
-            position: absolute;
-            font-size: 2vw;
-            color: #00ff00;
-            text-shadow: 0 0 10px #00ff00;
-        }
+    /* Bola */
+    #ball {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+    }
 
-        .score-label {
-            position: absolute;
-            font-size: 5vw;
-            color: #00ff00;
-            text-shadow: 0 0 10px #00ff00;
-            font-weight: bold;
-            top: 30px;
-        }
+    /* Rodapé */
+    .footer {
+      position: absolute;
+      bottom: 10px;
+      color: #00ff00;
+      font-size: 2vw;
+      text-shadow: 0 0 10px #00ff00;
+    }
 
-        #sherkScore {
-            left: 60px;
-        }
+    /* Mensagens encadeadas (Point for..., Deuce, etc.) */
+    .message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 4vw;
+      font-weight: bold;
+      color: white;
+      text-shadow: 0 0 20px red, 0 0 40px blue;
+      display: none;
+    }
 
-        #bonkScore {
-            right: 60px;
-        }
+    /* ===== POPUP DE DOCUMENTAÇÃO ===== */
+    #docs-popup {
+      display: none; /* inicialmente escondido */
+      position: fixed;
+      top: 0; 
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 9999; /* acima do resto */
+    }
+    .popup-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      max-width: 700px;
+      background: #111;
+      border: 2px solid #00ff00;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: left;
+      color: #00ff00;
+      box-shadow: 0 0 20px #00ff00;
+      font-size: 1.2rem;
+    }
+    .popup-content h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .popup-content button {
+      margin-top: 20px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
 
-        .player-left {
-            top: 10px;
-            left: 20px;
-        }
-
-        .player-right {
-            top: 10px;
-            right: 20px;
-        }
-
-        .instructions-container {
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: #fff;
-        }
-
-        .instructions {
-            font-size: 2vw;
-            margin-bottom: 20px;
-        }
-
-        .button {
-            padding: 15px 30px;
-            font-size: 2vw;
-            color: #fff;
-            background: linear-gradient(90deg, #00f0ff, #ff0000);
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 0 20px #00f0ff;
-        }
-
-        .button:hover {
-            box-shadow: 0 0 40px #ff0000;
-        }
-
-        #winner-message {
-            font-size: 3vw;
-            color: #00ff00;
-            text-shadow: 0 0 10px #00ff00, 0 0 20px #ff0000;
-            white-space: pre-wrap;
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-        }
-
-        #ball {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-        }
-
-        .footer {
-            position: absolute;
-            bottom: 10px;
-            color: #00ff00;
-            font-size: 2vw;
-            text-shadow: 0 0 10px #00ff00;
-        }
-    </style>
+  </style>
 </head>
 <body>
 
-<div class="glow-text">Sherk Pong</div>
+  <!-- Título -->
+  <div class="glow-text">Sherk Pong</div>
 
-<div class="player-label player-left">Player: Sherk</div>
-<div class="score-label" id="sherkScore">0</div>
-    
-<div class="player-label player-right">Player: Pepe</div>
-<div class="score-label" id="bonkScore">0</div>
+  <!-- Placar de partidas (melhor de 3) -->
+  <div class="match-label" id="sherkMatches">Matches: 0</div>
+  <div class="match-label" id="bonkMatches">Matches: 0</div>
 
-<div id="instructions-container" class="instructions-container">
+  <!-- Nome e pontuação da partida -->
+  <div class="player-label player-left">Player: Sherk</div>
+  <div class="score-label"  id="sherkScore">0</div>
+
+  <div class="player-label player-right">Player: Pepe</div>
+  <div class="score-label"  id="bonkScore">0</div>
+
+  <!-- Instruções e botão de início -->
+  <div id="instructions-container" class="instructions-container">
     <div class="instructions">
-        Use the touch to control Sherk on mobile or mouse on PC.<br>
-        First to 5 points wins!<br><br>
-    </div><br><br>
+      Use the touch to control Sherk on mobile or mouse on PC.<br>
+      First to 5 points wins the Match!<br>
+      First to 3 Matches is the Champion!<br><br>
+    </div>
     <button class="button" onclick="startGame()">Play</button>
-</div>
+  </div>
 
-<canvas id="pongCanvas"></canvas>
-<img src="Sherk.png" id="sherk" class="player">
-<img src="Bonk.png" id="bonk" class="player">
-<img src="ball.png" id="ball">
+  <!-- Canvas e personagens -->
+  <canvas id="pongCanvas"></canvas>
+  <img src="Sherk.png" id="sherk" class="player">
+  <img src="Bonk.png" id="bonk"  class="player">
+  <img src="ball.png" id="ball">
 
-<div id="winner-message">
+  <!-- Mensagem de fim de partida ou torneio -->
+  <div id="winner-message">
     <p id="winner-text"></p>
-    <button onclick="restartGame()" class="button">Restart</button>
-</div>
+    <button id="winner-button" class="button" onclick="startNextAction()">...</button>
+  </div>
 
-<div class="footer">Sherk Games - Sherkfun.io</div>
+  <!-- Mensagem momentânea (encadeada) -->
+  <div id="game-message" class="message"></div>
 
-<!-- Sons -->
-<audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
-<audio id="bgMusic" src="bg_music.MP3" loop="true" preload="auto"></audio>
-<audio id="victorySound" src="victory_sound.MP3" preload="auto"></audio>
-<audio id="pointSound" src="point.MP3" preload="auto"></audio>
+  <!-- Rodapé + BOTÃO DOCS -->
+  <div class="footer">
+    Sherk Games - Sherkfun.io&nbsp;&nbsp;
+    <button class="button" style="font-size:1rem; padding:5px 10px;" onclick="openDocs()">Docs</button>
+  </div>
 
-<script>
+  <!-- POPUP DE DOCUMENTAÇÃO -->
+  <div id="docs-popup">
+    <div class="popup-content">
+      <h2>Manual de Instruções</h2>
+      <p>
+        Bem-vindo ao <strong>Sherk Pong</strong>! Este jogo é uma variação de Pong com
+        temática do Sherk e do Pepe. Cada partida é disputada até 5 pontos,
+        e o primeiro a atingir 5 pontos vence a partida (Match).<br><br>
+        O jogo é disputado em <em>melhor de 3 matches</em>:
+        quem ganhar 3 partidas primeiro será o grande campeão.<br><br>
+        <strong>Controles:</strong><br>
+        - <em>PC:</em> Mova o mouse para cima ou para baixo, controlando o Sherk.<br>
+        - <em>Mobile:</em> Toque e arraste o dedo na tela para mover o Sherk.<br><br>
+        <strong>IA do Pepe:</strong><br>
+        - O Pepe se move automaticamente, seguindo a bola com um pequeno atraso.<br><br>
+        <strong>Mensagens Especiais:</strong><br>
+        - Quando o placar chega em 4×4, a mensagem “Deuce!” pode aparecer.<br>
+        - “This is the Match point...” aparece quando alguém pode fechar a melhor de 3.<br>
+        - Caso a bola saia da tela, o ponto vai para o jogador oposto, e a bola é reiniciada no centro.<br><br>
+        <strong>Dicas:</strong><br>
+        - Tente acertar a bola usando as bordas das raquetes para alterar seu ângulo.<br>
+        - Quanto mais a bola rebate, mais rápida ela fica!<br>
+        - Divirta-se e tente ser o primeiro a 3 partidas para se tornar o grande campeão!
+      </p>
+
+      <button class="button" onclick="closeDocs()">Fechar</button>
+    </div>
+  </div>
+
+  <!-- Sons -->
+  <audio id="hitSound" src="hit_sound.MP3" preload="auto"></audio>
+  <audio id="bgMusic" src="bg_music.MP3" loop="true" preload="auto"></audio>
+  <audio id="victorySound" src="victory_sound.MP3" preload="auto"></audio>
+  <audio id="pointSound" src="point.MP3" preload="auto"></audio>
+  <audio id="pointSound" src="point.mp3" preload="auto"></audio>
+  <audio id="matchPointSound" src="match_point.mp3" preload="auto"></audio>
+  <audio id="deuceSound" src="deuce.mp3" preload="auto"></audio>
+  <audio id="gameSetMatchSound" src="game_set_match.mp3" preload="auto"></audio>
+
+  <script>
+    /* ===================== CONFIGURAÇÕES INICIAIS ===================== */
     const canvas = document.getElementById("pongCanvas");
     const ctx = canvas.getContext("2d");
-
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const ball = document.getElementById("ball");
+    // Referências HTML
+    const ball            = document.getElementById("ball");
+    const sherkScoreEl    = document.getElementById("sherkScore");
+    const bonkScoreEl     = document.getElementById("bonkScore");
+    const sherkMatchEl    = document.getElementById("sherkMatches");
+    const bonkMatchEl     = document.getElementById("bonkMatches");
+    const winnerMsgEl     = document.getElementById("winner-message");
+    const winnerTextEl    = document.getElementById("winner-text");
+    const winnerButton    = document.getElementById("winner-button");
+    const gameMessage     = document.getElementById("game-message");
 
     // Sons
-    const hitSound = document.getElementById("hitSound");
-    const bgMusic = document.getElementById("bgMusic");
-    const victorySound = document.getElementById("victorySound");
-    const pointSound = document.getElementById("pointSound");
+    const hitSound         = document.getElementById("hitSound");
+    const bgMusic          = document.getElementById("bgMusic");
+    const pointSound       = document.getElementById("pointSound");
+    const deuceSound       = document.getElementById("deuceSound");
+    const matchPointSound  = document.getElementById("matchPointSound");
+    const gameSetMatchSound= document.getElementById("gameSetMatchSound");
 
-    // Ajuste do volume da música de fundo para 3 em uma escala de 0 a 10 (volume 0.3)
+    // Volume
     bgMusic.volume = 0.3;
 
-    // Começar a música de fundo quando a página carrega
-    function startGame() {
-        document.getElementById("instructions-container").style.display = "none";
-        gameRunning = true;
-        bgMusic.play();  // Play music on game start
-        gameLoop();
-    }
-
-    // Velocidade inicial mais lenta
-    const initialSpeedX = 2; 
-    const initialSpeedY = 1.5; 
-    let ballX = canvas.width / 2;
-    let ballY = canvas.height / 2;
-    let ballSpeedX = initialSpeedX;
-    let ballSpeedY = initialSpeedY;
+    // Variáveis de jogo
+    const initialSpeedX = 2, initialSpeedY = 1.5, playerHeight = 200;
+    let ballX = canvas.width / 2, ballY = canvas.height / 2;
+    let ballSpeedX = initialSpeedX, ballSpeedY = initialSpeedY;
     let ballAngle = 0;
-
-    const playerHeight = 150;
     let sherkY = canvas.height / 2 - playerHeight / 2;
-    let bonkY = canvas.height / 2 - playerHeight / 2;
+    let bonkY  = canvas.height / 2 - playerHeight / 2;
 
-    let leftScore = 0;
-    let rightScore = 0;
+    // Pontos e Partidas
+    let leftScore = 0, rightScore = 0; 
+    let sherkMatches = 0, bonkMatches = 0;
     let gameRunning = false;
 
-    // Função para capturar o movimento do mouse
-    document.addEventListener("mousemove", (e) => {
-        if (gameRunning) {
-            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight / 2));
+    /* ===================== Mensagens Encadeadas ===================== */
+    function showMessageSequence(messages) {
+      if (!messages || messages.length === 0) return;
+      const [first, ...rest] = messages;
+      gameMessage.innerText = first;
+      gameMessage.style.display = "block";
+
+      setTimeout(() => {
+        gameMessage.style.display = "none";
+        if (rest.length > 0) {
+          showMessageSequence(rest);
         }
-    });
-
-    // Função para capturar o movimento do toque (para dispositivos móveis)
-    let touchStartY = 0;
-    document.addEventListener("touchstart", (e) => {
-        touchStartY = e.touches[0].clientY; // Pega a posição inicial do toque
-    });
-
-    document.addEventListener("touchmove", (e) => {
-        if (gameRunning) {
-            const touchEndY = e.touches[0].clientY;
-            const deltaY = touchEndY - touchStartY; // Movimento do toque
-
-            sherkY = Math.max(0, Math.min(canvas.height - playerHeight, sherkY + deltaY)); // Atualiza a posição do Sherk
-            touchStartY = touchEndY; // Atualiza o valor de referência do toque
-        }
-    });
-
-    function drawScore() {
-        document.getElementById("sherkScore").innerText = leftScore;
-        document.getElementById("bonkScore").innerText = rightScore;
-
-        // Alterar cor do placar
-        if (leftScore > rightScore) {
-            document.getElementById("sherkScore").style.color = "blue";
-            document.getElementById("bonkScore").style.color = "red";
-        } else if (rightScore > leftScore) {
-            document.getElementById("bonkScore").style.color = "blue";
-            document.getElementById("sherkScore").style.color = "red";
-        } else {
-            document.getElementById("sherkScore").style.color = "#00ff00";
-            document.getElementById("bonkScore").style.color = "#00ff00";
-        }
+      }, 1500);
     }
 
+    /* ===================== EVENTOS DE ENTRADA (MOUSE/TOUCH) ===================== */
+    document.addEventListener("mousemove", (e) => {
+      if (gameRunning) {
+        sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight / 2));
+      }
+    });
+    let touchStartY = 0;
+    document.addEventListener("touchstart", (e) => {
+      touchStartY = e.touches[0].clientY;
+    });
+    document.addEventListener("touchmove", (e) => {
+      if (gameRunning) {
+        const touchEndY = e.touches[0].clientY;
+        const deltaY = touchEndY - touchStartY;
+        sherkY = Math.max(0, Math.min(canvas.height - playerHeight, sherkY + deltaY));
+        touchStartY = touchEndY;
+      }
+    });
+
+    /* ===================== INÍCIO DO JOGO ===================== */
+    function startGame() {
+      document.getElementById("instructions-container").style.display = "none";
+      gameRunning = true;
+      bgMusic.play();
+      gameLoop();
+    }
+
+    /* ===================== AUMENTAR VELOCIDADE DA BOLA ===================== */
+    function increaseBallSpeed() {
+      ballSpeedX *= 1.05;
+      ballSpeedY *= 1.05;
+    }
+
+    /* ===================== ATUALIZA SCORE ===================== */
+    function updateScore(winner) {
+      const pointMessage = `Point for ${winner}!`;
+      let finalMessages = [ pointMessage ]; 
+
+      if (winner === "Sherk") {
+        leftScore++;
+      } else {
+        rightScore++;
+      }
+
+      // Verificações especiais de placar (4x4, 4x3 etc.)
+      if (leftScore === 4 && rightScore === 4) {
+        finalMessages.push("Deuce!");
+        let hasSherk2Matches = (sherkMatches === 2);
+        let hasBonk2Matches  = (bonkMatches === 2);
+        if (hasSherk2Matches || hasBonk2Matches) {
+          finalMessages.push("Next point wins the Match");
+        } else {
+          finalMessages.push("Next point wins the Game");
+        }
+      } else if (
+        (leftScore === 4 && rightScore === 3) ||
+        (rightScore === 4 && leftScore === 3)
+      ) {
+        let leadIsSherk = (leftScore === 4 && leftScore - rightScore === 1);
+        let leadIsBonk  = (rightScore === 4 && rightScore - leftScore === 1);
+
+        if (leadIsSherk) {
+          if (sherkMatches === 2) {
+            finalMessages.push("This is the Match point for Sherk");
+          } else {
+            finalMessages.push("This is the Game point for Sherk");
+          }
+        } else if (leadIsBonk) {
+          if (bonkMatches === 2) {
+            finalMessages.push("This is the Match point for Pepe");
+          } else {
+            finalMessages.push("This is the Game point for Pepe");
+          }
+        }
+      }
+
+      showMessageSequence(finalMessages);
+      if (pointMessage) pointSound.play();
+    }
+
+    /* ===================== DESENHAR SCORE ===================== */
+    function drawScore() {
+      sherkScoreEl.innerText = leftScore;
+      bonkScoreEl.innerText  = rightScore;
+
+      if (leftScore > rightScore) {
+        sherkScoreEl.style.color = "blue";
+        bonkScoreEl.style.color  = "red";
+      } else if (rightScore > leftScore) {
+        sherkScoreEl.style.color = "red";
+        bonkScoreEl.style.color  = "blue";
+      } else {
+        sherkScoreEl.style.color = "#00ff00";
+        bonkScoreEl.style.color  = "#00ff00";
+      }
+
+      sherkMatchEl.innerText = `Matches: ${sherkMatches}`;
+      bonkMatchEl.innerText  = `Matches: ${bonkMatches}`;
+    }
+
+    /* ===================== RESETAR BOLA ===================== */
+    function resetBall() {
+      ballX = canvas.width / 2;
+      ballY = canvas.height / 2;
+      ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * initialSpeedX;
+      ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * initialSpeedY;
+      ballAngle = 0;
+    }
+
+    /* ===================== CHECAR SE ALGUÉM GANHOU A PARTIDA ===================== */
+    function checkChampion() {
+      gameRunning = false;
+      bgMusic.pause();
+
+      gameSetMatchSound.currentTime = 0;
+      gameSetMatchSound.play();
+
+      winnerMsgEl.style.display = "block";
+      winnerTextEl.innerText = "Game, Set, Match!";
+
+      if (sherkMatches === 3 || bonkMatches === 3) {
+        winnerButton.innerText = "Start New Game";
+      } else {
+        winnerButton.innerText = "Start Next Match Game";
+      }
+    }
+
+    /* ===================== LOOP PRINCIPAL ===================== */
     function updateBall() {
-        ballX += ballSpeedX;
-        ballY += ballSpeedY;
-        ballAngle += 5;  // Incrementa o ângulo da bola para rotação
-        ball.style.transform = `rotate(${ballAngle}deg)`;
+      ballX += ballSpeedX;
+      ballY += ballSpeedY;
+      ballAngle += 5;
+      ball.style.transform = `rotate(${ballAngle}deg)`;
 
-        // Rebater na parede superior e inferior
-        if (ballY <= 0 || ballY + ball.height >= canvas.height) {
-            ballSpeedY = -ballSpeedY;
+      // Paredes
+      if (ballY <= 0 || (ballY + ball.height >= canvas.height)) {
+        ballSpeedY = -ballSpeedY;
+      }
+      // Rebote Sherk
+      if (ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
+        ballSpeedX = -ballSpeedX;
+        increaseBallSpeed();
+        hitSound.play();
+      }
+      // Rebote Bonk
+      if (ballX >= canvas.width - 100 - ball.width && ballY > bonkY && ballY < bonkY + playerHeight) {
+        ballSpeedX = -ballSpeedX;
+        increaseBallSpeed();
+        hitSound.play();
+      }
+
+      // Saiu pela esquerda => Pepe ponto
+      if (ballX < 0) {
+        updateScore("Pepe");
+        drawScore();
+        if (rightScore === 5) {
+          bonkMatches++;
+          drawScore();
+          checkChampion();
+          return;
         }
-
-        // Rebater na raquete do Sherk (jogador)
-        if (ballX <= 100 && ballY > sherkY && ballY < sherkY + playerHeight) {
-            ballSpeedX = -ballSpeedX;
-            increaseBallSpeed();
-            hitSound.play(); // Som de rebote
+        resetBall();
+      }
+      // Saiu pela direita => Sherk ponto
+      if (ballX > canvas.width) {
+        updateScore("Sherk");
+        drawScore();
+        if (leftScore === 5) {
+          sherkMatches++;
+          drawScore();
+          checkChampion();
+          return;
         }
+        resetBall();
+      }
 
-        // Rebater na raquete do Bonk (IA)
-        if (ballX >= canvas.width - 100 - ball.width && ballY > bonkY && ballY < bonkY + playerHeight) {
-            ballSpeedX = -ballSpeedX;
-            increaseBallSpeed();
-            hitSound.play(); // Som de rebote
-        }
-
-        // Verificar se a bola saiu pelos lados
-        if (ballX < 0) {
-            rightScore++;
-            drawScore();
-            pointSound.play(); // Som de ponto
-            if (rightScore === 5) {
-                showWinner("Pepe Wins!");
-                bgMusic.pause(); // Para a música de fundo quando alguém vence
-                victorySound.play(); // Som de vitória
-                return;
-            }
-            resetBall();
-        }
-
-        if (ballX > canvas.width) {
-            leftScore++;
-            drawScore();
-            pointSound.play(); // Som de ponto
-            if (leftScore === 5) {
-                showWinner("Sherk Wins!");
-                bgMusic.pause(); // Para a música de fundo quando alguém vence
-                victorySound.play(); // Som de vitória
-                return;
-            }
-            resetBall();
-        }
-
-        moveBonk();
-        movePlayers();
+      moveBonk();
+      movePlayers();
     }
 
     function moveBonk() {
-        let targetY = ballY - playerHeight / 2;
-        bonkY += (targetY - bonkY) * 0.05;
-        bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
+      let targetY = ballY - playerHeight / 2;
+      bonkY += (targetY - bonkY) * 0.05;
+      bonkY = Math.max(0, Math.min(canvas.height - playerHeight, bonkY));
     }
 
     function movePlayers() {
-        document.getElementById("sherk").style.top = `${sherkY}px`;
-        document.getElementById("bonk").style.top = `${bonkY}px`;
-        ball.style.left = `${ballX}px`;
-        ball.style.top = `${ballY}px`;
-    }
-
-    function increaseBallSpeed() {
-        ballSpeedX *= 1.05;
-        ballSpeedY *= 1.05;
-    }
-
-    function resetBall() {
-        ballX = canvas.width / 2;
-        ballY = canvas.height / 2;
-        ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * initialSpeedX;
-        ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * initialSpeedY;
-        ballAngle = 0;  // Resetando o ângulo da bola
-    }
-
-    function showWinner(winnerMessage) {
-        gameRunning = false;
-        document.getElementById("winner-text").innerText = winnerMessage;
-        document.getElementById("winner-message").style.display = "block";
-    }
-
-    // Função para reiniciar o jogo ao clicar no botão "Restart"
-    function restartGame() {
-        location.reload();  // Isso simula a tecla F5 e recarrega a página
+      document.getElementById("sherk").style.top = `${sherkY}px`;
+      document.getElementById("bonk").style.top  = `${bonkY}px`;
+      ball.style.left = `${ballX}px`;
+      ball.style.top  = `${ballY}px`;
     }
 
     function gameLoop() {
-        updateBall();
-        if (gameRunning) requestAnimationFrame(gameLoop);
+      updateBall();
+      if (gameRunning) {
+        requestAnimationFrame(gameLoop);
+      }
     }
-</script>
 
+    /* ===================== BOTÃO (FIM DE PARTIDA) ===================== */
+    function startNextAction() {
+      if (sherkMatches === 3 || bonkMatches === 3) {
+        sherkMatches = 0;
+        bonkMatches  = 0;
+      }
+      winnerMsgEl.style.display = "none";
+      leftScore  = 0;
+      rightScore = 0;
+      drawScore();
+
+      resetBall();
+      bgMusic.currentTime = 0;
+      bgMusic.play();
+
+      gameRunning = true;
+      gameLoop();
+    }
+
+    /* ===================== POPUP DOCS ===================== */
+    function openDocs() {
+      document.getElementById("docs-popup").style.display = "block";
+    }
+    function closeDocs() {
+      document.getElementById("docs-popup").style.display = "none";
+    }
+  </script>
 </body>
 </html>
