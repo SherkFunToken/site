@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>|-- Sherk Pong - Best of 3</title>
+  <title>|- Sherk Pong - Best of 3</title>
 
   <style>
     /* ===== BASIC PAGE STYLES ===== */
     :root {
-      --paddleDistance: 100; /* default for desktop */
+      --paddleDistance: 100; /* Desktop default */
     }
 
     @media (max-width: 600px) {
       :root {
-        --paddleDistance: 50; /* smaller distance for mobile */
+        --paddleDistance: 50; /* Mobile default */
       }
     }
 
@@ -69,7 +69,7 @@
       right: 20px;
     }
 
-    /* ===== SCORES ===== */
+    /* ===== SCORES (POINTS) ===== */
     .score-label {
       position: absolute;
       font-size: 5vw;
@@ -187,7 +187,7 @@
       text-shadow: 0 0 10px #00ff00;
     }
 
-    /* ===== TEMPORARY MESSAGES (POINT FOR..., DEUCE, ETC.) ===== */
+    /* ===== TEMPORARY MESSAGES (POINT FOR..., ETC.) ===== */
     .message {
       position: absolute;
       top: 50%;
@@ -217,6 +217,8 @@
       transform: translate(-50%, -50%);
       width: 80%;
       max-width: 700px;
+      max-height: 80vh; /* enable scrolling if too tall */
+      overflow-y: auto; 
       background: #111;
       border: 2px solid #00ff00;
       border-radius: 10px;
@@ -251,17 +253,16 @@
 
     /* ===== MEDIA QUERY FOR MOBILE ===== */
     @media (max-width: 600px) {
-      /* Characters at 50% height on mobile */
+      /* characters at 50% height on mobile */
       .player {
-        height: 100px; /* half of 200px */
+        height: 100px; 
       }
       #sherk {
-        top: 75px; /* half of 150px */
+        top: 75px;
       }
       #bonk {
         top: 75px;
       }
-      /* scale up text for smaller screens, etc. */
       .glow-text {
         font-size: 6vw;
       }
@@ -352,7 +353,7 @@
       <p>
         <strong>How to move:</strong><br>
         - On PC, move your mouse up/down to control Sherk.<br>
-        - On mobile, just drag your finger on the screen. Piece of cake!
+        - On mobile, just drag your finger on the screen. Easy enough!
       </p>
       <p>
         <strong>Pepe’s AI:</strong><br>
@@ -360,8 +361,8 @@
       </p>
       <p>
         <strong>Pro tips:</strong><br>
-        - Watch out if the score hits 4–4—things get crazy with “Deuce!” or “Match Point!” if someone’s about to take the best-of-3.<br>
-        - The ball speeds up each time it bounces, so keep your eyes sharp!
+        - Watch out if the score hits 4–4—things get crazy with “Deuce!” or “Match Point!” if someone might clinch the series.<br>
+        - The ball speeds up each time it bounces, so keep your reflexes sharp!
       </p>
       <button onclick="closeDocs()">Close</button>
     </div>
@@ -406,6 +407,9 @@
     // Music volume
     bgMusic.volume = 0.3;
 
+    // Reading the CSS variable paddleDistance
+    const paddleDistance = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--paddleDistance'));
+
     // Variables
     const initialSpeedX = 2;
     const initialSpeedY = 1.5;
@@ -417,9 +421,6 @@
     let ballAngle  = 0;
     let sherkY = canvas.height / 2 - playerHeight / 2;
     let bonkY  = canvas.height / 2 - playerHeight / 2;
-
-    // We'll use the CSS variable "paddleDistance" to do collision checks:
-    let paddleDistance = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--paddleDistance'));
 
     // Score
     let leftScore    = 0;
@@ -445,16 +446,17 @@
 
     /* ===================== INPUT CONTROL ===================== */
     document.addEventListener("mousemove", e => {
-      if(gameRunning) {
-        sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight/2));
+      if (gameRunning) {
+        sherkY = Math.max(0, Math.min(canvas.height - playerHeight, e.clientY - playerHeight / 2));
       }
     });
+
     let touchStartY = 0;
     document.addEventListener("touchstart", e => {
       touchStartY = e.touches[0].clientY;
     });
     document.addEventListener("touchmove", e => {
-      if(gameRunning) {
+      if (gameRunning) {
         const touchEndY = e.touches[0].clientY;
         const deltaY = touchEndY - touchStartY;
         sherkY = Math.max(0, Math.min(canvas.height - playerHeight, sherkY + deltaY));
@@ -479,7 +481,7 @@
     /* ===================== UPDATE SCORE ===================== */
     function updateScore(winner) {
       const pointMessage = `Point for ${winner}!`;
-      let finalMessages = [ pointMessage ];
+      let finalMessages  = [ pointMessage ];
 
       if (winner === "Sherk") {
         leftScore++;
@@ -487,7 +489,7 @@
         rightScore++;
       }
 
-      // 4x4 => Deuce
+      // If 4x4 => Deuce
       if (leftScore === 4 && rightScore === 4) {
         finalMessages.push("Deuce!");
         let hasSherk2Matches = (sherkMatches === 2);
@@ -551,7 +553,7 @@
       ballY = canvas.height / 2;
       ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * initialSpeedX;
       ballSpeedY = (Math.random() > 0.5 ? 1 : -1) * initialSpeedY;
-      ballAngle = 0;
+      ballAngle  = 0;
     }
 
     /* ===================== CHECK CHAMPION ===================== */
@@ -562,7 +564,7 @@
       gameSetMatchSound.play();
 
       winnerMsgEl.style.display = "block";
-      winnerTextEl.innerText = "Game, Set, Match!";
+      winnerTextEl.innerText    = "Game, Set, Match!";
 
       if (sherkMatches === 3 || bonkMatches === 3) {
         winnerButton.innerText = "Start New Game";
@@ -584,7 +586,6 @@
       }
 
       // Paddle bounce (Sherk)
-      // Instead of fixed 100, use paddleDistance from CSS :root
       if (ballX <= paddleDistance && ballY > sherkY && ballY < sherkY + playerHeight) {
         ballSpeedX = -ballSpeedX;
         increaseBallSpeed();
