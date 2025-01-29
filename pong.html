@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>|-- Sherk Pong --|</title>
+  <title>|- Sherk Pong --|</title>
 
   <!-- By: @Marcelo_VP / https://token4fun.github.io/crypto/ -->
 
@@ -41,6 +41,67 @@
       display: block;
     }
 
+    /* ==================== TÍTULO ==================== */
+    .glow-text {
+      font-size: 4vw;
+      color: #00ff00;
+      text-shadow: 0 0 20px #00ff00, 0 0 40px #0077ff;
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* ==================== PLAYER & SCORE LABELS ==================== */
+    /* Match label (contador de partidas) */
+    .match-label {
+      position: absolute;
+      font-size: 3vw;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00;
+    }
+    #sherkMatches {
+      top: 10px;    /* Ajuste aqui caso queira mais/menos distância do topo */
+      left: 20px;
+    }
+    #bonkMatches {
+      top: 10px;
+      right: 20px;
+    }
+
+    /* Pontuação do jogo (pontos por partida) */
+    .score-label {
+      position: absolute;
+      font-size: 5vw;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00;
+      font-weight: bold;
+    }
+    #sherkScore {
+      top: 60px;  /* Mover o placar um pouco para baixo */
+      left: 60px;
+    }
+    #bonkScore {
+      top: 60px;
+      right: 60px;
+    }
+
+    /* Nome do jogador */
+    .player-label {
+      position: absolute;
+      font-size: 2vw;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00;
+    }
+    .player-left {
+      top: 100px; /* Ajusta o texto Player: Sherk ainda mais abaixo */
+      left: 20px;
+    }
+    .player-right {
+      top: 100px;
+      right: 20px;
+    }
+
     /* ==================== PERSONAGENS (SHERK E BONK) ==================== */
     .player {
       position: absolute;
@@ -48,8 +109,14 @@
       width: auto;
       animation: glow-animation 1.5s infinite alternate;
     }
-    #sherk { left: 20px; }
-    #bonk  { right: 20px; }
+    #sherk {
+      top: 150px; /* Ajusta a posição do Sherk ainda mais para baixo */
+      left: 20px;
+    }
+    #bonk {
+      top: 150px;
+      right: 20px;
+    }
 
     @keyframes glow-animation {
       0% {
@@ -63,47 +130,7 @@
       }
     }
 
-    /* ==================== TÍTULO ==================== */
-    .glow-text {
-      font-size: 4vw;
-      color: #00ff00;
-      text-shadow: 0 0 20px #00ff00, 0 0 40px #0077ff;
-      position: absolute;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    /* ==================== LABELS E PLACARES ==================== */
-    .player-label {
-      position: absolute;
-      font-size: 2vw;
-      color: #00ff00;
-      text-shadow: 0 0 10px #00ff00;
-    }
-    .score-label {
-      position: absolute;
-      font-size: 5vw;
-      color: #00ff00;
-      text-shadow: 0 0 10px #00ff00;
-      font-weight: bold;
-      top: 30px;
-    }
-    /* Sherk */
-    #sherkScore { left: 60px; }
-    /* Pepe */
-    #bonkScore  { right: 60px; }
-
-    .player-left {
-      top: 10px;
-      left: 20px;
-    }
-    .player-right {
-      top: 10px;
-      right: 20px;
-    }
-
-    /* ==================== CONTÊINER DE INSTRUÇÕES ==================== */
+    /* ==================== INSTRUÇÕES E BOTÃO PLAY ==================== */
     .instructions-container {
       position: absolute;
       top: 40%;
@@ -172,25 +199,6 @@
       text-shadow: 0 0 20px red, 0 0 40px blue;
       display: none;
     }
-
-    /* ==================== LABELS PARA PARTIDAS (BEST OF 3) ==================== */
-    .match-label {
-      position: absolute;
-      font-size: 3vw;
-      color: #00ff00;
-      text-shadow: 0 0 10px #00ff00;
-      /* Ajuste de 'top' para ficar acima do placar de pontos */
-    }
-    /* Sherk (acima do .player-left e do score) */
-    #sherkMatches {
-      top: 0px;
-      left: 20px; /* Ajuste conforme desejar */
-    }
-    /* Pepe (acima do .player-right e do score) */
-    #bonkMatches {
-      top: 0px;
-      right: 20px; /* Ajuste conforme desejar */
-    }
   </style>
 </head>
 <body>
@@ -198,16 +206,16 @@
   <!-- TÍTULO PRINCIPAL -->
   <div class="glow-text">Sherk Pong</div>
 
-  <!-- LABELS DO JOGADOR E PLACAR (PONTOS DA PARTIDA) -->
-  <div class="player-label player-left">Player: Sherk</div>
-  <div class="score-label" id="sherkScore">0</div>
-
-  <div class="player-label player-right">Player: Pepe</div>
-  <div class="score-label" id="bonkScore">0</div>
-
   <!-- PLACAR DE PARTIDAS (BEST OF 3) -->
   <div class="match-label" id="sherkMatches">Matches: 0</div>
   <div class="match-label" id="bonkMatches">Matches: 0</div>
+
+  <!-- LABEL DO JOGADOR E PLACAR (PONTOS POR PARTIDA) -->
+  <div class="player-label player-left">Player: Sherk</div>
+  <div class="score-label"  id="sherkScore">0</div>
+
+  <div class="player-label player-right">Player: Pepe</div>
+  <div class="score-label"  id="bonkScore">0</div>
 
   <!-- INSTRUÇÕES E BOTÃO DE PLAY -->
   <div id="instructions-container" class="instructions-container">
@@ -222,7 +230,7 @@
   <!-- CANVAS E IMAGENS -->
   <canvas id="pongCanvas"></canvas>
   <img src="Sherk.png" id="sherk" class="player">
-  <img src="Bonk.png" id="bonk" class="player">
+  <img src="Bonk.png" id="bonk"  class="player">
   <img src="ball.png" id="ball">
 
   <!-- MENSAGEM DE VITÓRIA DA PARTIDA OU TORNEIO -->
